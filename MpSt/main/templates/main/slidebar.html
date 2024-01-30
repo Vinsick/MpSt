@@ -1,6 +1,4 @@
-{% load has_group %}
-{% load has_sub_group %}
-{% load avit_shop %}
+
 
 
 <aside class="main-sidebar">
@@ -12,253 +10,6 @@
 			  <ul class="sidebar-menu" data-widget="tree">
 
 
-				{% if request.user|has_group:"Администрация" %}
-				<li class="header">Аналитика</li>
-				<li class="treeview">
-				  <a href="#">
-					<i span class="ti-bar-chart"><span class="path3"></span><span class="path3"></span></i>
-					<span>Аналитика</span>
-					<span class="pull-right-container">
-					  <i class="fa fa-angle-right pull-right"></i>
-					</span>
-				  </a>
-				  <ul class="treeview-menu">
-					<li><a href="{% url 'analytics_roznica' %}"><i class="ti-shopping-cart"><span class="path3"></span><span class="path3"></span></i>Заказы</a></li>
-				  </ul>
-				</li>
-
-				{% else %}
-				{% endif %}
-
-
-				
-				{% if request.user|has_group:"Розница Продажа" or request.user|has_group:"Администрация" %} 
-				<li class="header">Отдел Продаж</li>
-				<li class="treeview">
-					<a href="#">
-					  <i span class="ti-shopping-cart-full"><span class="path1"></span><span class="path1"></span></i>
-					  <span>Отдел Продаж</span>
-					  <span class="pull-right-container">
-						<i class="fa fa-angle-right pull-right"></i>
-					  </span>
-					</a>
-					<ul class="treeview-menu">
-					  <li><a href="{% url 'orders' %}"><i class=" ti-shopping-cart"><span class="path1"></span><span class="path1"></span></i>Заказы</a></li>
-					  <li><a href="{% url 'mp_perevod' %}"><i class=" ti-exchange-vertical"><span class="path1"></span><span class="path1"></span></i>Переводы МП</a></li>
-					</ul>
-				  </li>
-
-				  {% if request.user|has_group:"Администрация" or request.user|has_group:"РОП" %} 
-				  <li class="treeview">
-					<a href="#">
-					  <i span class=" ti-user"><span class="path1"></span><span class="path1"></span></i>
-					  <span>Менеджеры</span>
-					  <span class="pull-right-container">
-						<i class="fa fa-angle-right pull-right"></i>
-					  </span>
-					</a>
-					<ul class="treeview-menu">
-					  <li><a href="{% url 'managers_graphic' %}"><i class="ti-calendar"><span class="path1"></span><span class="path1"></span></i>График Работы</a></li>
-					  <li><a href="{% url 'managers_zarplata' %}"><i class="ti-money"><span class="path1"></span><span class="path1"></span></i>Зарплата</a></li>
-					</ul>
-				  </li>
-				  <li class="treeview">
-					<a href="#">
-					  <i span class=" ti-hand-open"><span class="path1"></span><span class="path1"></span></i>
-					  <span>Клиенты</span>
-					  <span class="pull-right-container">
-						<i class="fa fa-angle-right pull-right"></i>
-					  </span>
-					</a>
-					<ul class="treeview-menu">
-						<li><a href="{% url 'costumer_index' 'roznica' %}"><i class=" ti-menu-alt"><span class="path1"></span><span class="path1"></span></i>Розница</a></li>
-					  <li><a href="{% url 'costumer_index' 'opt' %}"><i class=" ti-menu-alt"><span class="path1"></span><span class="path1"></span></i>ОПТ</a></li>
-					</ul>
-				  <li class="treeview">
-					<a href="#">
-					  <i span class=" ti-stats-up"><span class="path1"></span><span class="path1"></span></i>
-					  <span>Аналитика</span>
-					  <span class="pull-right-container">
-						<i class="fa fa-angle-right pull-right"></i>
-					  </span>
-					</a>
-					<ul class="treeview-menu">
-					  <li><a href="{% url 'roznica_analitick_index' %}"><i class=" ti-dashboard"><span class="path1"></span><span class="path1"></span></i>Розница</a></li>
-					</ul>
-				  </li>
-				  {% else %}
-				  {% endif %}
-
-				  
-				  {% else %}
-				  {% endif %}
-				  
-				  {% if request.user|has_group:"Сварочный Цех" or request.user|has_group:"Администрация" %}
-				  {% else %}
-				  {% endif %}
-
-
-
-				  {% if request.user|has_group:"Сварочный Цех" or request.user|has_group:"Администрация" %}
-				  <li class="header">Производство</li>
-				  <li class="treeview">
-					<a href="#">
-					  <i span class="ti-vector"><span class="path1"></span><span class="path2"></span></i>
-					  <span>Сварка</span>
-					  <span class="pull-right-container">
-						<i class="fa fa-angle-right pull-right"></i>
-					  </span>
-					</a>
-					<ul class="treeview-menu">
-						{% if user|has_sub_group %}
-						<!-- <li><a href="{% url 'svarka_potrebnost' %}"><i class="icon-Commit"><span class="path2"></span><span class="path2"></span></i>Потребность</a></li> -->
-						<li><a href="{% url 'svarka_zarplata' %}"><i class="icon-Commit"><span class="path2"></span><span class="path2"></span></i>Зарплата</a></li>
-						<li><a href="{% url 'svarka_settingss' %}"><i class="icon-Commit"><span class="path2"></span><span class="path2"></span></i>Настройки</a></li>
-					  {% else %}
-					  <li><a href="{% url 'view_zarp_ids' user.id %}"><i class="icon-Commit"><span class="path2"></span><span class="path2"></span></i>Моя зарплата</a></li>
-					  {% endif %}
-					</ul>
-				  </li>
-
-				  {% else %}
-				  {% endif %}
-
-				  <!-- {% if request.user|has_group:"Швейный Цех" or request.user|has_group:"Администрация" %}
-				  <li class="treeview">
-					<a href="#">
-					  <i span class="ti-cut"><span class="path1"></span><span class="path2"></span></i>
-					  <span>Швейка</span>
-					  <span class="pull-right-container">
-						<i class="fa fa-angle-right pull-right"></i>
-					  </span>
-					</a>
-					<ul class="treeview-menu">
-					  <li><a href="{% url 'shveika_potrebnost' %}"><i class="icon-Commit"><span class="path2"></span><span class="path2"></span></i>Потребность</a></li>
-					</ul>
-				  </li>
-
-				  {% else %}
-				  {% endif %}
-
-
-				  {% if request.user|has_group:"Цех Оплётка" or request.user|has_group:"Администрация" %}
-				  <li class="treeview">
-					<a href="#">
-					  <i span class="ti-pin-alt"><span class="path1"></span><span class="path2"></span></i>
-					  <span>Оплетка</span>
-					  <span class="pull-right-container">
-						<i class="fa fa-angle-right pull-right"></i>
-					  </span>
-					</a>
-					<ul class="treeview-menu">
-					  <li><a href="{% url 'opletka_potrebnost' %}"><i class="icon-Commit"><span class="path2"></span><span class="path2"></span></i>Потребность</a></li>
-					</ul>
-				  </li>
-
-				  {% else %}
-				  {% endif %}
-
-
-				  {% if request.user|has_group:"Покрасочный Цех" or request.user|has_group:"Администрация" %}
-				  <li class="treeview">
-					<a href="#">
-					  <i span class=" ti-palette"><span class="path1"></span><span class="path2"></span></i>
-					  <span>Покраска</span>
-					  <span class="pull-right-container">
-						<i class="fa fa-angle-right pull-right"></i>
-					  </span>
-					</a>
-					<ul class="treeview-menu">
-					  <li><a href="{% url 'pokraska_potrebnost' %}"><i class="icon-Commit"><span class="path2"></span><span class="path2"></span></i>Потребность</a></li>
-					</ul>
-				  </li>
-
-				  {% else %}
-				  {% endif %}
-
-
-				  {% if request.user|has_group:"Упаковочный Цех" or request.user|has_group:"Администрация" %} 
-				  <li class="treeview">
-					  <a href="#">
-						<i span class="ti-bag"><span class="path5"></span><span class="path5"></span></i>
-						<span>Упаковка</span>
-						<span class="pull-right-container">
-						  <i class="fa fa-angle-right pull-right"></i>
-						</span>
-					  </a>
-					  <ul class="treeview-menu">
-						<li><a href="{% url 'upakovka_information' %}"><i class="icon-Commit"><span class="path1"></span><span class="path5"></span></i>Информация</a></li>
-						<li><a href="{% url 'upakovka_information' %}"><i class="icon-Commit"><span class="path1"></span><span class="path5"></span></i>Видео</a></li>
-					  </ul>
-					</li>
-					{% else %}
-				  {% endif %} -->
-
-				  
-				  {% if request.user|has_group:"МаркетПлейсы" or request.user|has_group:"Администрация" or request.user|has_group:"1С" %}
-				  <li class="header">МаркетПлейсы</li>
-				  <li class="treeview">
-					<a href="#">
-					  <i span class="ti-align-justify"><span class="path3"></span><span class="path3"></span></i>
-					  <span>МаркетПлейсы</span>
-					  <span class="pull-right-container">
-						<i class="fa fa-angle-right pull-right"></i>
-					  </span>
-					</a>
-					<ul class="treeview-menu">
-					  <li><a href="{% url 'main_mp' %}"><i class="icon-Commit"><span class="path3"></span><span class="path3"></span></i>Главная</a></li>
-					</ul>
-				  </li>
-
-				  {% else %}
-				  {% endif %}
-
-				  {% if request.user|has_group:"Администрация" or request.user|has_group:"РОП" %}
-				  <li class="header">Авито</li>
-				  <li class="treeview">
-					<a href="#">
-						<img src="https://www.avito.ru/dstatic/favicon.ico" alt="Ozon Logo">
-					  <span>Авито</span>
-					  <span class="pull-right-container">
-						<i class="fa fa-angle-right pull-right"></i>
-					  </span>
-					</a>
-					{% get_shops_avito as shops_avito %}
-					<ul class="treeview-menu">
-					{% for shop in shops_avito %}
-					
-						<li><a href="{% url 'avito' shop.id %}"><i  class="icon-Commit"><span class="path3"></span><span class="path3"></span></i >{{ shop.name }}</a></li>
-
-				{% endfor %}
-			</ul>
-
-
-				  {% else %}
-				  {% endif %}
-
-
-				  {% if request.user|has_group:"МаркетПлейсы" or request.user|has_group:"Администрация" or request.user|has_group:"РОП" %}
-				  <li class="header">Настройка Приложения</li>
-				  <li class="treeview">
-					<a href="#">
-					  <i span class=" ti-bag"><span class="path2"></span><span class="path2"></span></i>
-					  <span>Товары</span>
-					  <span class="pull-right-container">
-						<i class="fa fa-angle-right pull-right"></i>
-					  </span>
-					</a>
-					<ul class="treeview-menu">
-					  <li><a href="{% url 'ozon_products' 18 %}"><i class="icon-Commit"><span class="path2"></span><span class="path2"></span></i>Артиклы</a></li>
-					</ul>
-				  </li>
-
-
-
-				  {% else %}
-				  {% endif %}
-
-				  
-				  {% if request.user|has_group:"Администрация" %}
 				  <li class="header">Администрирование</li>
 				  <li class="treeview">
 					<a href="#">
@@ -269,7 +20,7 @@
 					  </span>
 					</a>
 					<ul class="treeview-menu">
-					  <li><a href="{% url 'users_crm' %}"><i class="icon-Commit"><span class="path4"></span><span class="path4"></span></i>Пользователи</a></li>
+					  <li><a href=""><i class="icon-Commit"><span class="path4"></span><span class="path4"></span></i>Пользователи</a></li>
 					</ul>
 				  </li>
 
@@ -283,12 +34,9 @@
 					  </span>
 					</a>
 					<ul class="treeview-menu">
-					  <li><a href="{% url 'sebestoimost_main' %}"><i class="icon-Commit"><span class="path4"></span><span class="path4"></span></i>Себестоимость</a></li>
+					  <li><a href=""><i class="icon-Commit"><span class="path4"></span><span class="path4"></span></i>Себестоимость</a></li>
 					</ul>
 				  </li>
-
-				  {% else %}
-				  {% endif %}
 
 
 			</ul>
