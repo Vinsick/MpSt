@@ -40,7 +40,7 @@
 				<div class="col-md-12 col-lg-4">
 					<div class="card">
 						<div class="card-header d-flex justify-content-between">
-							<span><i class="fa fa-user me-2"></i> <a href="#" id="client_id">Михаил Штруцкий</a></span>
+							<span><i class="fa fa-user me-2"></i> <a href="#">Михаил Штруцкий</a></span>
 							<span class="text-muted">Добавлено 4 часа назад</span>
 						</div>
 					  <img class="card-img-top bter-0 btsr-0" src= "https://mykaleidoscope.ru/x/uploads/posts/2022-09/1663200698_10-mykaleidoscope-ru-p-stolitsa-chuvashii-cheboksari-vkontakte-11.jpg" alt="Card image cap">
@@ -69,7 +69,7 @@
 				<div class="col-md-12 col-lg-4">
 					<div class="card">
 						<div class="card-header d-flex justify-content-between">
-							<span><i class="fa fa-user me-2"></i> <a href="#" id="client_id">Михаил Штруцкий</a></span>
+							<span><i class="fa fa-user me-2"></i> <a href="#">Михаил Штруцкий</a></span>
 							<span class="text-muted">Добавлено 4 часа назад</span>
 						</div>
 					  <img class="card-img-top bter-0 btsr-0" src="https://www.luna.ru/wp-content/uploads/2023/05/image_5656eaf05cc420.12787328.jpg" alt="Card image cap">
@@ -94,11 +94,11 @@
 					  </div>
 					</div>
 				</div>
-
+					
 				<div class="col-md-12 col-lg-4">
 					<div class="card">
 						<div class="card-header d-flex justify-content-between">
-							<span><i class="fa fa-user me-2"></i> <a href="#" id="client_id">Михаил Штруцкий</a></span>
+							<span><i class="fa fa-user me-2"></i> <a href="#">Михаил Штруцкий</a></span>
 							<span class="text-muted">Добавлено 4 часа назад</span>
 						</div>
 					  <img class="card-img-top bter-0 btsr-0" src= "https://w.forfun.com/fetch/a7/a7f2c4b6cf4bd25801fc46e1dfccd82c.jpeg" alt="Card image cap">
@@ -121,9 +121,79 @@
 							<li><a href="#">Удалить</a></li>
 						</ul>
 					  </div>
+					  
 					</div>
 				</div>
+				<div class="col-12 col-lg-6">			
+					<!-- <div class="box"> -->
+					  <div class="box-body">
+						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-center">
+						  Добавить магазин
+						</button>
+	  
+					  </div>
+					<!-- </div> -->
+	  
+				  </div>	
 			</div>
+			<div class="modal center-modal fade" id="modal-center" tabindex="-1">
+				<div class="modal-dialog">
+				  <div class="modal-content">
+					<div class="modal-header">
+					  <h5 class="modal-title">Добавление магазина</h5>
+					  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<form class="form">
+							<div class="box-body">
+								<h4 class="box-title text-info mb-0"><i class="ti-user me-15"></i>Ваши данные</h4>
+								<hr class="my-15">
+								<div class="row">
+								  <div class="col-md-6">
+									<div class="form-group">
+									  <label class="form-label" id="client_id">Имя</label>
+									  <input type="text" class="form-control" placeholder="Введите имя">
+									</div>
+								  </div>
+								  <div class="col-md-6">
+									<div class="form-group">
+									  <label class="form-label" id="client_id">Фамилия</label>
+									  <input type="text" class="form-control" placeholder="Введите фамилию">
+									</div>
+								  </div>
+								</div>
+								<h4 class="box-title text-info mb-0 mt-20"><i class="ti-save me-15"></i>Характеристики магазина</h4>
+								<hr class="my-15">
+								<div class="form-group">
+								  <label class="form-label" id="client_key">Название магазина</label>
+								  <input type="text" class="form-control" placeholder="Название Вашего магазина">
+								</div>
+								<div class="form-group">
+								  <label class="form-label">Выберите изображение карточки</label>
+								  <label class="file">
+									<input type="file" id="file">
+								  </label>
+								</div>
+								<div class="form-group">
+								  <label class="form-label">Введите описание магазина</label>
+								  <textarea rows="5" class="form-control" placeholder="Описание"></textarea>
+								</div>
+							</div>
+							<!-- /.box-body -->
+							<div class="box-footer">
+								<button type="button" class="btn btn-warning me-1">
+								  <i class="ti-trash"></i> Отменить 
+								</button>
+								<button type="submit" class="btn btn-primary">
+								  <i class="ti-save-alt"></i> Сохранить
+								</button>
+							</div>  
+						</form>
+					</div>
+				  </div>
+				</div>
+			  </div>
+			<!-- /.modal -->
 		  </section>
 		  <!-- /.content -->
 		
