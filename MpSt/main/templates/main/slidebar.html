@@ -1,48 +1,34 @@
-
-
-
 <aside class="main-sidebar">
     <!-- sidebar-->
     <section class="sidebar position-relative">	
 	  	<div class="multinav">
 		  <div class="multinav-scroll" style="height: 100%;">	
 			  <!-- sidebar menu-->
-			  <ul class="sidebar-menu" data-widget="tree">
-
-
-				  <li class="header">Администрирование</li>
-				  <li class="treeview">
+			  <ul class="sidebar-menu" data-widget="tree">	
+				<li class="header"> Ozon</li>
+				<li class="treeview">
 					<a href="#">
-					<i class="icon-User"><span class="path1"></span><span class="path2"></span></i>
-					  <span >Пользователи</span>
+						<img src="https://www.ozon.ru/public/favicon.ico" alt="Ozon Logo">
+					  <span>Ozon</span>
 					  <span class="pull-right-container">
 						<i class="fa fa-angle-right pull-right"></i>
 					  </span>
 					</a>
 					<ul class="treeview-menu">
-					  <li><a href=""><i class="icon-Commit"><span class="path4"></span><span class="path4"></span></i>Пользователи</a></li>
+
+					  <li><a href="{% url 'ozon_settings' %}"><i class="ti-settings"><span class="path1"></span><span class="path1"></span></i>Настройки</a></li>
+			  
 					</ul>
 				  </li>
 
-
-				  <li class="treeview">
-					<a href="#">
-						<i class="icon-File"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
-					  <span>Данные</span>
-					  <span class="pull-right-container">
-						<i class="fa fa-angle-right pull-right"></i>
-					  </span>
-					</a>
-					<ul class="treeview-menu">
-					  <li><a href=""><i class="icon-Commit"><span class="path4"></span><span class="path4"></span></i>Себестоимость</a></li>
-					</ul>
-				  </li>
-
-
-			</ul>
+				
+			  </ul>
 		  </div>
 		</div>
     </section>
+	<div class="sidebar-footer">
+		<a href="javascript:void(0)" class="link" data-bs-toggle="tooltip" title="Settings"><span class="icon-Settings-2"></span></a>
+		<a href="mailbox.html" class="link" data-bs-toggle="tooltip" title="Email"><span class="icon-Mail"></span></a>
+		<a href="javascript:void(0)" class="link" data-bs-toggle="tooltip" title="Logout"><span class="icon-Lock-overturning"><span class="path1"></span><span class="path2"></span></span></a>
+	</div>
   </aside>
-  <div class="control-sidebar-bg"></div>
-
