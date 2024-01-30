@@ -1,0 +1,126 @@
+{% load has_group %}
+{% load has_sub_group %}
+
+
+
+{% load static %}
+<div class="wrapper">
+	<div id="loader"></div>
+
+  <header class="main-header">
+	<div class="d-flex align-items-center logo-box justify-content-start">
+		<a href="#" class="waves-effect waves-light nav-link d-none d-md-inline-block mx-10 push-btn bg-transparent" data-toggle="push-menu" role="button">
+			<span class="icon-Align-left"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
+		</a>	
+		<!-- Logo -->
+		<a href="{% url 'main' %}" class="logo">
+		  <!-- logo-->
+		  <div class="logo-lg">
+			  <span class="light-logo"><img src="{% static 'true/img/logo_stuler.png' %}" alt="logo"></span>
+			  <span class="dark-logo"><img src="{% static 'true/img/logo_stuler.png' %}" alt="logo"></span>
+		  </div>
+		</a>	
+	</div>  
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+	  <div class="app-menu">
+		<ul class="header-megamenu nav">
+			<li class="btn-group nav-item d-md-none">
+				<a href="#" class="waves-effect waves-light nav-link push-btn" data-toggle="push-menu" role="button">
+					<span class="icon-Align-left"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
+			    </a>
+			</li>
+
+
+			{% if request.user|has_group:"Администрация" or request.user|has_group:"РОП" or request.user|has_group:"Розница Продажа" %}
+			<li class="btn-group nav-item d-none d-xl-inline-block">
+				<a href="{% url 'orders' %}" class="waves-effect waves-light nav-link svg-bt-icon" title="Заказы" target="_blank">
+					<i class="ti-shopping-cart"><span class="path1"></span><span class="path2"></span></i>
+			    </a>
+			</li>
+			{% else %}
+			{% endif %}
+
+			{% if request.user|has_group:"Администрация" or request.user|has_group:"МаркетПлейсы" %}
+			<li class="btn-group nav-item d-none d-xl-inline-block">
+				<a href="{% url 'main_mp' %}" class="waves-effect waves-light nav-link svg-bt-icon" title="МаркетПлейсы" target="_blank">
+					<i class="ti-menu"><span class="path1"></span><span class="path2"></span></i>
+			    </a>
+			</li>
+			{% else %}
+			{% endif %}
+
+			{% if request.user|has_group:"МаркетПлейсы" or request.user|has_group:"Администрация" or request.user|has_group:"РОП" or request.user|has_group:"Розница Продажа" %}
+			<li class="btn-group nav-item d-none d-xl-inline-block">
+				<a href="{% url 'ozon_products' 18 %}" class="waves-effect waves-light nav-link svg-bt-icon" title="Товары" target="_blank">
+					<i class=" ti-bag"><span class="path1"></span><span class="path2"></span></i>
+			    </a>
+			</li>
+			{% else %}
+			{% endif %}
+
+		</ul> 
+	  </div>
+		
+      <div class="navbar-custom-menu r-side">
+        <ul class="nav navbar-nav">	
+	  
+
+		  <!-- Notifications -->
+		  <li class="dropdown notifications-menu">
+			<a href="#" class="waves-effect waves-light dropdown-toggle" data-bs-toggle="dropdown" title="Уведомления">
+			  <i class="icon-Notifications"><span class="path1"></span><span class="path2"></span></i>
+			</a>
+			<ul class="dropdown-menu animated bounceIn">
+
+			  <li class="header">
+				<div class="p-20">
+					<div class="flexbox">
+						<div>
+							<h4 class="mb-0 mt-0">Уведомления</h4>
+						</div>
+						<div>
+							<a href="#" class="text-danger">Очистить</a>
+						</div>
+					</div>
+				</div>
+			  </li>
+
+			  <li>
+				<!-- inner menu: contains the actual data -->
+				<ul class="menu sm-scrol">
+				  <li>
+					<a href="#">
+					  <i class="fa fa-users text-info"></i> Уведомлений нет
+					</a>
+				  </li>
+				 
+				</ul>
+			  </li>
+			  <li class="footer">
+				  <a href="#">Посмотреть все</a>
+			  </li>
+			</ul>
+		  </li>	
+		  
+	      <!-- User Account-->
+          <li class="dropdown user user-menu">
+            <a href="#" class="waves-effect waves-light dropdown-toggle" data-bs-toggle="dropdown" title="User">
+				<i class="icon-User"><span class="path1"></span><span class="path2"></span></i>
+            </a>
+            <ul class="dropdown-menu animated flipInX">
+              <li class="user-body">
+				 <a class="dropdown-item" href="{% url 'profile_view_user' user.id %}"><i class="ti-user text-muted me-2"></i> {{ user.first_name }} {{ user.last_name }}</a>
+				 <a class="dropdown-item" href="{% url 'profile_view_user' user.id %}"><i class="ti-settings text-muted me-2"></i> Настройки</a>
+				 <div class="dropdown-divider"></div>
+				 <a class="dropdown-item" href="{% url 'logout' %}"><i class="ti-lock text-muted me-2"></i> Выход</a>
+              </li>
+            </ul>
+          </li>	
+		  
+			
+        </ul>
+      </div>
+    </nav>
+  </header>
