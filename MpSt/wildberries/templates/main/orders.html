@@ -7,7 +7,29 @@
 {% block css %}
 
 <style>
+.parent-container {
+    width: 200%; /* Ширина родительского контейнера */
+    height: 100%; /* Высота родительского контейнера */
+    overflow: auto; /* Добавляем полосу прокрутки, если таблица больше, чем размер контейнера */
+    border: 1px solid #ccc; /* Необязательно: граница для визуального отображения контейнера */
+  }
 
+  .table-container {
+    width: 100%; /* Ширина таблицы */
+    height: 100%; /* Высота таблицы */
+    overflow: auto; /* Добавляем полосу прокрутки, если таблица больше, чем размер контейнера */
+  }
+
+  .table-container__table {
+    width: 100%; /* Ширина таблицы */
+    border-collapse: collapse; /* Убираем промежутки между ячейками */
+  }
+
+  .table-container__table th, td {
+    border: 1px solid #ccc; /* Граница для ячеек */
+    padding: 10px; /* Отступы внутри ячеек */
+    text-align: left; /* Выравнивание текста по левому краю */
+  }
 </style>
 
 {% endblock %}
@@ -40,12 +62,76 @@
             </div>
 
             <section class="content">
-
-                <div class="container mt-5">
-
+                <div class="container mt-5"> 
+                    <div class="col-6">
+                    <h2>Список заказов</h2>
+                    <label for="statusFilter">Фильтр по статусу:</label>
+                    <select id="statusFilter">
+                        <option value="all">Все заказы</option>
+                        <option value="Оформлен">Оформлен</option>
+                        <option value="В обработке">В обработке</option>
+                        <option value="Оплачен">Оплачен</option>
+                    </select>
+                    <div class="parent-container">
+                        <div class="table-container">
+                            <table id="table table-striped" class="table-container__table">
+                                <thead>
+                                    <tr>
+                                        <th>Дата и время заказа</th>
+                                        <th>Дата и время обновления информации в сервисе</th>
+                                        <th>Склад отгрузки</th>
+                                        <th>Страна</th>
+                                        <th>Округ</th>
+                                        <th>Регион</th>
+                                        <th>Артикул продавца</th>
+                                        <th>Артикул WB</th>
+                                        <th>Баркод</th>
+                                        <th>Категория</th>
+                                        <th>Предмет</th>
+                                        <th>Бренд</th>
+                                        <th>Размер товара</th>
+                                        <th>Номер поставки</th>
+                                        <th>Договор поставки</th>
+                                        <th>Договор реализации</th>
+                                        <th>Цена без скидок</th>
+                                        <th>Скидка продавца</th>
+                                        <th>Скидка WB</th>
+                                        <th>Фактическая цена с учетом всех скидок</th>
+                                        <th>Цена со скидкой продавца</th>
+                                        <th>Отмена заказа</th>
+                                        <th>Дата и время отмены заказа</th>
+                                        <th>Тип заказа</th>
+                                        <th>Идентификатор стикера</th>
+                                        <th>Номер заказа</th>
+                                        <th>Уникальный идентификатор заказа</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="id="tableBody>
+                                    <!-- {% for inc in WB_inc %}
+                                    <tr>
+                                        <td>{{ inc.incomeId }}</td>
+                                        <td>{{ inc.number }}</td>
+                                        <td>{{ inc.date }}</td>
+                                        <td>{{ inc.lastChangeDate }}</td>
+                                        <td>{{ inc.supplierArticle }}</td>
+                                        <td>{{ inc.techSize }}</td>
+                                        <td>{{ inc.barcode }}</td>
+                                        <td>{{ inc.quantity }}</td>
+                                        <td>{{ inc.totalPrice }}</td>
+                                        <td>{{ inc.dateClose }}</td>
+                                        <td>{{ inc.warehouseName }}</td>
+                                        <td>{{ inc.nmId }}</td>
+                                        <td>{{ inc.status }}</td>
+                                    </tr>
+                                    {% endfor %} -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-
-              </section>
+                </div>
+                </div>
+            </section>
 
         </div>
     </div>
