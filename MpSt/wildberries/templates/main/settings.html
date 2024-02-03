@@ -1,0 +1,99 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+
+{% block css %}
+
+<style>
+
+</style>
+
+{% endblock %}
+
+{% block tiitle %}StulerCRM - WildBerries Настройки{% endblock %}
+
+    {% block content %}
+
+
+
+    <div class="content-wrapper">
+        <div class="container-full">
+  
+            <div class="content-header">
+                <div class="d-flex align-items-center">
+                    <div class="mr-auto">
+                        <h3 class="page-title">WildBerries</h3>
+                        <div class="d-inline-block align-items-center">
+                            <nav>
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                                    <li class="breadcrumb-item" aria-current="page">WildBerries</li>
+                                    <li class="breadcrumb-item active" aria-current="page">Настройки</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <section class="content">
+
+                <div class="container mt-5">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Настройка токена</h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" action="{% url 'wildberries_settings' %}">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="tokenInput">Токен</label>
+                                    <input type="text" class="form-control" name="tokenInput" value="{{ wb_set.token }}" placeholder="Введите токен">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastUpdatedInput">Последнее обновление токена</label>
+                                    <input type="text" class="form-control" id="lastUpdatedInput" value="{{ wb_set.last_updated|date:'d.m.Y' }}" disabled>
+                                </div>
+                                <!-- Добавляем предупреждающий текст -->
+
+
+                                <div class="box bs-3 border-danger">
+                  
+                                    <div class="box-body">
+
+                                      <p>Токен действует 180 дней с момента его генерации в системе WildBerries.</p>
+                                    </div>
+                                  </div>
+
+                                <button type="submit" class="btn btn-primary">Сохранить</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+              </section>
+
+        </div>
+    </div>
+    
+
+
+	{% endblock %}
+
+
+	{% block js %} 
+    
+
+
+    <script>
+
+
+
+
+
+    </script>
+
+    
+    {% endblock %}

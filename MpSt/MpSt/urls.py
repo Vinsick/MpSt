@@ -19,6 +19,7 @@ from django.urls import include, path
 
 urlpatterns = [
     path('ozon/', include('ozon.urls')),
+    path('wildberries/', include('wildberries.urls')),
     path('', include('main.urls')),
     path('admin/', admin.site.urls),
 ]

@@ -1,0 +1,106 @@
+{% extends 'main/base.html' %}
+
+
+
+{% load static %}
+
+
+{% block css %}
+
+<style>
+
+</style>
+
+{% endblock %}
+
+{% block tiitle %}StulerCRM - WildBerries Поставки{% endblock %}
+
+    {% block content %}
+
+
+
+    <div class="content-wrapper">
+        <div class="container-full">
+  
+            <div class="content-header">
+                <div class="d-flex align-items-center">
+                    <div class="mr-auto">
+                        <h3 class="page-title">Поставки</h3>
+                        <div class="d-inline-block align-items-center">
+                            <nav>
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                                    <li class="breadcrumb-item" aria-current="page">WildBerries</li>
+                                    <li class="breadcrumb-item active" aria-current="page">Поставки</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <section class="content">
+                <div class="container mt-5">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>incomeId</th>
+                                <th>number</th>
+                                <th>date</th>
+                                <th>lastChangeDate</th>
+                                <th>supplierArticle</th>
+                                <th>techSize</th>
+                                <th>barcode</th>
+                                <th>quantity</th>
+                                <th>totalPrice</th>
+                                <th>dateClose</th>
+                                <th>warehouseName</th>
+                                <th>nmId</th>
+                                <th>status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            {% for inc in WB_inc %}
+                            <tr>
+                                <td>{{ inc.incomeId }}</td>
+                                <td>{{ inc.number }}</td>
+                                <td>{{ inc.date }}</td>
+                                <td>{{ inc.lastChangeDate }}</td>
+                                <td>{{ inc.supplierArticle }}</td>
+                                <td>{{ inc.techSize }}</td>
+                                <td>{{ inc.barcode }}</td>
+                                <td>{{ inc.quantity }}</td>
+                                <td>{{ inc.totalPrice }}</td>
+                                <td>{{ inc.dateClose }}</td>
+                                <td>{{ inc.warehouseName }}</td>
+                                <td>{{ inc.nmId }}</td>
+                                <td>{{ inc.status }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+    </div>
+    
+
+
+	{% endblock %}
+
+
+	{% block js %} 
+    
+
+
+    <script>
+
+
+
+
+
+    </script>
+
+    
+    {% endblock %}
