@@ -74,7 +74,7 @@
                     </select>
                     <div class="parent-container">
                         <div class="table-container">
-                            <table id="table table-striped" class="table-container__table">
+                            <table id="table table-striped" class="table-container__table" id="order_table">
                                 <thead>
                                     <tr>
                                         <th>Дата и время заказа</th>
@@ -106,24 +106,38 @@
                                         <th>Уникальный идентификатор заказа</th>
                                     </tr>
                                 </thead>
-                                <tbody id="id="tableBody>
-                                    <!-- {% for inc in WB_inc %}
+                                <tbody id="tableBody">
+                                    {% for order in WB_inc %}
                                     <tr>
-                                        <td>{{ inc.incomeId }}</td>
-                                        <td>{{ inc.number }}</td>
-                                        <td>{{ inc.date }}</td>
-                                        <td>{{ inc.lastChangeDate }}</td>
-                                        <td>{{ inc.supplierArticle }}</td>
-                                        <td>{{ inc.techSize }}</td>
-                                        <td>{{ inc.barcode }}</td>
-                                        <td>{{ inc.quantity }}</td>
-                                        <td>{{ inc.totalPrice }}</td>
-                                        <td>{{ inc.dateClose }}</td>
-                                        <td>{{ inc.warehouseName }}</td>
-                                        <td>{{ inc.nmId }}</td>
-                                        <td>{{ inc.status }}</td>
+                                        <td>{{ order.date|date:"d.m.Y" }}</td>
+                                        <td>{{ order.lastChangeDate|date:"d.m.Y" }}</td>
+                                        <td>{{ order.warehouseName }}</td>
+                                        <td>{{ order.countryName }}</td>
+                                        <td>{{ order.oblastOkrugName }}</td>
+                                        <td>{{ order.regionName }}</td>
+                                        <td>{{ order.supplierArticle }}</td>
+                                        <td>{{ order.nmId }}</td>
+                                        <td>{{ order.barcode }}</td>
+                                        <td>{{ order.category }}</td>
+                                        <td>{{ order.subject }}</td>
+                                        <td>{{ order.brand }}</td>
+                                        <td>{{ order.techSize }}</td>
+                                        <td>{{ order.incomeID }}</td>
+                                        <td>{{ order.isSupply }}</td>
+                                        <td>{{ order.isRealization }}</td>
+                                        <td>{{ order.totalPrice }}</td>
+                                        <td>{{ order.discountPercent }}</td>
+                                        <td>{{ order.spp }}</td>
+                                        <td>{{ order.finishedPrice }}</td>
+                                        <td>{{ order.priceWithDisc }}</td>
+                                        <td>{{ order.isCancel }}</td>
+                                        <td>{{ order.cancelDate|date:"d.m.Y" }}</td>
+                                        <td>{{ order.orderType }}</td>
+                                        <td>{{ order.sticker }}</td>
+                                        <td>{{ order.gNumber }}</td>
+                                        <td>{{ order.srid }}</td>
                                     </tr>
-                                    {% endfor %} -->
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
@@ -142,11 +156,9 @@
 
 
 	{% block js %} 
-    
 
 
     <script>
-
 
 
 

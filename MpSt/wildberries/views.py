@@ -30,6 +30,7 @@ from django.db.models.functions import TruncDay
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import ListView
 from django.contrib.auth.hashers import make_password
+from django.utils import timezone
 
 
 def wildberries_settings(request):
@@ -77,8 +78,9 @@ def wildberries_stocks(request):
 def wildberries_orders(request):
     BWC = WildBerries()
 
+    WB_inc = WildBerries_Orders.objects.all()
     data = {
-
+        'WB_inc': WB_inc
         }
     return render(request, 'main/orders.html', context=data)
 
@@ -150,6 +152,29 @@ class WildBerries:
                     id=item.get('id')
                 )
                 seller_office.save()
+        return response
+    
+    def update_or_create_orders(self, order_list):
+        for order_data in order_list:
+            # Преобразование строковых дат в объекты datetime
+            order_data['date'] = timezone.make_aware(datetime.strptime(order_data['date'], "%Y-%m-%dT%H:%M:%S"))
+            order_data['lastChangeDate'] = timezone.make_aware(datetime.strptime(order_data['lastChangeDate'], "%Y-%m-%dT%H:%M:%S"))
+            order_data['cancelDate'] = timezone.make_aware(datetime.strptime(order_data['cancelDate'], "%Y-%m-%dT%H:%M:%S"))
+
+            # Получение или создание объекта модели
+            order, created = WildBerries_Orders.objects.update_or_create(
+                nmId=order_data['nmId'],
+                defaults=order_data
+            )
+
+    def GetOrders(self):
+        self.url = "https://statistics-api.wildberries.ru"
+        now = datetime.now()
+        one_hour_ago = now - timedelta(days=30)
+        formatted_date = one_hour_ago.strftime("%Y-%m-%d")
+        self.method = f'/api/v1/supplier/orders?dateFrom={formatted_date}'
+        response = self.make_request(endpoint=self.method, method='GET')
+        self.update_or_create_orders(response)
         return response
 
     def GetIncomes(self):
