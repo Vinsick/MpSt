@@ -8,16 +8,18 @@
 
 <style>
 .parent-container {
-    width: 200%; /* Ширина родительского контейнера */
-    height: 100%; /* Высота родительского контейнера */
-    overflow: auto; /* Добавляем полосу прокрутки, если таблица больше, чем размер контейнера */
-    border: 1px solid #ccc; /* Необязательно: граница для визуального отображения контейнера */
+    width: 150%; /* Ширина родительского контейнера */
+    height: 350px; /* Высота родительского контейнера */
+    overflow-y: auto; /* Добавляем полосу прокрутки, если таблица больше, чем размер контейнера */
+    overflow-x: auto;
+    border: 1px solid #ccc; 
   }
 
   .table-container {
     width: 100%; /* Ширина таблицы */
     height: 100%; /* Высота таблицы */
-    overflow: auto; /* Добавляем полосу прокрутки, если таблица больше, чем размер контейнера */
+    overflow-y: auto; /* Добавляем полосу прокрутки, если таблица больше, чем размер контейнера */
+    overflow-x: auto;
   }
 
   .table-container__table {
@@ -63,88 +65,107 @@
 
             <section class="content">
                 <div class="container mt-5"> 
-                    <div class="col-6">
-                    <h2>Список заказов</h2>
-                    <label for="statusFilter">Фильтр по статусу:</label>
-                    <select id="statusFilter">
-                        <option value="all">Все заказы</option>
-                        <option value="Оформлен">Оформлен</option>
-                        <option value="В обработке">В обработке</option>
-                        <option value="Оплачен">Оплачен</option>
-                    </select>
-                    <div class="parent-container">
-                        <div class="table-container">
-                            <table id="table table-striped" class="table-container__table" id="order_table">
-                                <thead>
-                                    <tr>
-                                        <th>Дата и время заказа</th>
-                                        <th>Дата и время обновления информации в сервисе</th>
-                                        <th>Склад отгрузки</th>
-                                        <th>Страна</th>
-                                        <th>Округ</th>
-                                        <th>Регион</th>
-                                        <th>Артикул продавца</th>
-                                        <th>Артикул WB</th>
-                                        <th>Баркод</th>
-                                        <th>Категория</th>
-                                        <th>Предмет</th>
-                                        <th>Бренд</th>
-                                        <th>Размер товара</th>
-                                        <th>Номер поставки</th>
-                                        <th>Договор поставки</th>
-                                        <th>Договор реализации</th>
-                                        <th>Цена без скидок</th>
-                                        <th>Скидка продавца</th>
-                                        <th>Скидка WB</th>
-                                        <th>Фактическая цена с учетом всех скидок</th>
-                                        <th>Цена со скидкой продавца</th>
-                                        <th>Отмена заказа</th>
-                                        <th>Дата и время отмены заказа</th>
-                                        <th>Тип заказа</th>
-                                        <th>Идентификатор стикера</th>
-                                        <th>Номер заказа</th>
-                                        <th>Уникальный идентификатор заказа</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tableBody">
-                                    {% for order in WB_inc %}
-                                    <tr>
-                                        <td>{{ order.date|date:"d.m.Y" }}</td>
-                                        <td>{{ order.lastChangeDate|date:"d.m.Y" }}</td>
-                                        <td>{{ order.warehouseName }}</td>
-                                        <td>{{ order.countryName }}</td>
-                                        <td>{{ order.oblastOkrugName }}</td>
-                                        <td>{{ order.regionName }}</td>
-                                        <td>{{ order.supplierArticle }}</td>
-                                        <td>{{ order.nmId }}</td>
-                                        <td>{{ order.barcode }}</td>
-                                        <td>{{ order.category }}</td>
-                                        <td>{{ order.subject }}</td>
-                                        <td>{{ order.brand }}</td>
-                                        <td>{{ order.techSize }}</td>
-                                        <td>{{ order.incomeID }}</td>
-                                        <td>{{ order.isSupply }}</td>
-                                        <td>{{ order.isRealization }}</td>
-                                        <td>{{ order.totalPrice }}</td>
-                                        <td>{{ order.discountPercent }}</td>
-                                        <td>{{ order.spp }}</td>
-                                        <td>{{ order.finishedPrice }}</td>
-                                        <td>{{ order.priceWithDisc }}</td>
-                                        <td>{{ order.isCancel }}</td>
-                                        <td>{{ order.cancelDate|date:"d.m.Y" }}</td>
-                                        <td>{{ order.orderType }}</td>
-                                        <td>{{ order.sticker }}</td>
-                                        <td>{{ order.gNumber }}</td>
-                                        <td>{{ order.srid }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                    <div class="box-body pb-0">
+                        <div class="row" style="align-items: baseline;">
+                            <div class="col-md-3 col-12" style="width: 10%;">
+                            <div class="form-group">
+                              <label class="form-label">Фильтры</label>
+                              <select class="form-control select2" style="width: 100%;">
+                                <option selected="selected">Alabama</option>
+                                <option>Alaska</option>
+                                <option>California</option>
+                                <option>Delaware</option>
+                                <option>Tennessee</option>
+                                <option>Texas</option>
+                                <option>Washington</option>
+                              </select>
+                              
+                            </div>
+                            <!-- /.form-group -->
+                            </div>
+                            <div class="col-6">
+                                <div class="col-6__header" style="display: flex; justify-content: space-between; align-items: center;">
+                                    <h2>Список заказов</h2>
+                                    <div class="col-6__header-btn">
+                                        <button type="button" class="waves-effect waves-light btn btn-default btn-flat mb-5">Default</button>
+                                        <button type="button" class="waves-effect waves-light btn btn-default btn-flat mb-5">Default</button>
+                                    </div>
+                                </div>
+                                <div class="parent-container">
+                                    <div class="table-container">
+                                        <table id="table table-striped" class="table-container__table" id="order_table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Дата и время заказа</th>
+                                                    <th>Дата и время обновления информации в сервисе</th>
+                                                    <th>Склад отгрузки</th>
+                                                    <th>Страна</th>
+                                                    <th>Округ</th>
+                                                    <th>Регион</th>
+                                                    <th>Артикул продавца</th>
+                                                    <th>Артикул WB</th>
+                                                    <th>Баркод</th>
+                                                    <th>Категория</th>
+                                                    <th>Предмет</th>
+                                                    <th>Бренд</th>
+                                                    <th>Размер товара</th>
+                                                    <th>Номер поставки</th>
+                                                    <th>Договор поставки</th>
+                                                    <th>Договор реализации</th>
+                                                    <th>Цена без скидок</th>
+                                                    <th>Скидка продавца</th>
+                                                    <th>Скидка WB</th>
+                                                    <th>Фактическая цена с учетом всех скидок</th>
+                                                    <th>Цена со скидкой продавца</th>
+                                                    <th>Отмена заказа</th>
+                                                    <th>Дата и время отмены заказа</th>
+                                                    <th>Тип заказа</th>
+                                                    <th>Идентификатор стикера</th>
+                                                    <th>Номер заказа</th>
+                                                    <th>Уникальный идентификатор заказа</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tableBody">
+                                                {% for order in WB_inc %}
+                                                <tr>
+                                                    <td>{{ order.date|date:"d.m.Y" }}</td>
+                                                    <td>{{ order.lastChangeDate|date:"d.m.Y" }}</td>
+                                                    <td>{{ order.warehouseName }}</td>
+                                                    <td>{{ order.countryName }}</td>
+                                                    <td>{{ order.oblastOkrugName }}</td>
+                                                    <td>{{ order.regionName }}</td>
+                                                    <td>{{ order.supplierArticle }}</td>
+                                                    <td>{{ order.nmId }}</td>
+                                                    <td>{{ order.barcode }}</td>
+                                                    <td>{{ order.category }}</td>
+                                                    <td>{{ order.subject }}</td>
+                                                    <td>{{ order.brand }}</td>
+                                                    <td>{{ order.techSize }}</td>
+                                                    <td>{{ order.incomeID }}</td>
+                                                    <td>{{ order.isSupply }}</td>
+                                                    <td>{{ order.isRealization }}</td>
+                                                    <td>{{ order.totalPrice }}</td>
+                                                    <td>{{ order.discountPercent }}</td>
+                                                    <td>{{ order.spp }}</td>
+                                                    <td>{{ order.finishedPrice }}</td>
+                                                    <td>{{ order.priceWithDisc }}</td>
+                                                    <td>{{ order.isCancel }}</td>
+                                                    <td>{{ order.cancelDate|date:"d.m.Y" }}</td>
+                                                    <td>{{ order.orderType }}</td>
+                                                    <td>{{ order.sticker }}</td>
+                                                    <td>{{ order.gNumber }}</td>
+                                                    <td>{{ order.srid }}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                </div>
                         </div>
                     </div>
                 </div>
-                </div>
-                </div>
+
             </section>
 
         </div>
