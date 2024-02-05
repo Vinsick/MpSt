@@ -40,11 +40,168 @@
             </div>
 
             <section class="content">
-
                 <div class="container mt-5">
-
+                    <div class="row">
+                        <div class="col-xl-2 col-lg-5 col-12">
+                                <div class="row">
+                                </div>
+                              <!-- /.modal -->
+                      
+                              <!-- /. box -->
+                                <div class="box" style="padding: 25px;">
+                                    <div class="box-header with-border">
+                                        <h4 class="box-title">Фильтры</h4>
+                                        <!-- <ul class="box-controls pull-right">
+                                            <li>
+                                            <a class="box-btn-slide" href="#"></a>
+                                            </li>	
+                                        </ul> -->
+                                    </div>
+                    
+                                        <ul class="nav nav-pills flex-column">
+                                            <div class="form-group">
+                                                <label>Склад отгрузки</label>
+                                                <select class="form-select" id="sp_dost">
+                                                    <option value="all">Все</option><option value="73895">Почта России - Склад ПОЧТА</option>
+                                                    <option value="Cheb">Самостоятельно - Склад Чебоксары</option>
+                                                </select>
+                                            </div>
+                                
+                                            <div class="form-group">
+                                                <label>Статус заказа</label>
+                                                <select class="form-select" id="status">
+                                                <option value="all">Все</option><option value="awaiting_registration">Ожидает регистрации</option>
+                                                <option value="acceptance_in_progress">идёт приёмка</option>
+                                                <option value="awaiting_approve">ожидает подтверждения</option>
+                                                <option value="awaiting_packaging">ожидает упаковки</option>
+                                                <option value="awaiting_deliver">ожидает отгрузки</option>
+                                                <option value="arbitration">арбитраж</option>
+                                                <option value="client_arbitration">клиентский арбитраж доставки</option>
+                                                <option value="delivering">доставляется</option>
+                                                <option value="driver_pickup">у водителя</option>
+                                                <option value="delivered">доставлено</option>
+                                                <option value="cancelled">отменено</option>
+                                                <option value="not_accepted">не принят на сортировочном центре</option>
+                                                <option value="sent_by_seller">отправлено продавцом</option>
+                                            </select>
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="box-title mb-5">Дата оформления</label>
+                                                <div class="row">
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                    <label>Начальная дата:</label>
+                                                    <input class="form-control" type="date" value="" id="date_start">
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                    <label>Конечная дата:</label>
+                                                    <input class="form-control" type="date" value="" id="date_end">
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </ul>
+                                </div>
+                                    <!-- /.box-body -->
+                        </div>
+                        <div class="col-xl-10 col-lg-7 col-12">
+                                    <div class="box" id="order_box">
+                                        <div class="box-header with-border">
+                                            <h4 class="box-title">Список товаров</h4>
+                                            <div class="box__buttons">
+                                                <a class="btn btn-xs btn-primary pull-right">button</a>
+                                                <a class="btn btn-xs btn-warning pull-right">button</a>
+                                            </div> 
+                                        </div>
+                                        <div class="box-body order_box_body">
+                                            <div class="table-responsive">
+                                                <div id="order_table2_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+                                                    <div class="row">
+                                                        <div class="col-sm-12 col-md-6">
+                                                    
+                                                        </div>
+                                                        <div class="col-sm-12 col-md-6">
+                                                            <div id="order_table2_filter" class="dataTables_filter">
+                                                                <label>Поиск:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="order_table2"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="dataTables_scroll">
+                                                                <div class="dataTables_scrollBody" style="position: relative; overflow: auto; max-height: 450px; width: 100%;">
+                                                                    <table id="order_table2" class="table table-sm table-hover dataTable no-footer" role="grid" aria-describedby="order_table2_info" style="width: 100%;">
+                                                                        <thead class="thead-light">
+                                                                            <tr role="row" style="height: 0px;">
+                                                                                <th>Дата и время обновления информации в сервисе.</th>
+                                                                                <th>Название склада</th>
+                                                                                <th>Артикул продавца</th>
+                                                                                <th>Артикул WB</th>
+                                                                                <th>Баркод</th>
+                                                                                <th>Количество, доступное для продажи</th>
+                                                                                <th>В пути к клиенту</th>
+                                                                                <th>В пути от клиента</th>
+                                                                                <th>Полное (непроданное) количество, которое числится за складом</th>
+                                                                                <th>Категория</th>
+                                                                                <th>Предмет</th>
+                                                                                <th>Бренд</th>
+                                                                                <th>Размер</th>
+                                                                                <th>Цена</th>
+                                                                                <th>Скидка</th>
+                                                                                <th>Договор поставки</th>
+                                                                                <th>Договор реализации</th>
+                                                                                <th>Код контракта</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                            
+                                                                        <tbody id="tableBody">
+                                                                            {% for stock in WB_inc %}
+                                                                            <tr>
+                                                                                <td>{{ stock.lastChangeDate|date:"d.m.Y" }}</td>
+                                                                                <td>{{ stock.warehouseName }}</td>
+                                                                                <td>{{ stock.supplierArticle }}</td>
+                                                                                <td>{{ stock.nmId }}</td>
+                                                                                <td>{{ stock.barcode }}</td>
+                                                                                <td>{{ stock.quantity }}</td>
+                                                                                <td>{{ stock.inWayToClient }}</td>
+                                                                                <td>{{ stock.inWayFromClient }}</td>
+                                                                                <td>{{ stock.quantity} + {stock.inWayToClient} }</td>
+                                                                                <td>{{ stock.category }}</td>
+                                                                                <td>{{ stock.subject }}</td>
+                                                                                <td>{{ stock.brand }}</td>
+                                                                                <td>{{ stock.techSize }}</td>
+                                                                                <td>{{ stock.Price }}</td>
+                                                                                <td>{{ stock.Discount }}</td>
+                                                                                <td>{{ stock.isSupply }}</td>
+                                                                                <td>{{ stock.isRealization }}</td>
+                                                                                <td>{{ stock.SCCode }}</td>
+                                                                            </tr>
+                                                                            {% endfor %}
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-12 col-md-5">
+                                                            <div class="dataTables_info" id="order_table2_info" role="status" aria-live="polite">
+                                                                Записи с 1 до #
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-12 col-md-7">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /. box -->
+                                </div>
+                     </div>
                 </div>
-
               </section>
 
         </div>
