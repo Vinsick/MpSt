@@ -153,6 +153,7 @@
                                                                                 <th>Цена без скидок</th>
                                                                                 <th>Скидка продавца</th>
                                                                                 <th>Скидка WB</th>
+                                                                                <th>К перечислению продавцу</th>
                                                                                 <th>Фактическая цена с учетом всех скидок</th>
                                                                                 <th>Цена со скидкой продавца</th>
                                                                                 <th>Отмена заказа</th>
@@ -186,6 +187,7 @@
                                                                                 <td>{{ sale.totalPrice }}</td>
                                                                                 <td>{{ sale.discountPercent }}</td>
                                                                                 <td>{{ sale.spp }}</td>
+                                                                                <td>{{ sale.forPay }}</td>
                                                                                 <td>{{ sale.finishedPrice }}</td>
                                                                                 <td>{{ sale.priceWithDisc }}</td>
                                                                                 <td>{{ sale.isCancel }}</td>
@@ -218,7 +220,6 @@
                                     <!-- /. box -->
                                 </div>
                      </div>
-                    </div>
                 </div>
               </section>
 
