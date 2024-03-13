@@ -1,0 +1,282 @@
+{% extends 'marketplace/main_mp.html' %}
+{% load product_tags %}
+{% load get_ozon_shop %}
+{% load static %}
+{% load get_characteristics_table %}
+{% block css %}
+{% load product_tags %}
+{% load get_characteristics_table_yandex %}
+
+
+<style>
+    li{
+        list-style: none;
+    }
+
+
+</style>
+
+
+
+{% endblock %}
+
+{% block tiitle %}StulerCRM - Заказ Ya.market {{ order.id_order }}{% endblock %}
+
+    {% block content %}
+
+    <div class="content-wrapper">
+        <input hidden id="order_id" value="{{ order.id_order }}">
+        <div class="container-full">
+          <!-- Content Header (Page header) -->	  
+          <div class="content-header">
+              <div class="d-flex align-items-center">
+                <div class="me-auto">
+                    <h3 class="page-title"> <img style="width: auto; max-width: 30px; height: auto; max-height: 30px;" src="https://sun7-22.userapi.com/impg/mCHOUy4tm3GnSOQGt2Uw29LVdx9wAVYNFY-Gog/jExzWMsnoQc.jpg?size=800x800&quality=95&sign=ce4b35db780c06f718d8446eb39ba374&type=album" alt="Yandex Logo"> Заказы</h3>
+                    <div class="d-inline-block align-items-center">
+                        <nav>
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                                <li class="breadcrumb-item" aria-current="page"> <img style="width: auto; max-width: 20px; height: auto; max-height: 20px;" src="https://sun7-22.userapi.com/impg/mCHOUy4tm3GnSOQGt2Uw29LVdx9wAVYNFY-Gog/jExzWMsnoQc.jpg?size=800x800&quality=95&sign=ce4b35db780c06f718d8446eb39ba374&type=album" alt="Yandex Logo"> Я.Маркет</li>
+                                <li class="breadcrumb-item active" aria-current="page">Заказы</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                  
+              </div>
+          </div>
+          
+          
+
+          <div class="row">
+            <div class="col-12">
+
+          <!-- Main content -->
+          <section class="invoice printableArea">
+
+
+            
+            <div class="row">
+                
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-6 page-header">
+                            <h2 class="d-inline"><span class="fs-30" id="">Магазин: {{ order.id_shop }}</span></h2>
+                        </div>
+                        <div class="col-6">
+                            <div class="clearFix">
+                                <div class="text-end pb-15">
+                                    <button id="print2" class="btn btn-warning float-end" type="button"> <span><i class="fa fa-print"></i> Распечатать</span> </button>
+                                </div>	
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+              <div class="col-12">
+                <div class="page-header">
+                  <h2 class="d-inline"><span class="fs-30" id="zakaz_number">Заказ #{{ order.id_order }}</span></h2>
+                  <div class="pull-right text-end">
+                      <h3 id="date_oforml">Дата оформления: {{ order.creation_date|date:"d.m.Y" }}</h3>
+                  </div>	
+                </div>
+              </div>
+
+
+              <!-- /.col -->
+            </div>
+
+
+            <div class="row invoice-info">
+
+
+            {% if order.get_poluchatel %}
+              <div class="col-md-6 invoice-col">
+                <strong>Получатель</strong>	
+                <address>
+                  <strong class="text-blue fs-24" id="pol_fio">{{ order.get_poluchatel }}</strong><br>
+                  <strong class="d-inline" id="pol_adress">{{ order.get_poluchatel.address }}</strong><br>
+
+                </address>
+              </div>
+            {% else %}
+            <div class="col-md-6 invoice-col">
+                <strong>Получатель скрыт</strong>	
+                <address>
+                  <strong class="text-blue fs-24" id="pol_fio">Скрыто</strong><br>
+                  <strong class="d-inline" id="pol_adress">Скрыто</strong><br>
+
+                </address>
+              </div>
+            {% endif %}
+
+              <!-- /.col -->
+              <div class="col-sm-12 invoice-col mb-15">
+                <div class="invoice-details row no-margin">
+                    {% if order.delivering_date %}
+                    <div class="col-md-6 col-lg-3" id="date_delivery"><b>Дата Отправки: </b> {{ order.delivering_date|date:"d.m.Y H:m" }}</div>
+                    {% else %}
+                    <div class="col-md-6 col-lg-3" id="date_delivery"><b>Дата Отправки: </b> Не отправлен</div>
+                    {% endif %}
+            
+                    {% if order.delivery_method %}
+                    <div class="col-md-6 col-lg-3" id="istochnik"><b>Метод доставки:</b> {{ order.delivery_method.tpl_provider }}</div>
+                    {% else %}
+                    <div class="col-md-6 col-lg-3" id="istochnik"><b>Метод доставки:</b> Не указан</div>
+                    {% endif %}
+            
+                    {% if order.shipmentDate %}
+                    <div class="col-md-6 col-lg-3" id="managers"><b>Дата сборки:</b> {{ order.shipmentDate|date:"d.m.Y" }}</div>
+                    {% else %}
+                    <div class="col-md-6 col-lg-3" id="managers"><b>Дата сборки:</b> Не указана</div>
+                    {% endif %}
+            
+                    {% if order.status   %}
+                    <div class="col-md-6 col-lg-3" id="kt"><b>Статус:</b> {{ order.status }}</div>
+                    {% else %}
+                    <div class="col-md-6 col-lg-3" id="kt"><b>Статус:</b> Не указан</div>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- /.col -->
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+
+                {% for product in order.items.all %}
+                {% get_characteristics_table_yandex product.offer_id product.count as characteristics_table %}
+                {{ characteristics_table|safe }}
+              {% empty %}
+                <p>Нет продуктов</p>
+              {% endfor %}
+
+
+              </div>
+              <!-- /.col -->
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <!-- Новый блок -->
+                    <p class="lead"><b>Системные настройки: </b></p>
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">Комментарий:</label>
+                        {% if order.system_comment %}
+                            <textarea class="form-control" id="comment" name="comment">{{ order.system_comment }}</textarea>
+                        {% else %}
+                            <textarea class="form-control" id="comment" name="comment"></textarea>
+                        {% endif %}
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Дата сборки:</label>
+                        <input type="date" class="form-control" id="date" name="date" value="{{ order.shipment_posting_date|date:'Y-m-d' }}">
+                    </div>
+                </div>
+                <div class="col-6 text-end">
+                    <p class="lead"><b>Дата поступления: </b><span class="text-danger" id="srok"> {{ order.in_process_at|date:"d.m.Y" }} </span></p>
+                    <p class="lead"><b>Трек номер: </b><span class="text-danger" id="ostatok"> {{ order.tracking_number }} </span></p>
+            
+                    <div>
+            
+                    </div>
+                    <div class="total-payment">
+            
+                    </div>
+            
+                </div>
+                <!-- /.col -->
+            </div>
+
+
+
+        </div>
+          </section>
+
+
+
+
+          <div class="col-3">
+            
+
+
+
+
+
+
+
+
+        </div>
+
+
+
+        </div>
+        <div class="control-sidebar-bg"></div>
+    </div>
+
+    
+    </div>
+
+	{% endblock %}
+
+
+	{% block js %}
+    
+    <script src="{% static 'js/pages/invoice.js' %}"></script>
+	<script src="{% static 'js/vendors.min.js' %}"></script>
+	<script src="{% static 'js/pages/chat-popup.js' %}"></script>
+    <script src="{% static 'assets/vendor_plugins/JqueryPrintArea/demo/jquery.PrintArea.js' %}"></script>
+    
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js' %}"></script>
+    <script src="{% static 'js/pages/data-table.js' %}"></script>
+
+
+	<script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.date.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
+
+    <script src="{% static 'assets/vendor_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+
+    <script src="{% static 'js/pages/advanced-form-element.js' %}"></script>
+
+    <script>
+
+$(document).ready(function() {
+    $('#comment, #date').on('change', function() {
+        var url = "{% url 'api_yandex_info_update' %}"
+        var comment = $('#comment').val();
+        var date = $('#date').val();
+        var order_id = $('#order_id').val();
+
+        $.ajax({
+            url: url, // Замените '/your-url' на ваш URL
+            type: 'GET',
+            data: {
+                comment: comment,
+                date: date,
+                order_id: order_id
+            },
+            success: function(response) {
+                // Обработка успешного ответа
+                console.log(response);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // Обработка ошибки
+                console.log(textStatus, errorThrown);
+            }
+        });
+    });
+});
+
+    </script>
+    {% endblock %}
+
+
+    

@@ -1,0 +1,269 @@
+{% extends 'main/base.html' %}
+
+
+{% load static %}
+
+{% block css %}
+<style>
+
+#art_table tr {
+    white-space: nowrap;
+}
+
+
+
+
+
+#art_table td {
+    padding: 0;
+
+}
+
+
+/* Определяем стиль для таблицы */
+.custom-table {
+  border-collapse: collapse; /* Убираем пробелы между ячейками */
+  width: 100%; /* Ширина таблицы */
+}
+
+/* Определяем стиль для ячеек таблицы */
+.custom-table th,
+.custom-table td {
+  border: 2px solid #f00; /* Параметры border: толщина, стиль и цвет */
+  padding: 8px; /* Поля вокруг текста */
+}
+
+/* Определяем стиль для заголовков таблицы */
+.custom-table th {
+  background-color: #4CAF50; /* Цвет фона заголовков */
+  color: white; /* Цвет текста заголовков */
+}
+
+/* Определяем стиль для текста в ячейках таблицы */
+.custom-table td {
+  background-color: #f2f2f2; /* Цвет фона ячеек */
+}
+
+
+</style>
+{% endblock %}
+
+{% block tiitle %}StulerCRM - Артиклы{% endblock %}
+
+    {% block content %}
+
+    <div class="content-wrapper">
+        <div class="container-full">
+          <!-- Content Header (Page header) -->	  
+          <div class="content-header">
+              <div class="d-flex align-items-center">
+                  <div class="mr-auto">
+                      <h3 class="page-title">Артиклы</h3>
+                      <div class="d-inline-block align-items-center">
+                          <nav>
+                              <ol class="breadcrumb">
+                                  <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                                  <li class="breadcrumb-item" aria-current="page">МаркетПлейсы</li>
+                                  <li class="breadcrumb-item active" aria-current="page">Артиклы</li>
+                              </ol>
+                          </nav>
+                      </div>
+                  </div>
+                  
+              </div>
+          </div>
+  
+          <!-- Main content -->
+          <section class="content">
+            <div class="row">
+
+                <div class="col-lg-3 col-md-4 col-12">
+                        <div class="clearfix">
+                            <a class="btn btn-app btn-primary" href="{% url 'ozon_products_add' %}">
+                                <i class="fa fa-inbox"></i> Добавить Артикул
+                              </a>
+
+
+                              <div class="box">
+                                <div class="box-header">
+                                    <h3 class="box-title">Категории</h3>
+                                </div>
+                                <div class="box-body" style="height: 400px; overflow-y: auto; padding: auto;">
+
+                                        {% for tovar in categories_list %}
+                                        <div class="pull-up" style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 0.5rem; padding: 10px; margin-bottom: 10px;">
+                                        <a class="px-0 media media-single " style="padding: 8px;" href="{% url 'ozon_products' tovar.category %}">
+                                            <span class="title ms-0">{{ tovar.category__name }}</span>
+                                            <span class="mx-0 badge badge-secondary-light">{{ tovar.count }}</span>
+                                        </a>
+                                        </div>
+                                        {% endfor %}
+
+                                </div>
+                            </div>
+
+
+
+
+
+				</div>
+
+
+
+
+            </div>
+
+
+
+
+            <div class="col-lg-9 col-md-8 col-12">
+                <div class="row align-items-center mb-30">
+                    <div class="col-6">
+                        <span>Список Артиклов</span>
+                    </div>
+
+                </div>
+                <table class="table table-striped mb-0 table-hover " id="art_table">
+                    <thead>
+                        <tr>
+                            <th>Артикул</th>
+                            {% for characteristic in characteristic_names %}
+                            <th>{{ characteristic }}</th>
+                            {% endfor %}                           
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Артикул</th>
+                            {% for characteristic in characteristic_names %}
+                            <th>{{ characteristic }}</th>
+                            {% endfor %}      
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {% for product_data in all_prod %}
+                        <tr onclick=window.location.href="{% url 'v_products' product_data.product.id %}">
+                            <td>{{ product_data.product.artikul }}</td>
+               
+                            {% for key, value in product_data.characteristics.items %}
+                            <td>
+                                {{ value }}
+                            </td>
+                        {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+                
+
+
+        </div>
+
+          </section>
+          <!-- /.content -->
+        </div>
+    </div>
+
+	{% endblock %}
+
+
+	{% block js %} 
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js' %}"></script>
+    <script src="{% static 'js/pages/data-table.js' %}"></script>
+
+
+	<script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.date.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
+
+    <script src="{% static 'assets/vendor_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+
+    <script src="{% static 'js/pages/advanced-form-element.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+
+
+
+
+            var table = $('#art_table').DataTable({
+    searching: true, // Разрешить поиск
+
+    scrollX: true, // Включить прокрутку по горизонтали
+    scrollCollapse: false, // Изменение здесь
+    "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Russian.json"
+    },
+    order: [[1, 'desc']],
+
+
+    pageLength: 15,
+
+
+    initComplete: function () {
+    var api = this.api();
+
+    api.columns().every(function () {
+        var column = this;
+        var select = $('<select class="form-control"><option value="">Все</option></select>')
+            .appendTo($(column.footer()).empty())
+            .on('change', function () {
+                var val = $.fn.dataTable.util.escapeRegex(
+                    $(this).val()
+                );
+
+                column
+                    .search(val ? '^' + val + '$' : '', true, false)
+                    .draw();
+            });
+
+        column.data().unique().sort().each(function (d, j) {
+            select.append('<option value="' + d + '">' + d + '</option>')
+        });
+    });
+}
+
+
+});
+
+
+
+    $('#product tbody').on('click', 'tr', function () {
+    var artikul = $(this).data('artikul');
+    window.open('' + artikul + '/', '_blank');
+});
+        });
+
+
+
+
+
+        $('#userSearch').on('input', function() {
+      var search = $(this).val().toLowerCase();
+      $(".user").each(function() {
+        var fullname = $(this).data('artikul');
+        if (fullname) { // Добавлена проверка на наличие fullname
+          fullname = fullname.toLowerCase();
+        }
+        else {
+          fullname = ""; // Если не определено, то считаем, что это пустая строка.
+        }
+        if(fullname.includes(search)) {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+    });
+
+    </script>
+    
+    {% endblock %}

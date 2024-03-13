@@ -1,0 +1,489 @@
+{% extends 'marketplace/main_mp.html' %}
+
+
+{% load static %}
+{% block css %}
+<style>
+    .ya-order-table__header {
+        border-top: 1px solid #ddd;
+        font-weight: bold;
+    }
+</style>
+
+{% endblock %}
+
+{% block tiitle %}StulerCRM - СберМегаМаркет {% endblock %}
+
+    {% block content %}
+
+    <div class="content-wrapper">
+        <div class="container-full">
+          <!-- Content Header (Page header) -->	  
+            <div class="content-header">
+                <div class="d-flex align-items-center">
+                    <div class="me-auto">
+                        <h3 class="page-title"> <img style="width: auto; max-width: 30px; height: auto; max-height: 30px;" src="https://extra-cdn.sbermegamarket.ru/static/dist/images/logo-mega-desktop.1d57cb.svg" alt="SMM Logo"> Заказы</h3>
+                        <div class="d-inline-block align-items-center">
+                            <nav>
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                                    <li class="breadcrumb-item" aria-current="page"> <img style="width: auto; max-width: 20px; height: auto; max-height: 20px;" src="https://extra-cdn.sbermegamarket.ru/static/dist/images/logo-mega-desktop.1d57cb.svg" alt="SMM Logo"> Я.Маркет</li>
+                                    <li class="breadcrumb-item active" aria-current="page">Заказы</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                    <form action="{% url 'sbermegamarket_orders_print' %}" method="post">
+                        {% csrf_token %}
+                        <div class="mb-20">
+                            <label for="report_date">Дата отчёта</label>
+                            <input class="form-control" type="date" name="report_date">
+                        </div>
+    
+                        <button type="submit" class="btn btn-primary">Сгенерировать отчёт</button>
+    
+                    </form>
+                </div>
+            </div>
+ 
+
+          <section class="content">
+            <div class="row">
+              <div class="col-3">
+              
+
+              <div class="box">
+                <div class="box-header with-border">
+                <h4 class="box-title">Фильтры</h4>
+                <ul class="box-controls pull-right">
+                  <li><a class="box-btn-slide" href="#"></a></li>	
+                </ul>
+                </div>
+    
+                <div class="box-body">
+
+                    <div class="form-group">
+                        <h4 class="box-title mb-3">Магазин:</h4>
+                            <select class="form-control select2" id="shop_multy_selected" multiple="multiple" data-placeholder="Магазин"
+                            style="width: 100%;">
+                            {% for os in unique_id_shops %}
+                            <option value="{{ os }}">{{ os }}</option>
+                            {% endfor %}
+                        </select>
+                        
+                    </div>
+    
+                    <div class="form-group">
+                        <h4 class="box-title mb-3">Статус:</h4>
+                            <select class="form-control select2" id="status_multy_selected" multiple="multiple" data-placeholder="Статус"
+                            style="width: 100%;">
+                            {% for os in unique_status %}
+                            <option value="{{ os }}">{{ os }}</option>
+                            {% endfor %}
+                        </select>
+                        
+                    </div>
+    
+                  <div class="col-12">
+                    <label class="box-title mb-5">Дата оформления</label>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="form-group">
+                          <label>Начальная дата:</label>
+                          <input class="form-control" type="date" value="" id="date_start">
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-group">
+                          <label>Конечная дата:</label>
+                          <input class="form-control" type="date" value="" id="date_end">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+
+                  <div class="col-12">
+                    <label class="box-title mb-5">Дата отгрузки</label>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="form-group">
+                          <label>Начальная дата:</label>
+                          <input class="form-control" type="date" value="" id="date_start_otrg">
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-group">
+                          <label>Конечная дата:</label>
+                          <input class="form-control" type="date" value="" id="date_end_otrg">
+                        </div>
+                      </div>
+              </div>
+            </div>
+
+
+                </div>
+    
+                <!-- /.box-body -->
+              </div>
+
+              </div>
+              <!-- /.col -->
+              <div class="col-9" >
+                <div class="box" id="order_box">
+                  <div class="box-header with-border">
+                    <h4 class="box-title">Список Заказов</h4>
+                    <a id="update_data" class="btn btn-xs btn-warning pull-right">Обновить</a>
+                  </div>
+                  <div class="box-body order_box_body">
+                    <div class="table-responsive">
+                        <table id="ordersTable" class="table table-striped ya-order-table">
+                            <thead>
+                                <tr class="ya-order-table__header">
+                                    <th scope="col" title="Номер Заказа">Номер</th>
+                                    <th scope="col">Статус</th>
+                                    <th scope="col">Дата создания</th>
+                                    <th scope="col">Отгрузка с</th>
+                                    <th scope="col">Имя клиента</th>
+                                    <th scope="col">Магазин</th>
+                                    <th scope="col">Артикул</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                </tbody>
+                            </table>
+                    </div>
+                  </div>
+                </div>
+              <!-- /. box -->
+              </div>
+              <!-- /.col -->
+    
+              <!-- /.col -->
+            </div>
+          </section>
+
+
+
+          <!-- /.content -->
+        </div>
+    </div>
+
+
+
+	{% endblock %}
+
+
+	{% block js %} 
+
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js' %}"></script>
+    <script src="{% static 'js/pages/data-table.js' %}"></script>
+
+
+	<script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.date.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
+
+    <script src="{% static 'assets/vendor_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+    <script src="{% static 'js/pages/ecommerce_details.js' %}"></script>
+    <script src="{% static 'js/pages/advanced-form-element.js' %}"></script>
+
+    <script>
+$.fn.dataTable.moment = function ( format, locale ) {
+    var types = $.fn.dataTable.ext.type;
+
+    types.detect.unshift( function ( d ) {
+        return moment( d, format, locale, true ).isValid() ?
+            'moment-'+format :
+            null;
+    } );
+
+    types.order[ 'moment-'+format+'-pre' ] = function ( d ) {
+        return moment( d, format, locale, true ).unix();
+    };
+};
+
+$(document).ready(function() {
+
+
+$('#shop_multy_selected').change( function (){
+
+get_orders()
+
+});
+
+$('#status_multy_selected').change( function (){
+
+get_orders()
+
+});
+
+$('#date_start').change( function (){
+if($('#date_end').val()){
+if($('#date_start').val()){
+get_orders()
+}
+}
+});
+
+$('#date_end').change( function (){
+if($('#date_end').val()){
+if($('#date_start').val()){
+get_orders()
+}
+}
+});
+
+$('#date_start_otrg').change( function (){
+if($('#date_end_otrg').val()){
+if($('#date_start_otrg').val()){
+get_orders()
+}
+}
+});
+
+$('#date_end_otrg').change( function (){
+if($('#date_end_otrg').val()){
+if($('#date_start_otrg').val()){
+get_orders()
+}
+}
+});
+
+
+
+var now = new Date();
+now.setDate(now.getDate() + 14)
+
+var day = ("0" + now.getDate()).slice(-2);
+var month = ("0" + (now.getMonth() + 1)).slice(-2);
+var year = now.getFullYear();
+
+var today = year + "-" + month + "-" + day;
+
+$('#date_end').val(today);
+$('#date_end_otrg').val(today);
+
+var ok = new Date();
+ok.setDate(ok.getDate() - 7);
+
+var day_ok = ("0" + ok.getDate()).slice(-2);
+var month_ok = ("0" + (ok.getMonth() + 1)).slice(-2);
+var year_ok = ok.getFullYear();
+
+var lastWeekDate = year_ok + "-" + month_ok + "-" + day_ok;
+
+$('#date_start').val(lastWeekDate);
+$('#date_start_otrg').val(lastWeekDate);
+
+
+$.fn.dataTable.moment( 'D.M.YYYY' );
+var table = $('#ordersTable').DataTable({
+    dom: 'Blfrtip',
+buttons: [ 'csv', 'excel', 'pdf', 'print' ],
+    searching: true, // Разрешить поиск
+    "language": {
+    "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Russian.json"
+    },  
+
+    order: [[2, 'desc']]
+})
+
+
+get_orders()
+
+
+function get_orders() {
+
+var url ="{% url 'api_sbermegamarket_get_orders' %}";
+
+
+var selectedValues_istochniki = $('#shop_multy_selected').val();
+if (selectedValues_istochniki) {
+// Преобразуем массив значений в строку, разделенную запятыми
+var dataObject_istochniki = { shop_selected: selectedValues_istochniki };
+
+// Сериализуем объект в JSON-строку
+var jsonString_istochniki = JSON.stringify(dataObject_istochniki);
+
+}
+var selectedValues_status_select = $('#status_multy_selected').val();
+if (selectedValues_status_select) {
+// Преобразуем массив значений в строку, разделенную запятыми
+var dataObject_status_select = { status_select: selectedValues_status_select };
+
+// Сериализуем объект в JSON-строку
+var jsonString_status_select = JSON.stringify(dataObject_status_select);
+
+}
+
+
+
+
+
+$.ajax({
+type: "GET",
+url: url,
+data: {
+    'date_start':$('#date_start').val(),
+    'date_end':$('#date_end').val(),
+    'date_end_otgr':$('#date_end_otrg').val(),
+    'date_start_otgr':$('#date_start_otgr').val(),
+    'shops': jsonString_istochniki,
+    'status':jsonString_status_select,
+},
+dataType: 'json',
+
+success: function (data) {
+table.clear();
+
+function formatDatee(dateString) {
+let date_parts = dateString.split("T")[0].split("-");
+let date_order = new Date(date_parts[0], date_parts[1] - 1, date_parts[2]);
+return ('0' + date_order.getDate()).slice(-2) + "." + ('0' + (date_order.getMonth() + 1)).slice(-2) + "." + date_order.getFullYear();
+}
+
+const smm_status_translation = {
+    'MERCHANT_CANCELED': 'отмена Мерчантом',
+    'NEW': 'новый заказ',
+    'PENDING': 'обработка заказа со стороны Мегамаркета',
+    'PENDING_CONFIRMATION ': 'обработка подтверждения со стороны Мегамаркета',
+    'CONFIRMED': 'подтверждено Мерчантом',
+    'PENDING_PACKING': 'обработка сообщения о комплектации со стороны Мегамаркета',
+    'PACKED': 'скомплектовано Мерчантом',
+    'PENDING_SHIPPING': 'обработка сообщения об отгрузке со стороны Мегамаркета',
+    'SHIPPED': 'отгружено Мерчантом',
+    'PACKING_EXPIRED': 'просрочка комплетации',
+    'SHIPPING_EXPIRED': 'просрочка отгрузки для C&D',
+    'DELIVERED': 'исполнение заказа',
+    'CUSTOMER_CANCELED': 'отмена покупателем',
+};
+
+
+
+const statusClasses = {
+    'CANCELLED': 'badge badge-pill badge-danger',
+    'DELIVERED': 'badge badge-pill badge-success',
+    'DELIVERY': 'badge badge-pill badge-warning',
+    'PICKUP': 'badge badge-pill badge-info',
+    'PROCESSING': 'badge badge-pill badge-secondary',
+    'UNPAID': 'badge badge-pill badge-warning',
+    'MERCHANT_CANCELED': 'badge badge-pill badge-danger', // Используем badge-danger для отмены Мерчантом
+    'NEW': 'badge badge-pill badge-primary', // Используем badge-primary для нового заказа
+    'PENDING': 'badge badge-pill badge-warning', // Используем badge-warning для обработки заказа
+    'PENDING_CONFIRMATION': 'badge badge-pill badge-warning', // Используем badge-warning для обработки подтверждения
+    'CONFIRMED': 'badge badge-pill badge-info', // Используем badge-info для подтвержденного заказа
+    'PENDING_PACKING': 'badge badge-pill badge-warning', // Используем badge-warning для обработки сообщения о комплектации
+    'PACKED': 'badge badge-pill badge-info', // Используем badge-info для скомплектованного заказа
+    'PENDING_SHIPPING': 'badge badge-pill badge-warning', // Используем badge-warning для обработки сообщения об отгрузке
+    'SHIPPED': 'badge badge-pill badge-info', // Используем badge-info для отгруженного заказа
+    'PACKING_EXPIRED': 'badge badge-pill badge-danger', // Используем badge-danger для просрочки комплетации
+    'SHIPPING_EXPIRED': 'badge badge-pill badge-danger', // Используем badge-danger для просрочки отгрузки
+    'DELIVERED': 'badge badge-pill badge-success', // Используем badge-success для исполнения заказа
+    'CUSTOMER_CANCELED': 'badge badge-pill badge-danger' // Используем badge-danger для отмены покупателем
+};
+
+
+var txt ="";
+data.Orders.forEach(function(order) {
+    txt ="";
+    let formatted_date2 = formatDatee(order['creationDate']);
+    let formatted_date3 = formatDatee(order['shipmentDateFrom']);
+    let status_class = statusClasses[order['status']] || '';
+    let translatedStatus = smm_status_translation[order['status']] || 'Неизвестный статус';
+    order['txt'].forEach(function(txt1) {
+        txt = txt + txt1
+       })
+    table.row.add([
+        '<a href="orders/' + order['shipmentId'] + '/" target="_blank">' + order['shipmentId'] + '</a>', // Первый столбец теперь ссылка,
+        '<span class="' + status_class + '" >' + translatedStatus + '</span>',
+        formatted_date2,
+        formatted_date3,
+        order['customerFullName'],
+        order['shippingPoint'],
+        txt
+    ]).draw();
+});
+
+table.order([2, 'desc']).draw();
+}
+});
+}
+
+
+
+
+
+});
+
+
+
+
+
+
+
+
+$("#update_data").click(function (e) {
+    e.preventDefault();
+
+    var url ="{% url 'sbermegamarket_orders_update_all' %}";
+
+    swal({   
+        title: "ВНИМАНИЕ",   
+        text: "Обновление списков может происходить до 10 минут!!  Не закрывайте плашку",   
+        type: "warning",   
+        showCancelButton: true,   
+        confirmButtonColor: "#DD6B55",   
+        confirmButtonText: "Да, обновить!",   
+        cancelButtonText: "Нет, стоп!",   
+        closeOnConfirm: false,  
+        closeOnCancel: false 
+    }, function(isConfirm) {
+        if (isConfirm) { 
+            swal({
+                title: 'Три... Два... Один...!',
+                text: 'Заказы начали обновляться, окно автоматически закроется после обновления заказов',
+                type: 'success',
+                showConfirmButton: false,
+                onOpen: function() {
+                    swal.showLoading();
+                }
+            });  
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                data: {},
+                dataType: 'json',
+                success: function (data) {
+                    swal.close(); // Закрываем лоадер
+                    swal({
+                        title: "Все заказы успешно обновлены.",
+                        type: "success",
+                        timer: 30000,
+                        showConfirmButton: true
+                    });
+                },
+                error: function () {
+                    swal.close(); // Закрываем лоадер в случае ошибки
+                    swal("Ошибка", "Произошла ошибка при обновлении.", "error");
+                }
+            });
+        } else {
+            swal("Отмена", "Вы отказались обновлять список", "error");
+        } 
+    });
+});
+
+
+    </script>
+    
+    {% endblock %}

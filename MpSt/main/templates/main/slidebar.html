@@ -16,6 +16,13 @@
 					</a>
 					<ul class="treeview-menu">
 
+						<li><a href="{% url 'ozon_orders_app' 0 %}"><i class="ti-shopping-cart-full"><span class="path1"></span><span class="path1"></span></i>Заказы</a></li>
+						<li><a href="{% url 'ozon_reports_app' %}"><i class="ti-clipboard"><span class="path1"></span><span class="path1"></span></i>Отчёты</a></li>
+						<li><a href="{% url 'ozon_products_app' 0 %}"><i class="ti-bag"><span class="path1"></span><span class="path1"></span></i>Товары</a></li>
+						<li><a href="{% url 'ozon_warehouse_app' 0 %}"><i class="ti-package"><span class="path1"></span><span class="path1"></span></i>Склад</a></li>
+						<li><a href="{% url 'ozon_settings_app' %}"><i class="ti-settings"><span class="path1"></span><span class="path1"></span></i>Настройки</a></li>
+
+
 					  <li><a href="{% url 'ozon_settings' %}"><i class="ti-settings"><span class="path1"></span><span class="path1"></span></i>Настройки</a></li>
 			  
 					</ul>
@@ -37,6 +44,23 @@
 					  <li><a href="{% url 'wildberries_settings' %}"><i class="ti-settings"><span class="path1"></span><span class="path1"></span></i>Настройки</a></li>
 					</ul>
 				  </li>
+
+
+
+
+				  <li class="header">Wildberries</li>
+				  <li class="treeview">
+					  <a href="#">
+						<i span class="ti-align-justify"><span class="path3"></span><span class="path3"></span></i>
+						<span>Товары</span>
+						<span class="pull-right-container">
+						  <i class="fa fa-angle-right pull-right"></i>
+						</span>
+					  </a>
+					  <ul class="treeview-menu">
+						<li><a href="{% url 'product_main' %}"><i class="ti-layout"><span class="path1"></span><span class="path1"></span></i>Товары</a></li>
+					  </ul>
+					</li>
 
 				
 			  </ul>

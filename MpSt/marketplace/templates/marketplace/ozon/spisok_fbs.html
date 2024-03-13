@@ -1,0 +1,194 @@
+{% load product_tags %}
+{% load get_characteristics_table %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Список заказов {{ type }}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+      @font-face {
+        font-family: 'OpenSans';
+        src: url("/static/fonts/OpenSans.ttf");
+      }
+
+        @media print {
+          a[href]:after {
+      content: none;
+    }
+            .container {
+                max-width: 100%;
+            }
+            .order {
+    break-inside: avoid;
+  }
+            .py-3 {
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+            }
+            .table {
+                margin-bottom: 0 !important;
+            }
+            h1, h2, h3 {
+                font-size: 1rem;
+            }
+            .table {
+                font-size: 0.7rem;
+            }
+            .order {
+                border: 1px solid #ddd;
+                margin: 10px 0;
+                padding: 10px;
+                border-radius: 5px;
+            }
+            .page-break {
+    display: block;
+    page-break-before: always;
+  }
+        }
+        /* Добавлено: выравнивание по центру для этих классов */
+        .warehouse-header, .tpl-header {
+            text-align: center;
+        }
+
+
+
+        body {
+          font-family: 'Arial', sans-serif;
+        }
+
+  </style>
+</head>
+<body>
+  <h1>Списки OZON <br>Статус: {{ type }}</h1>
+  <button onclick="window.print();" class="btn btn-primary mb-3">Печать</button> <!-- Бутон "Печать" -->
+  <div class="container">
+    <h1>Список необходимых товаров</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Тип</th>
+                <th scope="col">Необходимое количество</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in product_agg %}
+            <tr>
+              <td>{% if product.type is None %}{{ product.products__offer_id }}{% else %}{{ product.type }} {% endif %}</td>
+                {% for prod in prod_list %}
+                {% if prod.artikul == product.products__offer_id %}
+
+              {% endif %}
+              {% endfor %}
+                <td>{{ product.total_quantity }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="container lol py-3">
+
+  
+  {% for key, value in odrers_by_del_meth.items %}
+  <div class="page-break"></div>
+      <h4 class="tpl-header">{{ key }}</h4> 
+
+          {% for order in value  %}
+
+      
+      <div class="order">
+        <div class="d-flex justify-content-between">
+          <div>
+            <span>{{ order.posting_number }}</span>
+          </div>
+          <div class="text-center">
+            <span>{{ order.get_poluchatel|default:"<span class='empty'>Отсутствует</span>"|safe }}</span>
+          </div>
+          <div class="text-right">
+            <span>{{ order.shipment_posting_date|date:"d.m.Y" }}</span>
+          </div>
+        </div>
+        {% if order.system_comment %}
+        <div class="d-flex justify-content-between">
+          <span>Комментарий: {{ order.system_comment }}</span>
+        </div>
+      {% endif %}
+      {% for product1 in order.financialll_data.all %}
+
+        {% for product in product1.financialll_data_product.all %}
+
+
+        {% get_characteristics_table product.product_id product.quantity as characteristics_table %}
+          
+        {{ characteristics_table|safe }}
+
+          {% endfor %}
+
+
+      {% empty %}
+          <tr>
+              <td colspan="2">Нет продуктов</td>
+          </tr>
+      {% endfor %}
+      </table>
+      </div>
+      <hr>
+      {% endfor %}
+  {% endfor %}
+  <div class="page-break"></div>
+</div>
+    
+
+
+<div class="container lol py-3">
+  
+  <h4>Стулья: {{ type }}</h4>
+  
+  {% for key, value in grouped_orders_chair.items %}
+  {% if not forloop.first %}
+  <div class="page-break"></div>
+{% endif %}
+      <h4 class="tpl-header">{{ key }}</h4> 
+
+          {% for order in value  %}
+
+      
+      <div class="order">
+        <div class="d-flex justify-content-between">
+          <div>
+            <span>{{ order.posting_number }}</span>
+          </div>
+          <div class="text-center">
+            <span>{{ order.get_poluchatel|default:"<span class='empty'>Отсутствует</span>"|safe }}</span>
+          </div>
+          <div class="text-right">
+            <span>{{ order.shipment_posting_date|date:"d.m.Y" }}</span>
+          </div>
+        </div>
+
+          {% for product1 in order.financialll_data.all %}
+
+          {% for product in product1.financialll_data_product.all %}
+
+            {% get_characteristics_table product.product_id product.quantity as characteristics_table %}
+          
+          {{ characteristics_table|safe }}
+          {% endfor %}
+      {% empty %}
+          <tr>
+              <td colspan="2">Нет продуктов</td>
+          </tr>
+      {% endfor %}
+      </table>
+      </div>
+      <hr>
+      {% endfor %}
+  {% endfor %}
+
+</div>
+
+</div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+{% load static %}
+{% load get_ozon_product_table %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta charset="utf-8">
+  <title>Список упаковки OZON</title>
+
+  <style>
+
+    </style>
+    
+</head>
+<body>
+  <h1>Список упаковки OZON</h1>
+
+  {% for category, delivery_methods in postings_by_delivery_method.items %}
+  <h2>{{ category }}</h2>
+  {% for delivery_method, postings in delivery_methods.items %}
+      <h3>{{ delivery_method }}</h3>
+
+      {% for posting in postings %}
+      <div class="order">
+          <div class="d-flex justify-content-between">
+              <div>
+                  <h4>{{ posting.posting_number }}</h4>
+              </div>
+              <div class="text-center">
+                  <span>{{ posting.poluchatel }}</span>
+              </div>
+              <div class="text-right">
+                  <span>{{ posting.shipment_posting_date|date:"d.m.Y" }}</span>
+              </div>
+          </div>
+          <div class="d-flex justify-content-between">
+              <span>Комментарий: {{ posting.system_comment }}</span>
+          </div>
+          {% for product in posting.ozon_fbs_posting_products_set.all %}
+              {% get_ozon_product_table product.offer_id product.quantity as characteristics_table %}
+              {{ characteristics_table|safe }}
+          {% empty %}
+              <p>Товары не найдены</p>
+          {% endfor %}
+          <hr>
+      </div>
+      {% endfor %}
+
+
+  {% endfor %}
+{% endfor %}
+
+</body>
+</html>
+
+

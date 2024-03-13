@@ -1,0 +1,65 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge;chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{% static 'true/img/icon.svg' %}">
+
+    <title>{% block tiitle %}{% endblock %}</title>
+  
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.6/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.11.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.11.6/i18n/Russian.json"></script>
+	<link rel="stylesheet" href="{% static 'css/vendors_css.css' %}">
+	  
+
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+	<link rel="stylesheet" href="{% static 'css/skin_color.css' %}">	
+	{% block css %}{% endblock %}
+
+  <style>
+    #loader {
+      position: fixed;
+      width: 100%;
+      height: 100vh;
+      z-index: 999999;
+      overflow: visible;
+      background: #fff url("{% static 'true/img/preloaders/1.gif' %}") no-repeat center center; }
+
+      .treeview img {
+  width: 22px;
+  height: 22px;
+}
+
+
+          </style>
+</head>
+<body class="hold-transition light-skin sidebar-mini theme-primary fixed">
+	
+
+
+    {% include "main/header.html" %}
+
+    {% include "marketplace/slidebar.html" %}
+ 
+    {% block content %}{% endblock %}
+
+ 
+  {% include "main/footer.html" %}
+  
+
+
+
+	<script src="{% static 'js/vendors.min.js' %}"></script>
+	<script src="{% static 'assets/icons/feather-icons/feather.min.js' %}"></script>	
+	
+	<script src="{% static 'js/template.js' %}"></script>
+	{% block js %}  {% endblock %}
+  
+</body>
+</html>

@@ -1,0 +1,133 @@
+{% extends 'main/base.html' %}
+
+
+
+{% load static %}
+
+{% block tiitle %}Настройки Ozon - StulerCRM{% endblock %}
+
+    {% block content %}
+
+    <div class="content-wrapper">
+
+
+      <div class="content-header">
+        <div class="d-flex align-items-center">
+          <div class="me-auto">
+            <h3 class="page-title"><i class=" ti-settings"><span class="path1"></span><span class="path1"></span></i> Настройки Ozon</h3>
+            <div class="d-inline-block align-items-center">
+              <nav>
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                  <li class="breadcrumb-item" aria-current="page"><img style="width: auto; max-width: 15px; height: auto; max-height: 15px;" src="https://www.ozon.ru/public/favicon.ico" alt="Ozon Logo"> Ozon</li>
+                  <li class="breadcrumb-item active" aria-current="page"><i class=" ti-settings"><span class="path1"></span><span class="path1"></span></i> Настройки</li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+
+          <section class="content">
+
+
+            <div class="box">
+              <div class="box-body">
+                <div class="vtabs">
+                  <ul class="nav nav-tabs tabs-vertical" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" data-bs-toggle="tab" href="#Api" role="tab" aria-selected="true">
+                        <span><i class="ti-split-v-alt me-15"></i>Ключи Api</span>
+                      </a>
+                    </li>
+                  </ul>
+                  <div class="tab-content">
+                    <div class="tab-pane active" id="Api" role="tabpanel">
+
+                      <table class="table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col">Имя</th>
+                            
+                            <th scope="col">Key</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Действия</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for key in api_keys %}
+                          <tr>
+                            <td><span class="badge badge-pill badge-success">{{ key.name }}</span></td>
+                            
+                            <td><span class="badge badge-pill badge-dark">{{ key.client_key }}</span></td>
+                            <td>{{ key.client_id }}</td>
+                            <td>
+                              
+                              <div class="btn-group">
+                                <button class="btn-sm btn-rounded btn-danger dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                  <i class="fa fa-cog"></i> Настройки
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                  <a class="dropdown-item" href="{% url 'ozon_settings_edit' key.id %}">
+                                    <i class="fa fa-pencil"></i> Редактировать
+                                  </a>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+
+
+                      <div class="d-flex align-items-end">
+                        <a type="button" href="{% url 'ozon_settings_edit' 0 %}" class="waves-effect waves-light btn btn-primary-light mb-5">
+                          <i class="fa fa-plus"></i> Добавить магазин
+                        </a>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+          </section>
+
+    </div>
+
+	{% endblock %}
+
+
+	{% block js %} 
+
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js' %}"></script>
+    <script src="{% static 'js/pages/data-table.js' %}"></script>
+
+
+	<script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.date.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
+
+
+    <script src="{% static 'js/pages/ecommerce_details.js' %}"></script>
+    <script src="{% static 'js/pages/advanced-form-element.js' %}"></script>
+
+    <script>
+
+
+    </script>
+    
+    {% endblock %}

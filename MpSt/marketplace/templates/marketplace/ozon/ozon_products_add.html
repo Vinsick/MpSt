@@ -1,0 +1,209 @@
+{% extends 'main/base.html' %}
+
+
+
+{% load static %}
+
+{% block tiitle %}StulerCRM - Добавление Артикла{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<style>
+	.formset-row {
+		margin-bottom: 10px;
+	}
+	.btn-remove {
+		margin-top: 20px; /* Отступ для кнопки удаления, чтобы выровнять с полями формы */
+	}
+	.btn-add, .btn-primary {
+		border-radius: 10px; /* Скругляем углы кнопок */
+		padding: 5px 15px;
+	}
+	.child-friendly-input {
+		padding: 5px 10px; 
+		font-size: 16px; /* Увеличиваем шрифт для детей */
+	}
+	/* Дополнительные стили можно добавить здесь */
+
+	#formset-container {
+  height: 600px; /* Пример фиксированной высоты, можно изменить по вашему усмотрению */
+  overflow-y: auto; /* Позволяет скроллить вертикально, если контент превышает высоту */
+}
+
+
+
+</style>
+
+{% endblock %}
+
+    {% block content %}
+
+    <div class="content-wrapper">
+        <div class="container-full">
+          <!-- Content Header (Page header) -->	  
+          <div class="content-header">
+              <div class="d-flex align-items-center">
+                  <div class="mr-auto">
+                      <h3 class="page-title">Добавление Артикла</h3>
+                      <div class="d-inline-block align-items-center">
+                          <nav>
+                              <ol class="breadcrumb">
+                                  <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                                  <li class="breadcrumb-item" aria-current="page">МаркетПлейсы</li>
+                                  <li class="breadcrumb-item active" aria-current="page">Артиклы</li>
+                              </ol>
+                          </nav>
+                      </div>
+                  </div>
+                  
+              </div>
+          </div>
+  
+          <!-- Main content -->
+          <section class="content">
+
+			<div class="container mt-4">
+				<form method="post" class="row">
+					{% csrf_token %}
+					
+					<div class="col-md-6">
+						<!-- Основная информация о товаре -->
+						<fieldset class="p-4 mb-4">
+							<legend class="float-none w-auto px-2">Информация о товаре</legend>
+							{{ form.as_p }}
+						</fieldset>
+						<!-- Кнопка сохранения товара -->
+
+					</div>
+
+
+					<div class="col-md-6">
+						<div class="card">
+							<div class="card-body">
+								<button type="button" class="btn btn-info btn-add mb-3" onclick="addForm()">
+									Добавить характеристику
+								</button>
+								<div id="formset-container" class="flex-grow-1 overflow-auto">
+									<!-- Button to add new formset row -->
+									<!-- Total form counter used by JavaScript -->
+									<input type="hidden" id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" value="{{ formset.management_form.total_form_count }}">
+									{{ formset.management_form }}
+									<!-- Repeatable formset rows go here. Render them using Django's formset forms. -->
+									{% for form in formset.forms %}
+									<div class="formset-row d-flex justify-content-between align-items-center mb-3">
+										{{ form.as_p }}
+										<button type="button" class="btn btn-danger btn-remove" onclick="removeForm(this)">
+											Удалить
+										</button>
+									</div>
+									{% endfor %}
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="col-md-12">
+						<button type="submit" class="btn btn-primary btn-lg btn-block">Сохранить товар</button>
+					</div>
+				</form>
+			</div>
+			
+			
+			
+
+		</section>
+          <!-- /.content -->
+        </div>
+    </div>
+
+	{% endblock %}
+
+
+	{% block js %} 
+    
+    
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js' %}"></script>
+    <script src="{% static 'js/pages/data-table.js' %}"></script>
+
+
+	<script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.date.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
+
+    <script src="{% static 'assets/vendor_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+
+    <script src="{% static 'js/pages/advanced-form-element.js' %}"></script>
+
+	<script>
+
+$(document).ready(function() {
+
+	$('#id_form-TOTAL_FORMS').val(parseInt($('#id_characteristic-TOTAL_FORMS').val()));
+
+})
+
+
+function addForm() {
+    // Get the total number of forms
+    var totalForms = parseInt($('#id_form-TOTAL_FORMS').val());
+
+    // Increment the total number of forms
+    totalForms++;
+
+    // Update the total number of forms
+    $('#id_form-TOTAL_FORMS').val(totalForms);
+
+    // Update the total number of forms
+    $('#id_characteristic-TOTAL_FORMS').val(totalForms);
+
+    // Clone the last formset row
+    var newForm = $('.formset-row:last').clone().val('');
+
+    totalForms--;
+    newForm.find('input, select, textarea').each(function() {
+        console.log($(this))
+		console.log($(this).attr('name'))
+		console.log(totalForms)
+        var name = $(this).prop('name').replace('-' + (totalForms - 1) + '-', '-' + totalForms + '-');
+		console.log($(this).attr('name'))
+		console.log(name)
+        var id = 'id_' + name;
+        $(this).prop('name', name).prop('id', id);
+    });
+
+    // Add the new formset row
+    $('#formset-container').append(newForm);
+}
+
+		function removeForm(button) {
+
+    var formsetRow = $(button).closest('.formset-row');
+
+    var totalForms = parseInt($('#id_form-TOTAL_FORMS').val());
+	if (totalForms > 1) {
+	formsetRow.remove();
+    totalForms--;
+
+    $('#id_form-TOTAL_FORMS').val(totalForms);
+
+
+	$('#id_characteristic-TOTAL_FORMS').val(totalForms);
+	}
+
+
+
+
+}
+
+
+	</script>
+    
+    {% endblock %}

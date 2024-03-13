@@ -1,0 +1,638 @@
+{% extends 'main/base.html' %}
+
+{% load ozon_warehouse_status_translate %}
+
+{% load static %}
+
+{% block css %}
+
+<style>
+thead tr {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+#create_date, #shipment_date {
+  background: #f0f0f0;
+  cursor: pointer;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  max-width: 200px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+}
+
+#create_date, #shipment_date  i {
+  color: #333;
+  font-size: 14px;
+}
+
+#create_date, #shipment_date  span {
+  font-size: 12px;
+  color: #333;
+}
+</style>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+{% endblock %}
+
+{% block tiitle %}Заказы Ozon - StulerCRM{% endblock %}
+
+    {% block content %}
+
+    <div class="content-wrapper">
+
+
+          <section class="content">
+
+
+            <div class="col-12">
+                <div class="box box-inverse box-secondary box-shadow">
+
+                  <div class="box-header with-border">
+                    <h4 class="box-title">Заказы <strong>Ozon</strong></h4>
+
+                    <div class="box-controls pull">
+    
+                      
+                        
+                      <div class="box-header-actions">
+  
+                          <h5>FBO</h5>
+                          <label class="switch switch-border switch-danger">
+                            <input type="checkbox" id="order_type" checked>
+                            <span class="switch-indicator"></span>
+                            <span class="switch-description"></span>
+                          </label>
+                          <h5>FBS</h5>
+                          <div class="lookup lookup-sm lookup-right d-none d-lg-block">
+                              <input type="text" id="table_Search" placeholder="Поиск">
+                            </div>
+
+
+
+
+                                                    
+          <div class="btn-group">
+            <a class="btn btn-rounded btn-warning  btn-xs" type="button" id="updateButton">
+              <i class=" ti-reload"></i> Обновить
+            </a>
+          </div>
+
+          <input id="client_id" value="{{ key_now.client_id }}" hidden>
+          <div class="btn-group">
+            <button class="btn btn-rounded btn-dark dropdown-toggle btn-xs" type="button" data-bs-toggle="dropdown">
+              <i class="fa fa-cog"></i> {{ key_now.name }}
+            </button>
+            <div class="dropdown-menu dropdown-menu-end">
+                {% for key in api_keys %}
+                    <a class="dropdown-item" href="{% url 'ozon_orders_app' key.client_id %}">
+                        <i class="fa fa-circle"></i> {{ key.name }}
+                    </a>
+              {% endfor %}
+            </div>
+          </div>
+
+
+
+                        </div>
+
+
+                        
+
+
+
+                      </div>
+
+
+                    </div>
+
+
+
+                  <div class="box-body">
+
+
+
+                      <div class="row">
+                        <div class="col-4">
+                          <h4 class="box-title mb-5">Дата создания</h4>
+                          <div id="create_date">
+                            <i class="fa fa-calendar"></i>&nbsp;
+                            <span>Дата создания</span> <i class="fa fa-caret-down"></i>
+                          </div>
+                        </div>
+                      
+                        <div class="col-4">
+                          <h4 class="box-title mb-5">Дата отгрузки</h4>
+                          <div id="shipment_date">
+                            <i class="fa fa-calendar"></i>&nbsp;
+                            <span>Дата отгрузки</span> <i class="fa fa-caret-down"></i>
+                          </div>
+                        </div>
+                      
+                        <div class="col-4">
+                          <h4 class="box-title mb-5">Статус:</h4>
+                          <select class="form-control select2" id="status_multy_selected" multiple="multiple" data-placeholder="Статус">
+                          </select>
+                        </div>
+                      </div>
+
+
+                </div>
+              </div>
+            </div>
+
+
+            <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
+                <table class="table no-border table-striped table-hover" id="orderTable">
+                  <thead class="thead-light">
+                    <tr class="text-uppercase bg-info">
+                      <th scope="col">Номер</th>
+                      <th scope="col">Ф.И.О.</th>
+                      <th scope="col">Создан</th>
+                      <th scope="col">Отгрузка</th>
+                      <th scope="col">Артикул</th>
+                      <th scope="col">Статус</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                  </tbody>
+                </table>
+              </div>
+
+
+              <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="confirmationModalLabel">Подтверждение обновления</h5>
+
+                        </div>
+                        <div class="modal-body">
+                            <p>Вы уверены, что хотите обновить данные?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="confirmUpdate">Подтвердить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="loader" class="text-center" style="display: none;">
+              <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
+
+          </section>
+
+    </div>
+
+	{% endblock %}
+
+
+	{% block js %} 
+
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js' %}"></script>
+    <script src="{% static 'js/pages/data-table.js' %}"></script>
+
+	<script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- Подключение moment.js -->
+  <script src="https://cdn.jsdelivr.net/momentjs/2.14.1/moment.min.js"></script>
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <script src="{% static 'js/pages/advanced-form-element.js' %}"></script>
+  
+	<script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+    <script>
+
+
+var statuses = [
+
+ 'awaiting_verification',
+ 'awaiting_approve',
+ 'awaiting_registration',
+ 'awaiting_packaging',
+ 'awaiting_deliver',
+ 'sent_by_seller',
+ 'acceptance_in_progress',
+ 'not_accepted',
+ 'delivering',
+ 'delivered',
+ 'arbitration',
+ 'client_arbitration',
+  'cancelled',
+  'cancelled_from_split_pending',
+  'driver_pickup',
+  
+];
+
+
+
+function UpdateDataRange() {
+    var start, end, label = 'Выберите период';
+    var allDaysStart = moment().subtract(7, 'days');
+    var allDaysEnd = moment();
+
+
+
+
+    $('#create_date').daterangepicker({
+        locale: {
+            format: 'DD.MM.YYYY',
+            separator: ' - ',
+            applyLabel: 'Применить',
+            cancelLabel: 'Отмена',
+            fromLabel: 'От',
+            toLabel: 'До',
+            customRangeLabel: 'Своя дата',
+            daysOfWeek: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+            monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+            firstDay: 1
+        },
+        ranges: {
+            'Сегодня': [moment(), moment()],
+            'Неделя': [moment().subtract(6, 'days'), moment()],
+            '30 дней': [moment().subtract(29, 'days'), moment()],
+            'Все дни': [moment('01.02.2001', 'DD.MM.YYYY'), moment('01.02.2100', 'DD.MM.YYYY')],
+        },
+        startDate: allDaysStart,
+        endDate: allDaysEnd,
+        opens: 'left'
+    }, cb);
+
+    function cb(start, end) {
+        $('#create_date span').html(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
+        getOrders()
+    }
+
+
+    $('#create_date').on('apply.daterangepicker', function(ev, picker) {
+        var selectedStart = picker.startDate.format('DD.MM.YYYY');
+        var selectedEnd = picker.endDate.format('DD.MM.YYYY');
+        console.log('Выбранный диапазон дат:', selectedStart, '-', selectedEnd);
+        // Здесь вы можете использовать выбранные даты для дальнейшей обработки
+    });
+
+}
+
+function UpdateShipmentDataRange() {
+    var start, end, label = 'Выберите период';
+    var allDaysStart = moment().subtract(7, 'days');
+    var allDaysEnd = moment();
+
+
+
+
+    $('#shipment_date').daterangepicker({
+        locale: {
+            format: 'DD.MM.YYYY',
+            separator: ' - ',
+            applyLabel: 'Применить',
+            cancelLabel: 'Отмена',
+            fromLabel: 'От',
+            toLabel: 'До',
+            customRangeLabel: 'Своя дата',
+            daysOfWeek: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+            monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+            firstDay: 1
+        },
+        ranges: {
+            'Сегодня': [moment(), moment()],
+            'Неделя': [moment().subtract(6, 'days'), moment()],
+            '30 дней': [moment().subtract(29, 'days'), moment()],
+            'Все дни': [moment('01.02.2001', 'DD.MM.YYYY'), moment('01.02.2100', 'DD.MM.YYYY')],
+        },
+        startDate: allDaysStart,
+        endDate: allDaysEnd,
+        opens: 'left'
+    }, cb);
+
+    function cb(start, end) {
+        $('#shipment_date span').html(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
+        getOrders()
+    }
+
+}
+
+
+
+function translateStatus(status) {
+  let translatedStatus;
+  let className;
+
+  switch (status) {
+    case 'acceptance_in_progress':
+      translatedStatus = 'Идёт приёмка';
+      className = 'badge-primary';
+      break;
+    case 'arbitration':
+      translatedStatus = 'Арбитраж';
+      className = 'badge-danger';
+      break;
+    case 'awaiting_approve':
+      translatedStatus = 'Ожидает подтверждения';
+      className = 'badge-warning';
+      break;
+    case 'awaiting_deliver':
+      translatedStatus = 'Ожидает отгрузки';
+      className = 'badge-info';
+      break;
+    case 'awaiting_packaging':
+      translatedStatus = 'Ожидает упаковки';
+      className = 'badge-light';
+      break;
+    case 'awaiting_registration':
+      translatedStatus = 'Ожидает регистрации';
+      className = 'badge-secondary';
+      break;
+    case 'awaiting_verification':
+      translatedStatus = 'Создано';
+      className = 'badge-success';
+      break;
+    case 'cancelled':
+      translatedStatus = 'Отменено';
+      className = 'badge-danger';
+      break;
+    case 'cancelled_from_split_pending':
+      translatedStatus = 'Отменено';
+      className = 'badge-danger';
+      break;
+    case 'client_arbitration':
+      translatedStatus = 'Клиентский арбитраж доставки';
+      className = 'badge-danger';
+      break;
+    case 'delivering':
+      translatedStatus = 'Доставляется';
+      className = 'badge-dark';
+      break;
+    case 'driver_pickup':
+      translatedStatus = 'У водителя';
+      className = 'badge-info';
+      break;
+    case 'not_accepted':
+      translatedStatus = 'Не принят на сортировочном центре';
+      className = 'badge-warning';
+      break;
+    case 'sent_by_seller':
+      translatedStatus = 'Отправлено продавцом';
+      className = 'badge-success';
+      break;
+    case 'delivered':
+      translatedStatus = 'Доставлено';
+      className = 'badge-success';
+      break;
+    default:
+      translatedStatus = status;
+      className = 'badge-secondary';
+  }
+
+  return {
+    translatedStatus: translatedStatus,
+    className: className
+  };
+}
+
+
+function formatDateOrderApi(inputDate) {
+  // Создаем новый объект Date из входной строки
+  var date = new Date(inputDate);
+
+  // Получаем день, месяц и год
+  var day = date.getDate();
+  var month = date.getMonth() + 1; // Месяцы в JavaScript считаются с 0, поэтому добавляем 1
+  var year = date.getFullYear();
+
+  // Форматируем день и месяц, если они состоят из одной цифры, добавляем 0 спереди
+  day = (day < 10 ? '0' : '') + day;
+  month = (month < 10 ? '0' : '') + month;
+
+  // Объединяем день, месяц и год в одну строку в нужном формате
+  var formattedDate = day + '.' + month + '.' + year;
+
+  return formattedDate;
+}
+
+
+
+
+$(document).on('click', '#button_orderOpen', function(e) {
+    e.preventDefault(); // Предотвращаем стандартное действие ссылки
+
+    // Получаем ближайший родительский элемент tr
+    var $tr = $(this).closest('tr');
+
+    // Получаем значения атрибутов data-posting_number и data-client_id
+    var posting_number = $tr.data('posting_number');
+    var client_id = $tr.data('client_id');
+
+    // Формируем URL
+    var url = '../postings/' + client_id + '/fbs/' + posting_number;
+
+    // Открываем новую вкладку с URL
+    window.open(url, '_blank');
+});
+
+
+
+
+
+
+function getOrders() {
+var selectedValues_status_select = $('#status_multy_selected').val();
+if (selectedValues_status_select) {
+    // Преобразуем массив значений в строку, разделенную запятыми
+    var dataObject_status_select = { selectedValues_status_select };
+
+    // Сериализуем объект в JSON-строку
+    var jsonString_status_select = JSON.stringify(dataObject_status_select);
+
+}
+
+
+     var client_id = $('#client_id').val()
+      var url ="{% url 'api_ozon_orders_get_app' %}";
+        $.ajax({
+            url: url, // Замените на URL вашего обновления
+            type: 'GET',
+            data: {
+                'client_id': client_id,
+                'order_type': $('#order_type').prop('checked'),
+                'status': jsonString_status_select,
+                'create_date': $('#create_date span').text(),
+                'shipment_date': $('#shipment_date span').text(),
+            },
+            dataType: 'json',
+            success: function(response) {
+    if (response.status == 200) {
+        var postings = response.postings;
+        var $tbody = $('#orderTable tbody');
+        $tbody.empty();
+
+        var fragment = document.createDocumentFragment();
+
+        postings.forEach(function(item) {
+            var products = item.products;
+            var art = [];
+
+            products.forEach(function(product) {
+                art.push(`<span class="badge badge-pill badge-dark">${product.fields.offer_id} : ${product.fields.quantity}</span>`);
+            });
+
+            let statusInfo = translateStatus(item.fields.status);
+            var row = $('<tr data-posting_number="' + item.pk + '" data-client_id="' + item.fields.client_id + '"  data-client_fio="' + item.fields.poluchatel + '">');
+            row.append($('<td class="text-dark fw-600 hover-primary">').text(item.pk));
+            row.append($('<td class="fw-600">').text(item.fields.poluchatel));
+            row.append($('<td>').text(formatDateOrderApi(item.fields.in_process_at)));
+            row.append($('<td>').text(formatDateOrderApi(item.fields.shipment_posting_date)));
+            row.append($('<td>').html(art.join('')));
+            row.append($('<td>').html('<span class="badge ' + statusInfo.className + ' badge-lg">' + statusInfo.translatedStatus + '</span>'));
+            row.append($('<td>').addClass('text-end').html(
+                '<a href="#" id="button_orderOpen" class="btn btn-info-light btn-sm"><span class="icon-Arrow-right fs-18"><span class="path1"></span><span class="path2"></span></span></a>'
+            ));
+            fragment.appendChild(row[0]); // Append the actual DOM element
+        });
+
+        $tbody.append(fragment);
+    } else {
+        // Handle the error case
+    }
+},
+            error: function() {
+
+            }
+        });
+
+    }
+
+
+
+$('#status_multy_selected').change( function (){
+
+  getOrders()
+
+});
+
+
+
+$('#order_type').change( function (){
+
+  getOrders()
+
+});
+
+
+
+$(document).ready(function() {
+    $('#updateButton').on('click', function() {
+        $('#confirmationModal').modal('show');
+    });
+
+
+    $(document).on('hidden.bs.modal', '#confirmationModal', function() {
+        // Восстановление содержимого модального окна до первоначального состояния
+        var modalBody = $('#confirmationModal .modal-body');
+        var modalFooter = $('#confirmationModal .modal-footer');
+        modalBody.html('<p>Вы уверены, что хотите обновить данные?</p>');
+        modalFooter.html('<button type="button" class="btn btn-primary" id="confirmUpdate">Подтвердить</button>');
+    });
+
+    $(document).on('click', '#confirmUpdate', function() {
+        showLoader();
+        var url ="{% url 'ozon_orders_settings_app' %}";
+        $.ajax({
+            url: url, // Замените на URL вашего обновления
+            type: 'GET',
+            data: {
+                'client_id': $('#client_id').val(),
+            },
+            dataType: 'json',
+            success: function(response) {
+                hideLoader();
+
+                if (response.status == 200) {
+                    getOrders()
+                    showUpdateMessage(response.message);
+                }
+                else {
+                    showUpdateMessage('Произошла ошибка при обновлении данных.');
+                };
+            },
+            error: function() {
+                // Отображение сообщения об ошибке
+                showUpdateMessage('Произошла ошибка при обновлении данных.');
+            }
+        });
+    });
+
+    function showUpdateMessage(message) {
+        var modalBody = $('#confirmationModal .modal-body');
+        var modalFooter = $('#confirmationModal .modal-footer');
+        modalBody.html(message);
+        modalFooter.empty();
+    }
+
+    function showLoader() {
+        var modalBody = $('#confirmationModal .modal-body');
+        modalBody.html('<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div></div>');
+        var modalFooter = $('#confirmationModal .modal-footer');
+        modalFooter.empty();
+    }
+
+    function hideLoader() {
+        var modalBody = $('#confirmationModal .modal-body');
+        modalBody.html('<p>Вы уверены, что хотите обновить данные?</p>');
+    }
+
+    getOrders()
+    UpdateDataRange()
+    UpdateShipmentDataRange() 
+
+
+
+    $.each(statuses, function(index, status) {
+  var translatedStatus = translateStatus(status);
+  $('#status_multy_selected').append($('<option>', {
+    value: status,
+    text: translatedStatus.translatedStatus
+  }));
+});
+
+
+
+    // Add event listener to the search input field
+    $('#table_Search').on('input', function() {
+        var searchTerm = $(this).val().toLowerCase();
+        searchTable(searchTerm);
+    });
+
+    // Your existing getOrders function
+    // ...
+
+    // Search function
+    function searchTable(searchTerm) {
+        $('#orderTable tbody tr').each(function() {
+            var row = $(this);
+            var postingNumber = row.data('posting_number').toString().toLowerCase();
+            var clientFio = row.data('client_fio').toString().toLowerCase();
+
+            // Check if the search term is found in the posting number or client FIO
+            if (postingNumber.indexOf(searchTerm) > -1 || clientFio.indexOf(searchTerm) > -1) {
+                row.show(); // Show the row
+            } else {
+                row.hide(); // Hide the row
+            }
+        });
+    }
+
+
+});
+    </script>
+    
+    {% endblock %}

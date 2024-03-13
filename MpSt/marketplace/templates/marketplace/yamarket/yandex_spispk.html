@@ -1,0 +1,190 @@
+{% load product_tags %}
+{% load get_characteristics_table_yandex %}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>{{ title }}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+      @font-face {
+        font-family: 'OpenSans';
+        src: url("/static/fonts/OpenSans.ttf");
+      }
+
+        @media print {
+          a[href]:after {
+      content: none;
+    }
+            .container {
+                max-width: 100%;
+            }
+            .order {
+    break-inside: avoid;
+  }
+            .py-3 {
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+            }
+            .table {
+                margin-bottom: 0 !important;
+            }
+            h1, h2, h3 {
+                font-size: 1rem;
+            }
+            .table {
+                font-size: 0.7rem;
+            }
+            .order {
+                border: 1px solid #ddd;
+                margin: 10px 0;
+                padding: 10px;
+                border-radius: 5px;
+            }
+            .page-break {
+    display: block;
+    page-break-before: always;
+  }
+        }
+        /* Добавлено: выравнивание по центру для этих классов */
+        .warehouse-header, .tpl-header {
+            text-align: center;
+        }
+
+
+
+        body {
+          font-family: 'Arial', sans-serif;
+        }
+
+  </style>
+</head>
+<body>
+  <h1>Списки: {{ type }} <br>{{title}}</h1>
+  <button onclick="window.print();" class="btn btn-primary mb-3">Печать</button> <!-- Бутон "Печать" -->
+  <div class="container">
+    <h1>Список необходимых товаров</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Артикул</th>
+                <th scope="col">Необходимое количество</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in unique_items_list %}
+            <tr>
+              <td>{{ product.items__offer_id }}</td>
+            <td>{{ product.count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="container lol py-3">
+    <div class="page-break"></div>
+    <h4 class="tpl-header">Cписок заказов</h4> 
+  
+    {% for order in other_products  %}
+      <div class="order">
+        <div class="d-flex justify-content-between">
+          <div>
+            <span>{{ order.id_order }}</span>
+          </div>
+          {% if order.buyer %}
+          <div class="text-center">
+            <span>
+              {% if order.buyer.first_name %}{{ order.buyer.first_name }} {% endif %}
+              {% if order.buyer.last_name %}{{ order.buyer.last_name }} {% endif %}
+              {% if order.buyer.middle_name %}{{ order.buyer.middle_name }} {% endif %}
+            </span>
+          </div>
+        {% endif %}
+          <div class="text-right">
+            <span>{{ order.shipmentDate|date:"d.m.Y" }}</span>
+          </div>
+        </div>
+        {% if order.system_comment %}
+          <div class="d-flex justify-content-between">
+            <span>Комментарий: {{ order.system_comment }}</span>
+          </div>
+        {% endif %}
+  
+        {% for product in order.items.all %}
+          {% get_characteristics_table_yandex product.offer_id product.count as characteristics_table %}
+          {{ characteristics_table|safe }}
+        {% empty %}
+          <p>Нет продуктов</p>
+        {% endfor %}
+      </div>
+      <hr>
+    {% empty %}
+      <p>Нет заказов</p>
+    {% endfor %}
+  
+    <div class="page-break"></div>
+  </div>
+    
+
+
+<div class="container lol py-3">
+  
+  <h4>Стулья: {{ type }}</h4>
+
+
+
+      <h4 class="tpl-header"></h4> 
+
+          {% for order in chair_products  %}
+
+      
+          <div class="order">
+            <div class="d-flex justify-content-between">
+              <div>
+                <span>{{ order.id_order }}</span>
+              </div>
+              {% if order.buyer %}
+              <div class="text-center">
+                <span>
+                  {% if order.buyer.first_name %}{{ order.buyer.first_name }} {% endif %}
+                  {% if order.buyer.last_name %}{{ order.buyer.last_name }} {% endif %}
+                  {% if order.buyer.middle_name %}{{ order.buyer.middle_name }} {% endif %}
+                </span>
+              </div>
+            {% endif %}
+              <div class="text-right">
+                <span>{{ order.shipmentDate|date:"d.m.Y" }}</span>
+              </div>
+            </div>
+            {% if order.system_comment %}
+              <div class="d-flex justify-content-between">
+                <span>Комментарий: {{ order.system_comment }}</span>
+              </div>
+            {% endif %}
+      
+            {% for product in order.items.all %}
+              {% get_characteristics_table_yandex product.offer_id product.count as characteristics_table %}
+              {{ characteristics_table|safe }}
+            {% empty %}
+              <p>Нет продуктов</p>
+            {% endfor %}
+          </div>
+          <hr>
+        {% empty %}
+          <p>Нет заказов</p>
+        {% endfor %}
+      
+        <div class="page-break"></div>
+      </div>
+
+
+
+</div>
+
+</div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,328 @@
+{% extends 'marketplace/main_mp.html' %}
+
+
+{% load static %}
+
+{% block tiitle %}StulerCRM - OZON Заказы{% endblock %}
+
+    {% block content %}
+
+    <div class="content-wrapper">
+        <div class="container-full">
+          <!-- Content Header (Page header) -->	  
+          <div class="content-header">
+              <div class="d-flex align-items-center">
+                  <div class="mr-auto">
+                      <h3 class="page-title">Формирование Списков</h3>
+                      <div class="d-inline-block align-items-center">
+                          <nav>
+                              <ol class="breadcrumb">
+                                  <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                                  <li class="breadcrumb-item" aria-current="page">Ozon</li>
+                                  <li class="breadcrumb-item active" aria-current="page">Страница Заказов</li>
+                              </ol>
+                          </nav>
+                      </div>
+                  </div>
+                  
+              </div>
+          </div>
+  
+          <!-- Main content -->
+          <section class="content">
+            <div class="row">
+
+                <div class="row">
+
+                    <div class="col-xl-4 col-12">
+                        <div class="box">
+                            <div class="box-body">							
+        
+                        
+                                <div class="box no-shadow mb-0 px-10">
+                                    <div class="box-header no-border">
+                                        <h4 class="box-title">Фильтры</h4>							
+                                        <div class="box-controls pull-right d-md-flex d-none">
+                                          <a href="#">Информация</a>
+                                        </div>
+                                    </div>
+                                </div>
+        
+                                <div class="px-10">
+                                    <div class="box mb-15">
+                                        <div class="box-body">
+                                            <div class="form-group">
+                                                <label>Способ доставки</label>
+                                                <select class="form-select" id="sp_dost_main">
+                                                </select>
+                                              </div>
+                                        </div>
+                                    </div>                     
+        
+                                    <div class="px-10">
+
+        
+                                    <div class="box mb-15">
+                                        <div class="box-body">
+             
+                                            <div class="form-group">
+                                                <label>Статус заказа</label>
+                                                <select class="form-select" id="status">
+                                                </select>
+                                              </div>
+        
+                                        </div>
+                                    </div>
+                                    <div class="box mb-0">
+                                        <div class="box-body">
+                                            <h4 class="box-title mb-5">Дата обещанной отрузки</h4>
+                                              <div class="clearfix">
+                                                  <div class="form-group">
+                                  
+                                                      <div class="row">
+                                                          <div class="col-12"><input class="form-control" type="date" value="" id="date_start"></div>
+                                                      </div>
+                                                      <!-- /.input group -->
+                                                    </div>
+                                              </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+        
+                        </div>
+
+              <div class="col-xl-8 col-8">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h4 class="box-title">Действия списков <small class="subtitle">Выберите Дату, Способ Доставки и Статус Заказа</small></h4>
+                        <ul class="box-controls pull-right">
+
+                        </ul>
+                    </div>
+                    <div class="box-body">
+                        <div class="d-flex align-items-center mb-30">
+                            <a class="btn btn-app btn-primary" id="spisok_form">
+                                <i class="fa fa-inbox"></i> Сформироовать
+                              </a>
+                        </div>
+
+                    </div>
+                </div>
+              </div>
+
+
+            </div>
+          </section>
+          <!-- /.content -->
+        </div>
+    </div>
+
+	{% endblock %}
+
+
+	{% block js %} 
+    
+    
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js' %}"></script>
+    <script src="{% static 'js/pages/data-table.js' %}"></script>
+
+
+	<script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.date.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
+
+    <script src="{% static 'assets/vendor_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+
+    <script src="{% static 'js/pages/advanced-form-element.js' %}"></script>
+
+    <script>
+
+
+var table = $('#order_table2').DataTable({
+    
+});
+
+$("#spisok_form").click(function () {
+    var date_end = $('#date_start').val()
+    window.open('upakovka/fbs/orders/'+date_end+'/' +$('#status').val()+"/"+$('#sp_dost_main').val()+"/", '_blank');
+
+});
+
+
+$('#sp_dost_main').change( function (){
+
+get_orders()
+
+});
+
+function get_orders(){
+
+    var url ="{% url 'ozon_get_dost' %}";
+    $('#sp_dost').find('option').remove();
+    $('#sp_dost').find('option').remove()
+    $.ajax({
+		  type: "GET",
+		  url: url,
+		  data: {
+            'sp_dost_main': $('#sp_dost_main').val()
+		  },
+		  dataType: 'json',
+		  success: function (data) {
+			  if (data.status == 200) {
+                
+                $('#sp_dost').append($('<option>', {
+                            value: "all",
+                            text: "Все"
+                        }));
+                for (i=0; i<data.unique_warehouses.length; i++){
+                      $('#sp_dost').append($('<option>', {
+                            value: data.unique_warehouses[i],
+                            text: data.unique_warehouses[i]
+                        }));
+
+                      };
+
+
+
+			  }
+			  else if (data.status == 300) {
+
+			  }
+			  else if (data.status == 400) {
+
+			  }
+			  else if (data.status == 403){
+
+			  }
+		  }
+		  
+		});
+
+};
+
+
+$(document).ready(function() {
+    var now = new Date();
+
+var day = ("0" + now.getDate()).slice(-2);
+var month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+
+$('#date_end').val(today);
+
+var ok = new Date();
+ok.setDate(ok.getDate());
+
+var day = ("0" + (ok.getDate())).slice(-2);
+var month = ("0" + (ok.getMonth() + 1)).slice(-2);
+
+var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+
+$('#date_start').val(today);
+
+
+
+
+
+
+    var url ="{% url 'ozon_get_dost' %}";
+    $.ajax({
+		  type: "GET",
+		  url: url,
+		  data: {
+		  },
+		  dataType: 'json',
+		  success: function (data) {
+			  if (data.status == 200) {
+                $('#sp_dost').append($('<option>', {
+                            value: "all",
+                            text: "Все"
+                        }));
+                for (i=0; i<data.Istochniki.length; i++){
+                      $('#sp_dost').append($('<option>', {
+                            value: data.Istochniki[i][0],
+                            text: data.Istochniki[i][3] + " - "+data.Istochniki[i][2]
+                        }));
+
+                      };
+
+                      $('#sp_dost_main').append($('<option>', {
+                            value: "all",
+                            text: "Все"
+                        }));
+                for (i=0; i<data.unique_tpl_provider_values.length; i++){
+                      $('#sp_dost_main').append($('<option>', {
+                            value: data.unique_tpl_provider_values[i],
+                            text: data.unique_tpl_provider_values[i]
+                        }));
+
+                      };
+
+
+			  }
+			  else if (data.status == 300) {
+
+			  }
+			  else if (data.status == 400) {
+
+			  }
+			  else if (data.status == 403){
+
+			  }
+		  }
+		  
+		});
+
+
+        var url ="{% url 'ozon_get_status' %}";
+        $.ajax({
+		  type: "GET",
+		  url: url,
+		  data: {
+		  },
+		  dataType: 'json',
+		  success: function (data) {
+			  if (data.status == 200) {
+                for (i=0; i<data.Istochniki.length; i++){
+                      $('#status').append($('<option>', {
+                            value: data.Istochniki[i][1],
+                            text: data.Istochniki[i][2]
+                        }));
+
+                      };
+			  }
+			  else if (data.status == 300) {
+
+			  }
+			  else if (data.status == 400) {
+
+			  }
+			  else if (data.status == 403){
+
+			  }
+		  }
+		  
+		});
+
+
+
+});
+
+
+
+
+    </script>
+    
+    {% endblock %}

@@ -1,0 +1,256 @@
+{% extends 'main/base.html' %}
+
+{% load ozon_warehouse_status_translate %}
+
+{% load static %}
+
+{% block css %}
+
+<style>
+thead tr {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.modal-content {
+    max-height: calc(100vh - 100px); /* Высота модального окна */
+}
+
+.modal-body {
+    max-height: calc(100vh - 300px); /* Высота модального окна */
+    overflow-y: auto; /* Добавляем скролл, если контент выходит за пределы */
+}
+
+
+
+</style>
+{% endblock %}
+
+{% block tiitle %}Склады Ozon - StulerCRM{% endblock %}
+
+    {% block content %}
+
+    <div class="content-wrapper">
+
+
+      <div class="content-header">
+        <div class="d-flex align-items-center">
+          <div class="me-auto">
+            <h3 class="page-title"> <i class="  ti-package"><span class="path1"></span><span class="path1"></span></i> Склады Ozon</h3>
+            <div class="d-inline-block align-items-center">
+              <nav>
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                  <li class="breadcrumb-item" aria-current="page"><img style="width: auto; max-width: 15px; height: auto; max-height: 15px;" src="https://www.ozon.ru/public/favicon.ico" alt="Ozon Logo"> Ozon</li>
+                  <li class="breadcrumb-item active" aria-current="page"><i class="  ti-package"><span class="path1"></span><span class="path1"></span></i> Склады</li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+          
+
+          <div class="btn-group">
+            <button class="btn btn-rounded btn-dark dropdown-toggle col-xl" type="button" data-bs-toggle="dropdown">
+              <i class="fa fa-cog"></i> {{ key_now.name }}
+            </button>
+            <div class="dropdown-menu dropdown-menu-end">
+                {% for key in api_keys %}
+                    <a class="dropdown-item" href="{% url 'ozon_warehouse_app' key.client_id %}">
+                        <i class="fa fa-circle"></i> {{ key.name }}
+                    </a>
+              {% endfor %}
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+          <section class="content">
+
+
+            <div class="table-responsive" style="max-height: 700px; overflow-y: auto;">
+                <table class="table no-border table-hover" id="warehouseTable">
+                  <thead class="thead-light">
+                    <tr class="text-uppercase bg-lightest">
+                      <th scope="col">Имя</th>
+                      <th scope="col">Статус</th>
+                      <th scope="col">rFBS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for warehouse in warehouses_list %}
+                    <tr data-warehouse_id="{{ warehouse.warehouse_id }}">
+                        <td><span class="badge badge-pill badge-success">{{ warehouse.name }}</span></td>
+                        <td>{{ warehouse.status|ozon_warehouse_status_translate|safe }}</td>
+                        <td>{% if warehouse.is_rfbs == True %}<span class="badge badge-primary-light badge-lg">Да</span>{% else %}<span class="badge badge-danger-light badge-lg">Нет</span>{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+
+
+              <div class="modal center-modal fade" id="modal-warehouse_info" tabindex="-1">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Modal title</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Your content comes here</p>
+                    </div>
+                    <div class="modal-footer modal-footer-uniform">
+                      <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Закрыть</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+
+          </section>
+
+    </div>
+
+	{% endblock %}
+
+
+	{% block js %} 
+
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js' %}"></script>
+    <script src="{% static 'js/pages/data-table.js' %}"></script>
+
+
+	<script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.date.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
+
+
+    <script src="{% static 'js/pages/ecommerce_details.js' %}"></script>
+    <script src="{% static 'js/pages/advanced-form-element.js' %}"></script>
+
+    <script>
+
+$(document).ready(function() {
+
+
+    $('#warehouseTable tbody tr').click(function() {
+        var myModal = document.getElementById('modal-warehouse_info')
+        var warehouseId = $(this).data('warehouse_id');
+        
+
+        var url ="{% url 'api_ozon_warehouse_get' %}";
+        $.ajax({
+		  type: "GET",
+		  url: url,
+		  data: {
+            'warehouseId': warehouseId
+		  },
+		  dataType: 'json',
+		  success: function (data) {
+			  if (data.status == 200) {
+                var warehouse = JSON.parse(data.warehouse);
+                var dms = JSON.parse(data.dms);
+                var warehouseName = warehouse[0].fields.name;
+                $(myModal).find('.modal-header').text(warehouseName);
+
+                var modalBody = $('.modal-body');
+                modalBody.html('');
+                var fields = {
+                'Название склада': 'name',
+                'Признак доверительной приёмки': 'has_entrusted_acceptance',
+                'Признак работы склада по схеме rFBS': 'is_rfbs',
+                'Возможность печати акта приёма-передачи заранее': 'can_print_act_in_advance',
+                'Идентификатор DropOff-точки': 'dropoff_point_id',
+                'Идентификатор временного слота для DropOff': 'dropoff_timeslot_id',
+                'Признак, что настройки склада обновляются': 'first_mile_is_changing',
+                'Тип первой мили — DropOff или Pickup': 'first_mile_type',
+                'Признак наличия лимита минимального количества заказов': 'has_postings_limit',
+                'Признак, что склад не работает из-за карантина': 'is_karantin',
+                'Признак, что склад принимает крупногабаритные товары': 'is_kgt',
+                'Признак, что можно менять расписание работы складов': 'is_timetable_editable',
+                'Минимальное значение лимита — количество заказов, которые можно привезти в одной поставке': 'min_postings_limit',
+                'Значение лимита. -1, если лимита нет': 'postings_limit',
+                'Количество рабочих дней склада': 'min_working_days',
+                'Статус склада': 'status',
+                'Рабочие дни склада': 'working_days',
+                'Признак, что настройки склада обновляются': 'is_able_to_set_price',
+                'Клиент': 'client_id'
+            };
+
+
+var fields_table = {
+    'Наименование': 'name',
+    'Статус': 'status',
+}
+
+var headers = Object.keys(fields_table);
+var headerRow = $('<tr>');
+headers.forEach(function(header) {
+    var th = $('<th>').text(header);
+    headerRow.append(th);
+});
+
+// Создаем тело таблицы
+var tbody = $('<tbody>');
+dms.forEach(function(item) {
+    var tr = $('<tr>');
+    headers.forEach(function(header) {
+        var field = fields_table[header].trim(); // Trim the field name to remove leading/trailing spaces
+
+        var value = item.fields[field];
+        var td = $('<td>').text(value);
+        tr.append(td);
+    });
+    tbody.append(tr);
+});
+
+
+var table = $('<table>').addClass('table').append(headerRow).append(tbody);
+modalBody.append(table);
+
+    // for (var key in fields) {
+    //     var p = $('<p>');
+    //     var value = warehouse[0].fields[fields[key]];
+    //     if (typeof value === 'boolean') {
+    //         value = value ? 'Да' : 'Нет';
+    //     }
+    //     p.text(key + ': ' + value);
+    //     modalBody.append(p);
+    // }
+
+    $(myModal).modal('show');
+                
+			  }
+			  else if (data.status == 300) {
+
+			  }
+			  else if (data.status == 400) {
+
+			  }
+			  else if (data.status == 403){
+
+			  }
+		  }
+		  
+		});
+        
+    });
+
+
+    });
+
+
+
+
+    </script>
+    
+    {% endblock %}

@@ -1,0 +1,235 @@
+{% extends 'main/base.html' %}
+
+
+
+{% load static %}
+
+{% block tiitle %}StulerCRM - {{ product.artikul }} {% endblock %}
+
+    {% block content %}
+
+    <div class="content-wrapper">
+        <div class="container-full">
+          <!-- Content Header (Page header) -->
+          <div class="content-header">
+              <div class="d-flex align-items-center">
+                  <div class="mr-auto">
+                      <h3 class="page-title">{{ product.artikul }}</h3>
+                      <div class="d-inline-block align-items-center">
+                          <nav>
+                              <ol class="breadcrumb">
+                                  <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                                  <li class="breadcrumb-item" aria-current="page">OZON</li>
+                                  <li class="breadcrumb-item active" aria-current="page">Товары</li>
+                              </ol>
+                          </nav>
+                      </div>
+                  </div>
+                  
+              </div>
+          </div>
+  
+          <!-- Main content -->
+          <section class="content">
+  
+            <div class="row">
+
+                <div class="col-12">
+                  <div class="box">
+                    <div class="box-body">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-pills rounded nav-justified">
+                            <li class="nav-item"> <a href="#navpills-1" class="nav-link active" data-bs-toggle="tab" aria-expanded="false">StulerCRM</a> </li>
+                            <li class="nav-item"> <a href="#navpills-2" class="nav-link" data-bs-toggle="tab" aria-expanded="false">Ozon</a> </li>
+                            <li class="nav-item"> <a href="#navpills-3" class="nav-link" data-bs-toggle="tab" aria-expanded="false">Я.Маркет</a> </li>
+                        </ul>
+                    </div>
+                    <!-- /.box-body -->
+                  </div>
+                  <!-- /.box -->
+                  <div class="box">
+                    <div class="box-body">
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div id="navpills-1" class="tab-pane active">						
+                                <div class="row">
+                                  
+
+                                    <div class="col-lg-12">
+
+
+                                        <div class="box">
+                                            <div class="box-body">
+                                                <div class="row">
+
+
+                                                    <div class="col-md-4 col-sm-6">
+                                                        <h4 class="box-title mt-40">Основные характеристики</h4>
+                                                        <div class="table-responsive">
+                                                            <table class="table">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td width="390">Категория</td>
+                                                                        <td> {{ product.category  }} </td>
+                                                                    </tr>
+                                                                    {% for characteristic in product.productcharacteristic_set.all %}
+                                                                    <tr>
+                                                                        <td>{{ characteristic.characteristic.name }}</td>
+                                                                        <td>{{ characteristic.value }}</td>
+                                                                    </tr>
+                                                                    {% endfor %}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                  </div>
+
+
+                                                  <div class="col-md-8 col-sm-6">
+                                                      <h2 class="box-title mt-0">{{ product.artikul }}</h2>
+
+
+                                                      <hr>
+                                                      <div class="gap-items">
+                                                          <a class="btn btn-info" href="{% url 'ozon_products_edit' product.id  %}"><i class="mdi mdi-compare"></i> Редактировать</a>
+                                                          <a class="btn btn-danger"><i class="mdi mdi-heart"></i> Удалить</a>
+                                                      </div>
+
+                                                  </div>
+
+                      
+                      
+                                                </div>
+                                            </div>				
+                                        </div>
+                                    </div>
+                                </div>
+                                
+
+                            </div>
+                            <div id="navpills-2" class="tab-pane">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="box">
+                                            <div class="box-body">
+                                                <div class="row">
+                                                    <div class="col-md-4 col-sm-6">
+                                                        <div class="box box-body b-1 text-center no-shadow">
+                                                            <img src="{{ Ozon_Prod_Info.result.primary_image }}" id="product-image" class="img-fluid" alt="" />
+                                                        </div>
+                                                        <div class="pro-photos">
+
+                                                        </div>
+                                                        <div class="clear"></div>
+                                                    </div>
+                                                    <div class="col-md-8 col-sm-6">
+                                                        <h2 class="box-title mt-0">{{ Ozon_Prod_Info.result.name }}</h2>
+                                                        <div class="list-inline">
+
+                                                        </div>
+                                                        <h1 class="pro-price mb-0 mt-20">&#8381;{{ Ozon_Prod_Info.result.marketing_price }}
+                                                                <span class="old-price">&#8381;{{ Ozon_Prod_Info.result.old_price }}</span>
+                                                            </h1>
+                                                            <hr>
+                                                        <div class="row">
+                                                            <div class="col-md-8 col-sm-6">
+                                                                <h4 class="box-title mt-20">Комиссии доставки</h4>
+                                                                <ul class="list-icons list-unstyled">
+                                                                    {% for data in Ozon_Prod_Info.result.commissions %}
+                                                                    <li><i class="fa fa-check text-danger me-3"></i>{{ data.sale_schema }} - {{ data.percent }}% (&#8381;{{ data.value }})</li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            </div>
+                                                            <div class="col-md-8 col-sm-6">
+
+                                                            </div>
+
+
+                                                        </div>
+
+
+
+                                                    </div>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                                        <h4 class="box-title mt-40">Информация об остатках товара</h4>
+                                                        <div class="table-responsive">
+                                                            <table class="table">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td width="390">Ожидается поставка</td>
+                                                                        <td> {{ Ozon_Prod_Info.result.stocks.coming }} </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Сейчас на складе</td>
+                                                                        <td> {{ Ozon_Prod_Info.result.stocks.present }} </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Зарезервировано</td>
+                                                                        <td> {{ Ozon_Prod_Info.result.stocks.reserved }} </td>
+                                                                    </tr>
+
+                        
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>				
+                                        </div>
+                                    </div>
+                                </div>				
+                            </div>
+
+
+                            <div id="navpills-3" class="tab-pane">
+                                <!-- Categroy 2 -->
+    
+                                <!-- End Categroy 2 -->						
+                            </div>
+
+
+    
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                  </div>
+                  <!-- /.box -->
+                </div>  
+              </div>
+
+
+  
+
+          </section>
+          <!-- /.content -->
+        </div>
+    </div>
+
+	{% endblock %}
+
+
+	{% block js %} 
+
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js' %}"></script>
+    <script src="{% static 'js/pages/data-table.js' %}"></script>
+
+
+	<script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.date.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
+
+    <script src="{% static 'assets/vendor_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+    <script src="{% static 'js/pages/ecommerce_details.js' %}"></script>
+    <script src="{% static 'js/pages/advanced-form-element.js' %}"></script>
+
+    <script>
+
+    </script>
+    
+    {% endblock %}

@@ -1,0 +1,166 @@
+{% extends 'main/base.html' %}
+
+
+{% load static %}
+
+{% block tiitle %}StulerCRM - Маржинальность МаркетПлейсы {% endblock %}
+
+    {% block content %}
+
+    <div class="content-wrapper">
+
+
+      <div class="content-header">
+        <div class="d-flex align-items-center">
+          <div class="me-auto">
+            <h3 class="page-title">Заказы Ozon</h3>
+            <div class="d-inline-block align-items-center">
+              <nav>
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                  <li class="breadcrumb-item" aria-current="page">Ozon</li>
+                  <li class="breadcrumb-item active" aria-current="page">Заказы</li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+
+          <section class="content">
+
+            <div class="row">
+
+            <div class="col-xl-2">
+    
+            <!-- /. box -->
+            <div class="box">
+              <div class="box-header with-border">
+              <h4 class="box-title">Фильтры</h4>
+              <ul class="box-controls pull-right">
+                <li><a class="box-btn-slide" href="#"></a></li>	
+              </ul>
+              </div>
+  
+              <div class="box-body mailbox-nav">
+              <ul class="nav nav-pills flex-column">
+
+                <div class="form-group">
+                  <label>Склад</label>
+                  <select class="form-select" id="sp_dost">
+                  </select>
+                </div>
+  
+                <div class="form-group">
+                  <label>Статус заказа</label>
+                  <select class="form-select" id="status">
+                  </select>
+                </div>
+  
+  
+                <div class="col-12">
+                  <label class="box-title mb-5">Дата оформления</label>
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="form-group">
+                        <label>Начальная дата:</label>
+                        <input class="form-control" type="date" value="" id="date_start">
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="form-group">
+                        <label>Конечная дата:</label>
+                        <input class="form-control" type="date" value="" id="date_end">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+
+                <div class="col-12">
+                  <label class="box-title mb-5">Дата отгрузки Ozon</label>
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="form-group">
+                        <label>Начальная дата:</label>
+                        <input class="form-control" type="date" value="" id="date_start_otrg">
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="form-group">
+                        <label>Конечная дата:</label>
+                        <input class="form-control" type="date" value="" id="date_end_otrg">
+                      </div>
+                    </div>
+            </div>
+          </div>
+
+
+                
+              </ul>
+              </div>
+  
+              <!-- /.box-body -->
+            </div>
+
+            </div>
+
+            <div class="col-xl-10">
+
+              <h2>Таблица заказов</h2>
+              <table class="table table-striped">
+                  <thead>
+                      <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Номер заказа</th>
+                          <th scope="col">Клиент</th>
+                          <th scope="col">Дата</th>
+                          <th scope="col">Статус</th>
+                          <th scope="col">Действия</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <!-- Здесь будут динамически генерироваться строки таблицы -->
+                  </tbody>
+              </table>
+          </div>
+
+
+      </div>
+
+
+		</section>
+
+    </div>
+
+	{% endblock %}
+
+
+	{% block js %} 
+
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js' %}"></script>
+    <script src="{% static 'js/pages/data-table.js' %}"></script>
+
+
+	<script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.date.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
+
+
+    <script src="{% static 'js/pages/ecommerce_details.js' %}"></script>
+    <script src="{% static 'js/pages/advanced-form-element.js' %}"></script>
+
+    <script>
+
+
+    </script>
+    
+    {% endblock %}

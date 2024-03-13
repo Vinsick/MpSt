@@ -20,6 +20,8 @@ from django.urls import include, path
 urlpatterns = [
     path('ozon/', include('ozon.urls')),
     path('wildberries/', include('wildberries.urls')),
+    path('marketplace/ozon_app/', include('ozon_app.urls')),
+    path('products/', include('products_app.urls')),
     path('', include('main.urls')),
     path('admin/', admin.site.urls),
 ]

@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
     'ozon',
-    'wildberries'
+    'wildberries',
+    'products_app',
+    'ozon_app',
 ]
 
 MIDDLEWARE = [

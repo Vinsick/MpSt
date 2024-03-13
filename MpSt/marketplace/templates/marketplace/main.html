@@ -1,0 +1,121 @@
+{% extends 'marketplace/main_mp.html' %}
+
+
+{% load static %}
+
+
+{% block css %}
+
+<style>
+    body {
+      padding: 2rem;
+      background-color: #f7f7f7;
+    }
+
+    .content {
+      max-width: 960px;
+      margin: auto;
+    }
+
+    .content h1 {
+      text-align: center;
+      margin-bottom: 1em;
+      color: #333;
+    }
+
+    .list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 200px; /* Фиксированная ширина для каждого элемента */
+    }
+
+    .item img {
+      width: auto; /* Авто-ширина сохранит пропорции изображения */
+      height: 100px; /* Фиксированная высота */
+      margin-bottom: 1em;
+    }
+
+    .item p {
+      font-size: 1rem;
+      color: #333;
+      margin: 0;
+    }
+
+    /* Следите за адаптивностью вашего дизайна */
+    @media (max-width: 768px) {
+      .list {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+</style>
+
+{% endblock %}
+
+{% block tiitle %}StulerCRM - МаркетПлейсы{% endblock %}
+
+    {% block content %}
+
+
+
+    <div class="content-wrapper">
+        <div class="container-full">
+  
+
+            <section class="content">
+                <h1>Доступные МаркетПлейсы</h1>
+                <div class="list">
+                  <div class="item">
+                    <img src="https://www.ozon.ru/public/favicon.ico" alt="Логотип Ozon" class="img-fluid rounded">
+                    <p>Ozon</p>
+                  </div>
+                  <div class="item">
+                    <img src="https://sun7-22.userapi.com/impg/mCHOUy4tm3GnSOQGt2Uw29LVdx9wAVYNFY-Gog/jExzWMsnoQc.jpg?size=800x800&quality=95&sign=ce4b35db780c06f718d8446eb39ba374&type=album" alt="Логотип Яндекс Маркет" class="img-fluid rounded">
+                    <p>Яндекс Маркет</p>
+                  </div>
+                  <div class="item">
+                    <img src="https://extra-cdn.sbermegamarket.ru/static/dist/images/logo-mega-desktop.1d57cb.svg" alt="Логотип СберМегаМаркет" class="img-fluid rounded">
+                    <p>СберМегаМаркет</p>
+                  </div>
+                  <!-- Вставьте дополнительные элементы со списком фотографий и текста по желанию -->
+                </div>
+              </section>
+
+        </div>
+    </div>
+    
+
+
+	{% endblock %}
+
+
+	{% block js %} 
+    
+    
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js' %}"></script>
+    <script src="{% static 'js/pages/data-table.js' %}"></script>
+
+
+	<script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+
+	<script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+
+
+    <script src="{% static 'js/pages/advanced-form-element.js' %}"></script>
+
+    <script></script>
+
+    
+    {% endblock %}

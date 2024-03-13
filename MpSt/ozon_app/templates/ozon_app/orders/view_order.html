@@ -1,0 +1,236 @@
+{% extends 'main/base.html' %}
+
+{% load get_ozon_product_table %}
+
+
+{% load static %}
+
+{% block css %}
+
+<style>
+thead tr {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+
+</style>
+{% endblock %}
+
+{% block tiitle %}{{ order.posting_number }} Ozon - StulerCRM{% endblock %}
+
+    {% block content %}
+
+<div class="content-wrapper">
+    <input hidden id="order_id" value="{{ order.posting_number }}">
+    <input hidden id="client_id" value="{{ order.client_id.id }}">
+
+    <section class="invoice printableArea">
+
+        <div class="row align-items-center page-header">
+            <div class="col-6 ">
+                <h2 class="d-inline"><span class="fs-30" id=""><img style="width: auto; max-width: 35px; height: auto; max-height: 35px;" src="https://www.ozon.ru/public/favicon.ico" alt="Ozon Logo"></span> {{ order.posting_number }} | {{ order.client_id.name }}</h2>
+            </div>
+            <div class="col-6 ">
+
+                    <div class="text-end pb-15">
+                        <button id="print2" class="btn btn-warning float-end btn-sm" type="button"> <span><i class="fa fa-print"></i> Печать</span> </button>
+                    </div>	
+
+            </div>
+        </div>
+
+        <div class="row invoice-info">
+            {% if order.poluchatel %}
+            <div class="col-md-6 invoice-col">
+              <strong>Получатель</strong>	
+              <address>
+                <strong class="text-blue fs-24">{{ order.poluchatel }}</strong><br>
+              </address>
+            </div>
+          {% endif %}
+          <!-- /.col -->
+          {% if order.ozon_fbs_posting_customer_set.all %}
+            <div class="col-md-6 invoice-col text-end">
+              <strong>Покупатель</strong>
+              <address>
+                <strong class="text-blue fs-24">{{ order.ozon_fbs_posting_customer_set.all.0.name }}</strong><br>
+                {{ order.ozon_fbs_posting_customer_set.all.0.address_tail }}<br>
+              </address>
+            </div>
+          {% endif %}
+          <!-- /.col -->
+          <div class="col-sm-12 invoice-col mb-15">
+              <div class="invoice-details row no-margin">
+
+                {% if order.in_process_at %}
+                <div class="col-md-6 col-lg-3" id="date_delivery"><b>Оформлен: </b> {{ order.in_process_at|date:"d.m.Y" }}</div>
+                {% else %}
+                <div class="col-md-6 col-lg-3" id="date_delivery"><b>Оформлен: </b> Ошибка</div>
+                {% endif %}
+
+
+                {% if order.shipment_posting_date %}
+                <div class="col-md-6 col-lg-3" id="date_delivery"><b>Дата Сборки: </b> {{ order.shipment_posting_date|date:"d.m.Y" }}</div>
+                {% else %}
+                <div class="col-md-6 col-lg-3" id="date_delivery"><b>Дата Сборки: </b> Не собран</div>
+                {% endif %}
+
+
+                
+                {% if order.delivery_method %}
+                <div class="col-md-6 col-lg-3" id="date_delivery"><b>Метод доставки: </b> {{ order.delivery_method.tpl_provider }}</div>
+                {% else %}
+                <div class="col-md-6 col-lg-3" id="date_delivery"><b>Метод доставки: </b> Ошибка</div>
+                {% endif %}
+
+
+                {% if order.status %}
+                <div class="col-md-6 col-lg-3" id="date_delivery"><b>Статус: </b> {{ order.get_status_html|safe }}</div>
+                {% else %}
+                <div class="col-md-6 col-lg-3" id="date_delivery"><b>Статус: </b> Ошибка</div>
+                {% endif %}
+
+              </div>
+          </div>
+        <!-- /.col -->
+        </div>
+
+
+        <div class="row">
+          <div class="col-12 table-responsive">
+
+
+                {% for products in order.ozon_fbs_posting_products_set.all %}
+
+
+
+
+                            {% get_ozon_product_table products.offer_id products.quantity as characteristics_table %}
+                            
+                            {{ characteristics_table|safe }}
+
+
+                    {% empty %}
+                    <hr>
+                {% endfor %}
+
+
+          </div>
+          <!-- /.col -->
+        </div>
+
+
+
+
+        <div class="row">
+            <div class="col-6">
+                <div class="box box-inverse box-info">
+
+
+                    <div class="box-header">
+                        <h4 class="box-title"><strong>Системные настройки</strong></h4>
+
+                      </div>
+
+
+                    <div class="box-body">
+                        <div class="mb-3">
+                            <label for="comment" class="form-label">Комментарий:</label>
+                            {% if order.system_comment %}
+                                <textarea class="form-control" id="comment" name="comment">{{ order.system_comment }}</textarea>
+                            {% else %}
+                                <textarea class="form-control" id="comment" name="comment"></textarea>
+                            {% endif %}
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="date" class="form-label">Дата сборки:</label>
+                            <input type="date" class="form-control" id="date" name="date" value="{{ order.shipment_posting_date|date:'Y-m-d' }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 text-end">
+
+                {% if order.delivering_date %}
+                <p class="lead"><b>Дата отправки: </b><span class="text-danger" id="srok">{{ order.delivering_date|date:"d.m.Y" }}</span></p>
+                <p class="lead"><b>Дата отправки: </b><span class="text-danger" id="srok">{{ order.tracking_number }}</span></p>
+                {% else %}
+                <p class="lead"><b>Заказ не отправлен</b><span class="text-danger" id="srok"></span></p>
+                {% endif %}
+
+                <div>
+        
+                </div>
+                <div class="total-payment">
+        
+                </div>
+        
+            </div>
+            <!-- /.col -->
+        </div>
+        <div class="row no-print">
+          <div class="col-12">
+
+          </div>
+        </div>
+      </section>
+
+
+
+
+
+
+
+
+</div>
+
+	{% endblock %}
+
+
+	{% block js %} 
+
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js' %}"></script>
+    <script src="{% static 'js/pages/data-table.js' %}"></script>
+    <script src="{% static 'js/pages/invoice.js' %}"></script>
+
+	<script src="{% static 'js/vendors.min.js' %}"></script>
+
+    <script src="{% static 'assets/vendor_plugins/JqueryPrintArea/demo/jquery.PrintArea.js' %}"></script>
+
+    <script>
+
+$(document).ready(function() {
+    $('#comment, #date').on('change', function() {
+        var url = "{% url 'api_ozon_orders_update_one_app' %}"
+        var comment = $('#comment').val();
+        var date = $('#date').val();
+        var order_id = $('#order_id').val();
+        var client_id = $('#client_id').val();
+
+
+        $.ajax({
+            url: url, // Замените '/your-url' на ваш URL
+            type: 'GET',
+            data: {
+                comment: comment,
+                date: date,
+                order_id: order_id,
+                client_id: client_id
+            },
+            success: function(response) {
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // Обработка ошибки
+                console.log(textStatus, errorThrown);
+            }
+        });
+    });
+});
+
+    </script>
+    
+    {% endblock %}

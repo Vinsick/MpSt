@@ -1,0 +1,434 @@
+{% extends 'marketplace/main_mp.html' %}
+
+
+{% load static %}
+
+
+{% block css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+#order_table2 .tr {
+    white-space: nowrap;
+}
+
+#order_table2 th, #order_table2 td {
+    padding: 0;
+    
+}
+
+#order_table2 th {
+    padding: 0;
+
+}
+
+#order_table2 td {
+    padding: 0;
+
+}
+/* Стили для иконок */
+.icon-container {
+    display: inline-block;
+    font-size: 1em; /* Уменьшаем размер иконок */
+    margin: 0 0.25em; /* Добавляем отступы между иконками и переключателем */
+    vertical-align: middle; /* Выравниваем иконки по вертикали */
+}
+
+/* Стили для toggle switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 2em; /* Уменьшаем ширину переключателя */
+    height: 1em; /* Уменьшаем высоту переключателя */
+    vertical-align: middle; /* Выравниваем переключатель по вертикали */
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 0.75em; /* Уменьшаем размер ползунка */
+    width: 0.75em; /* Уменьшаем размер ползунка */
+    left: 0.125em; /* Уменьшаем отступ от левого края */
+    bottom: 0.125em; /* Уменьшаем отступ от нижнего края */
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(0.75em); /* Уменьшаем перемещение ползунка */
+    -ms-transform: translateX(0.75em); /* Уменьшаем перемещение ползунка */
+    transform: translateX(0.75em); /* Уменьшаем перемещение ползунка */
+}
+
+/* Опционально: стили для рамки вокруг переключателя */
+.slider.round {
+    border-radius: 1em; /* Уменьшаем радиус рамки */
+}
+
+.slider.round:before {
+    border-radius: 50%; /* Делаем ползунок круглым */
+}
+
+</style>
+
+{% endblock %}
+
+{% block tiitle %}StulerCRM - Упаковка - Списки{% endblock %}
+
+    {% block content %}
+
+
+
+    <div class="content-wrapper">
+        <div class="container-full">
+
+
+            <section class="content">
+
+
+                <div class="row">
+
+
+                    <div class="col-2">
+                        <div class="box">
+                            <div class="box-body text-center">
+                                <div class="icon-container">
+                                    <i class="fas  fa-chair"></i>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider round"></span>
+                                </label>
+                                <div class="icon-container">
+                                    <i class="fas  fa-bars"></i>
+                                </div>
+                            </div>
+                        </div>
+
+
+                      <div class="box">
+                        <div class="box-body">       
+
+
+                            <div class="form-group">
+                                <h4 class="box-title mb-3">Маркет Плейсы:</h4>
+                                    <select class="form-control select2" id="status_multy_selected" multiple="multiple" data-placeholder="Все"
+                                    style="width: 100%;">
+                                    <option value="ozon">Ozon</option>
+                                    <option value="ya_market">Я.Маркет</option>
+                                    <option value="smm">СберМегаМаркет</option>
+                                </select>
+                                
+                            </div>
+
+                             
+                          <div class="col-12">
+                            <label class="box-title mb-5">Дата отгрузки</label>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                        <input class="form-control" type="date" value="" id="report_date">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+        
+
+
+
+        
+                          
+
+                        </div>
+            
+                        <!-- /.box-body -->
+                      </div>
+
+
+                      <div class="form-group">
+                        <h4 class="box-title mb-3"><img style="width: auto; max-width: 30px; height: auto; max-height: 30px;" src="https://www.ozon.ru/public/favicon.ico" alt="Ozon Logo"> Озон:</h4>
+                            <select class="form-control select2" id="ozon_settings" multiple="multiple" data-placeholder="Все"
+                            style="width: 100%;">
+                            <option value="ozon">Сдек</option>
+                            <option value="ya_market">Логистика</option>
+                            <option value="smm">Почта</option>
+                        </select>
+                        
+                    </div>
+
+                    <div class="form-group">
+                        <h4 class="box-title mb-3"> <img style="width: auto; max-width: 30px; height: auto; max-height: 30px;" src="https://extra-cdn.sbermegamarket.ru/static/dist/images/logo-mega-desktop.1d57cb.svg" alt="Sber Logo"> СберМегаМаркет:</h4>
+                            <select class="form-control select2" id="smm_settings" multiple="multiple" data-placeholder="Все"
+                            style="width: 100%;">
+                            <option value="ozon">Сбер</option>
+                            <option value="ya_market">Почта</option>
+                        </select>
+                        
+                    </div>
+
+
+        
+                      </div>
+
+                    <div class="col-10">
+
+                        <table id="order_table2" class="table table-sm table-hover">
+                            <thead class="table table-sm table-hover">
+                              <tr>
+                                <th class="text-center" scope="col">#</th>
+                                <th class="text-center" scope="col">МП</th>
+                                <th class="text-center" scope="col">Тип</th>
+                                <th class="text-center" scope="col">Ф.И.О.</th>
+                                <th class="text-center" scope="col">Отгрузка</th>
+                                <th class="text-center" scope="col">Артикул</th>
+                                <th class="text-center" scope="col">Упаковка</th>
+                                <th class="text-center" scope="col">Действия</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <!-- Здесь будут добавлены строки таблицы -->
+                            </tbody>
+                          </table>
+
+                    </div>
+
+                </div>
+
+
+
+            </section>
+
+
+
+        </div>
+    </div>
+    
+
+
+	{% endblock %}
+
+
+	{% block js %} 
+    
+    
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js' %}"></script>
+    <script src="{% static 'js/pages/data-table.js' %}"></script>
+
+
+	<script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.date.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
+
+    <script src="{% static 'assets/vendor_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+
+    <script src="{% static 'js/pages/advanced-form-element.js' %}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+
+
+
+
+
+    <script>
+
+
+$('input[type="checkbox"]').on('change', function() {
+    get_all_orders()
+  });
+
+  
+
+
+var table = $('#order_table2').DataTable({
+    searching: true,
+    "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Russian.json"
+    },
+    order: [[2, 'desc']],
+    scrollY: '650px', // Включить прокрутку по вертикали
+
+    pageLength: -1,
+
+        paging: false, // Отключить пагинацию
+        
+        deferRender: true,
+    rowCallback: function(row, data, index) {
+        // Получаем значение из второго столбца
+        var secondColumnValue = data[1];
+
+        // Проверяем значение и изменяем фон строки
+        if (secondColumnValue === 'СММ') {
+            $(row).css('background-color', '#8654cc'); // темно-фиолетовый
+        } else if (secondColumnValue === 'Ozon') {
+            $(row).css('background-color', '#87CEFA'); // светло-голубой
+        } else if (secondColumnValue === 'Я.Маркет') {
+            $(row).css('background-color', '#FFD700'); // желтый
+        }
+    }
+        
+});
+
+
+function formatDatee(dateString) {
+let date_parts = dateString.split("T")[0].split("-");
+let date_order = new Date(date_parts[0], date_parts[1] - 1, date_parts[2]);
+return ('0' + date_order.getDate()).slice(-2) + "." + ('0' + (date_order.getMonth() + 1)).slice(-2) + "." + date_order.getFullYear();
+}
+
+function formatDateeYamarket(dateString) {
+    let date_parts = dateString.split("T")[0].split("-");
+    let date_order = new Date(date_parts[0], date_parts[1] - 1, date_parts[2]);
+    return ('0' + date_order.getDate()).slice(-2) + "." + ('0' + (date_order.getMonth() + 1)).slice(-2) + "." + date_order.getFullYear();
+}
+
+function get_all_orders() {
+table.row().clear().draw();
+
+var url ="{% url 'api_upakovka_get_all_orders_table' %}";
+var selectedValues_status_select = $('#status_multy_selected').val();
+if (selectedValues_status_select) {
+    // Преобразуем массив значений в строку, разделенную запятыми
+    var dataObject_status_select = { status_select: selectedValues_status_select };
+
+    // Сериализуем объект в JSON-строку
+    var jsonString_status_select = JSON.stringify(dataObject_status_select);
+
+}
+let positions_type = ''
+var checkbox = $('input[type="checkbox"]');
+if (checkbox.prop('checked')) {
+    positions_type='without_chairs'
+  } else {
+    positions_type = 'chairs'
+}
+
+$.ajax({
+  type: "GET",
+  url: url,
+  data: {
+    'report_date': $('#report_date').val(),
+    'marketplaces_list': jsonString_status_select,
+    'positions_type': positions_type
+  },
+  dataType: 'json',
+  success: function (data) {
+    const addRows = (orders, formatDateFunc) => {
+      orders.forEach(order => {
+        let txt = Array.isArray(order['txt']) ? order['txt'].join('') : '';
+        let formatted_date = formatDateFunc(order['shipmentDateFrom'] || order['shipment_posting_date']);
+        let id_order = order['shipmentId'] || order['id_order'] || order[0];
+        let mp = order[28] || order['marketplace']
+        let type = order[29] || order['type'] || 'none'
+        table.row.add([
+        `<input style="padding-left: 2px;" type="checkbox" name="order_checkbox" id="id_order_${id_order}" data-id_order="${id_order}" data-marketplace_type="${mp}"><label for="id_order_${id_order}" data-id_order="${id_order}">${id_order}</label>`,
+          mp,
+          type,
+          order['customerFullName'] || order[11] || 'Скрыт',
+          order[8] || formatted_date,
+          order[27] || txt,
+          'Иванов Иван',
+          '<a type="button" class="btn btn-rounded btn-xs btn-success m-5" data-id_order="${id_order}" data-marketplace_type="${mp}">Инфо</a>'
+        ]);
+      });
+    };
+
+    if (data && data.Orders_smm) {
+      addRows(data.Orders_smm, formatDatee);
+    }
+
+    if (data && data.Orders_ya) {
+      addRows(data.Orders_ya, formatDateeYamarket);
+    }
+
+    if (data && data.Orders_ozon) {
+      addRows(data.Orders_ozon, () => {}); // Пустая функция для соответствия сигнатуре
+    }
+
+    table.order([4, 'asc']).draw();
+  },
+  error: function (jqXHR, textStatus, errorThrown) {
+    console.error('Ошибка AJAX запроса:', textStatus, errorThrown);
+  }
+});
+
+   
+}
+
+
+
+
+
+$(document).ready(function() {
+
+
+var now = new Date();
+
+var day = ("0" + now.getDate()).slice(-2);
+var month = ("0" + (now.getMonth() + 1)).slice(-2);
+var year = now.getFullYear();
+
+var today = year + "-" + month + "-" + day;
+
+$('#report_date').val(today);
+
+
+
+get_all_orders()
+
+
+
+
+
+
+})
+
+$('#status_multy_selected').change( function (){
+
+    get_all_orders()
+
+});
+
+$('#report_date').change( function (){
+
+get_all_orders()
+
+});
+
+
+    </script>
+
+    
+    {% endblock %}

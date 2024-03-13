@@ -1,0 +1,507 @@
+{% extends 'marketplace/main_mp.html' %}
+{% load product_tags %}
+{% load get_ozon_shop %}
+{% load static %}
+{% load get_characteristics_table %}
+{% block css %}
+
+<style>
+    li{
+        list-style: none;
+    }
+
+
+</style>
+
+
+
+{% endblock %}
+
+{% block tiitle %}StulerCRM - Заказ Ozon {{ order.posting_number }}{% endblock %}
+
+    {% block content %}
+
+    <div class="content-wrapper">
+        <input hidden id="order_id" value="{{ order.posting_number }}">
+        <div class="container-full">
+          <!-- Content Header (Page header) -->	  
+          <div class="content-header">
+              <div class="d-flex align-items-center">
+                  <div class="me-auto">
+                      <h3 class="page-title">Заказ Ozon</h3>
+                      <div class="d-inline-block align-items-center">
+                          <nav>
+                              <ol class="breadcrumb">
+                                  <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                                  <li class="breadcrumb-item" aria-current="page">Ozon</li>
+                                  <li class="breadcrumb-item active" aria-current="page">Заказ Ozon</li>
+                              </ol>
+                          </nav>
+                      </div>
+                  </div>
+                  
+              </div>
+          </div>
+          
+          
+
+          <div class="row">
+            <div class="col-9">
+
+          <!-- Main content -->
+          <section class="invoice printableArea">
+
+
+            
+            <div class="row">
+                
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-6 page-header">
+                            <h2 class="d-inline"><span class="fs-30" id="">Магазин: {% get_ozon_shop client_id %}</span></h2>
+                        </div>
+                        <div class="col-6">
+                            <div class="clearFix">
+                                <div class="text-end pb-15">
+                                    <button id="print2" class="btn btn-warning float-end" type="button"> <span><i class="fa fa-print"></i> Распечатать</span> </button>
+                                </div>	
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+              <div class="col-12">
+                <div class="page-header">
+                  <h2 class="d-inline"><span class="fs-30" id="zakaz_number">Отправление #{{ order.posting_number }}</span></h2>
+                  <div class="pull-right text-end">
+                      <h3 id="date_oforml">Дата оформления: {{ order.in_process_at|date:"d.m.Y" }}</h3>
+                  </div>	
+                </div>
+              </div>
+
+
+              <!-- /.col -->
+            </div>
+
+
+            <div class="row invoice-info">
+
+
+            {% if order.get_poluchatel %}
+              <div class="col-md-6 invoice-col">
+                <strong>Получатель</strong>	
+                <address>
+                  <strong class="text-blue fs-24" id="pol_fio">{{ order.get_poluchatel }}</strong><br>
+                  <strong class="d-inline" id="pol_adress">{{ order.get_poluchatel.address }}</strong><br>
+
+                </address>
+              </div>
+            {% else %}
+            <div class="col-md-6 invoice-col">
+                <strong>Получатель скрыт</strong>	
+                <address>
+                  <strong class="text-blue fs-24" id="pol_fio">Скрыто</strong><br>
+                  <strong class="d-inline" id="pol_adress">Скрыто</strong><br>
+
+                </address>
+              </div>
+            {% endif %}
+
+              <!-- /.col -->
+              <div class="col-sm-12 invoice-col mb-15">
+                <div class="invoice-details row no-margin">
+                    {% if order.delivering_date %}
+                    <div class="col-md-6 col-lg-3" id="date_delivery"><b>Дата Отправки: </b> {{ order.delivering_date|date:"d.m.Y H:m" }}</div>
+                    {% else %}
+                    <div class="col-md-6 col-lg-3" id="date_delivery"><b>Дата Отправки: </b> Не отправлен</div>
+                    {% endif %}
+            
+                    {% if order.delivery_method %}
+                    <div class="col-md-6 col-lg-3" id="istochnik"><b>Метод доставки:</b> {{ order.delivery_method.tpl_provider }}</div>
+                    {% else %}
+                    <div class="col-md-6 col-lg-3" id="istochnik"><b>Метод доставки:</b> Не указан</div>
+                    {% endif %}
+            
+                    {% if order.shipment_date %}
+                    <div class="col-md-6 col-lg-3" id="managers"><b>Дата сборки:</b> {{ order.shipment_date|date:"d.m.Y" }}</div>
+                    {% else %}
+                    <div class="col-md-6 col-lg-3" id="managers"><b>Дата сборки:</b> Не указана</div>
+                    {% endif %}
+            
+                    {% if status_translation %}
+                    <div class="col-md-6 col-lg-3" id="kt"><b>Статус:</b> {{ status_translation }}</div>
+                    {% else %}
+                    <div class="col-md-6 col-lg-3" id="kt"><b>Статус:</b> Не указан</div>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- /.col -->
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+
+                {% for product1 in order.financialll_data.all %}
+
+                {% for product in product1.financialll_data_product.all %}
+
+
+                            {% get_characteristics_table product.product_id product.quantity as characteristics_table %}
+                            
+                            {{ characteristics_table|safe }}
+
+                    {% endfor %}
+
+                    {% empty %}
+                    <hr>
+                {% endfor %}
+
+
+              </div>
+              <!-- /.col -->
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <!-- Новый блок -->
+                    <p class="lead"><b>Системные настройки: </b></p>
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">Комментарий:</label>
+                        {% if order.system_comment %}
+                            <textarea class="form-control" id="comment" name="comment">{{ order.system_comment }}</textarea>
+                        {% else %}
+                            <textarea class="form-control" id="comment" name="comment"></textarea>
+                        {% endif %}
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Дата сборки:</label>
+                        <input type="date" class="form-control" id="date" name="date" value="{{ order.shipment_posting_date|date:'Y-m-d' }}">
+                    </div>
+                </div>
+                <div class="col-6 text-end">
+                    <p class="lead"><b>Дата поступления: </b><span class="text-danger" id="srok"> {{ order.in_process_at|date:"d.m.Y" }} </span></p>
+                    <p class="lead"><b>Трек номер: </b><span class="text-danger" id="ostatok"> {{ order.tracking_number }} </span></p>
+            
+                    <div>
+            
+                    </div>
+                    <div class="total-payment">
+            
+                    </div>
+            
+                </div>
+                <!-- /.col -->
+            </div>
+
+
+
+        </div>
+          </section>
+
+
+
+
+          <div class="col-3">
+            
+
+
+
+            <div class="col-xl-12 col-12">
+				<div class="box">
+				  <div class="box-header">
+					<h4 class="box-title">Доставка</h4>
+					<div class="box-controls pull-right">
+					  <button class="btn btn-xs btn-info"data-bs-toggle="modal" data-bs-target="#modal-right">Подробнее</button>
+					</div>                
+				  </div>
+
+				  <div class="box-body" style="height: auto; max-height: 700px; overflow-y: auto;">
+
+
+<!-- Timeline 1 - Bootstrap Brain Component -->
+<div class="timeline timeline-single-column timeline-single-full-column">
+
+
+    <span class="timeline-label">
+        <span class="badge badge-pill badge-primary badge-lg">Ozon</span>
+    </span>
+
+    <div class="timeline-item">
+        <div class="timeline-point timeline-point-primary">
+            <i class="fa fa-star"></i>
+        </div>
+        <div class="timeline-event timeline-event-primary">
+            <div class="timeline-heading">
+                <h4 class="timeline-title">Оформлен</h4>
+            </div>
+            <div class="timeline-body">
+                <p>Купили на Ozon</p>
+            </div>
+            <div class="timeline-footer">
+                <p class="text-end">{{ order.in_process_at|date:"d.m.Y" }}</p>
+            </div>
+        </div>
+    </div>
+
+    <span class="timeline-label">
+        <span class="badge badge-pill badge-primary badge-lg">Stuler</span>
+    </span>
+
+
+    <div class="timeline-item">
+        <div class="timeline-point timeline-point-warning">
+            <i class="fa fa-star"></i>
+        </div>
+        <div class="timeline-event timeline-event-warning">
+            <div class="timeline-heading">
+                <h4 class="timeline-title">Упаковка</h4>
+            </div>
+            <div class="timeline-body">
+                <p>Дата упаковки/сборки.</p>
+            </div>
+            <div class="timeline-footer">
+                <p class="text-end">{{ order.shipment_posting_date|date:'d.m.Y' }}</p>
+            </div>
+        </div>
+    </div>
+
+
+
+    {% if order.delivering_date %}
+
+    <div class="timeline-item">
+        <div class="timeline-point timeline-point-success">
+            <i class="fa fa-star"></i>
+        </div>
+        <div class="timeline-event timeline-event-success">
+            <div class="timeline-heading">
+                <h4 class="timeline-title">Отправлено</h4>
+            </div>
+            <div class="timeline-body">
+                <p>Отправлено.</p>
+            </div>
+            <div class="timeline-footer">
+                <p class="text-end">{{ order.delivering_date|date:"d.m.Y H:m" }}</p>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    {% if order.delivery_method.tpl_provider == 'Почта России' %}
+
+    <span class="timeline-label">
+        <span class="badge badge-pill badge-info badge-lg">Почта России</span>
+    </span>
+
+    <div class="timeline-item">
+        <div class="timeline-point timeline-point-blank">
+        </div>
+        <div class="timeline-event">
+            <div class="timeline-heading">
+                <h4 class="timeline-title">Принято</h4>
+            </div>
+            <div class="timeline-body">
+                <p>Принят в сортировочном цехе.</p>
+            </div>
+            <div class="timeline-footer">
+                <p class="text-end">17.01.2024</p>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    {% endif %}
+
+
+
+    {% if order.delivery_method.tpl_provider == 'СДЭК' %}
+
+    <span class="timeline-label">
+        <span class="badge badge-pill badge-success badge-lg">СДЭК</span>
+    </span>
+
+
+    {% for i in cdek_info.entity.statuses %}
+
+    <div class="timeline-item">
+        <div class="timeline-point timeline-point-blank">
+        </div>
+        <div class="timeline-event">
+            <div class="timeline-heading">
+                <h4 class="timeline-title">{{ i.name }}</h4>
+            </div>
+            <div class="timeline-body">
+                <p>{{ i.city }}</p>
+            </div>
+            <div class="timeline-footer">
+                <p class="text-end">{{ i.date_time }}</p>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+
+    {% else %}
+    {% endif %}
+
+
+
+    {% else %}
+
+
+
+
+
+
+    {% endif %}
+
+
+
+    <span class="timeline-label">
+        <button class="btn btn-danger"><i class="fa fa-clock-o"></i></button>
+    </span>
+</div>
+
+
+
+
+				  </div>
+				</div>
+			  </div>
+
+
+
+
+        </div>
+
+
+
+
+
+
+        <div class="modal modal fade" id="modal-right" tabindex="-1">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Транспортная Компания: {{ order.delivery_method.tpl_provider }}</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% if order.delivery_method.tpl_provider == 'Почта России' and order.delivering_date %}
+                    {% for pi in pochta_info %}
+                    <div class="card">
+                        <div class="card-body">
+                            {% for key, value in pi.items %}
+                            {% if key == 'add-to-mmo' %}
+                            <p class="card-text"><strong>{{ key }}:</strong> {{ value }}</p>
+                            {% else %}
+                            {% endif %}
+                                <p class="card-text"><strong>{{ key }}:</strong> {{ value }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+                {% else %}
+
+                {% if order.delivery_method.tpl_provider == 'СДЭК' and order.delivering_date %}
+                {% for key, value in cdek_info.entity.items %}
+                <div class="card">
+                    <div class="card-body">
+                        <p><strong>Ключ:</strong> {{ key }}</p>
+                        <p><strong>Значение:</strong> {{ value }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p>Заказ ещё не <code>отправлен</code> или <code>Транспортная Компания</code> не поддерживается системой</p>
+                {% endif %}      
+
+                {% endif %}
+
+
+
+
+
+
+
+                </div>
+                <div class="modal-footer modal-footer-uniform">
+                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Закрыть</button>
+                </div>
+              </div>
+            </div>
+        </div>         
+
+
+        </div>
+        <div class="control-sidebar-bg"></div>
+    </div>
+
+    
+    </div>
+
+	{% endblock %}
+
+
+	{% block js %}
+    
+    <script src="{% static 'js/pages/invoice.js' %}"></script>
+	<script src="{% static 'js/vendors.min.js' %}"></script>
+	<script src="{% static 'js/pages/chat-popup.js' %}"></script>
+    <script src="{% static 'assets/vendor_plugins/JqueryPrintArea/demo/jquery.PrintArea.js' %}"></script>
+    
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js' %}"></script>
+    <script src="{% static 'js/pages/data-table.js' %}"></script>
+
+
+	<script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.date.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
+
+    <script src="{% static 'assets/vendor_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+
+    <script src="{% static 'js/pages/advanced-form-element.js' %}"></script>
+
+    <script>
+
+$(document).ready(function() {
+    $('#comment, #date').on('change', function() {
+        var url = "{% url 'api_ozon_info_update' %}"
+        var comment = $('#comment').val();
+        var date = $('#date').val();
+        var order_id = $('#order_id').val();
+
+        $.ajax({
+            url: url, // Замените '/your-url' на ваш URL
+            type: 'GET',
+            data: {
+                comment: comment,
+                date: date,
+                order_id: order_id
+            },
+            success: function(response) {
+                // Обработка успешного ответа
+                console.log(response);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // Обработка ошибки
+                console.log(textStatus, errorThrown);
+            }
+        });
+    });
+});
+
+    </script>
+    {% endblock %}
+
+
+    

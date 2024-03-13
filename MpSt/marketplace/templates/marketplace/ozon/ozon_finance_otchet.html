@@ -1,0 +1,238 @@
+{% extends 'marketplace/main_mp.html' %}
+
+
+{% load static %}
+
+{% block tiitle %}StulerCRM - Ozon Аналитика {% endblock %}
+
+    {% block content %}
+
+    <div class="content-wrapper">
+
+          <section class="content">
+			<div class="row align-items-end">
+				<div class="col-xl-9 col-12">
+					<div class="box bg-primary-light pull-up">
+						<div class="box-body p-xl-0">							
+							<div class="row align-items-center">
+								<div class="col-12 col-lg-3"><img src="{% static '/images/svg-icon/color-svg/custom-14.svg' %}" alt=""></div>
+								<div class="col-12 col-lg-9">
+									<h2>Добро пожаловать, {{ user.username }}!</h2>
+									<p class="text-dark mb-0 fs-16">
+										Эта краткая сводка по Ozon!
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xl-3 col-12">
+					<div class="box bg-transparent no-shadow">
+						<div class="box-body p-xl-0 text-center">							
+                                <h4 class="box-title mb-5">Дата</h4>
+                                <p class="subtitle mb-20">Диапозон дат <code> между</code> которыми выведутся данные</p>
+                                  <div class="clearfix">
+                                      <div class="form-group">
+                                          <label class="form-label">Диапозон дат:</label>
+                      
+                                          <div class="row">
+                                              <div class="col-6"><input class="form-control" type="date" value="" id="date_start"></div>
+                                              <div class="col-6"><input class="form-control" type="date" value="" id="date_end"></div>
+                                          </div>
+                                          <!-- /.input group -->
+                                  </div>
+                            </div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">														
+					<div class="box no-shadow mb-0 bg-transparent">
+						<div class="box-header no-border px-0">
+							<h4 class="box-title">Суммы транзакций</h4>	
+
+						</div>
+					</div>
+				</div>
+				<div class="col-xl-3 col-md-6 col-12">
+					<div class="box bg-secondary-light pull-up" style="background-image: url(../images/svg-icon/color-svg/st-1.svg); background-position: right bottom; background-repeat: no-repeat;">
+						<div class="box-body">	
+							<div class="flex-grow-1">	
+								<h4 class="mt-25 mb-5" id="compensation_amount">It & software</h4>
+								<p class="text-fade mb-0 fs-12">Компенсации</p>
+							</div>	
+						</div>					
+					</div>
+				</div>
+				<div class="col-xl-3 col-md-6 col-12">
+					<div class="box bg-secondary-light pull-up" style="background-image: url(../images/svg-icon/color-svg/st-2.svg); background-position: right bottom; background-repeat: no-repeat;">
+						<div class="box-body">	
+							<div class="flex-grow-1">	
+								<h4 class="mt-25 mb-5" id="money_transfer">Programming</h4>
+								<p class="text-fade mb-0 fs-12">Начисления за доставку и возвраты</p>
+							</div>	
+						</div>					
+					</div>
+				</div>
+				<div class="col-xl-3 col-md-6 col-12">
+					<div class="box bg-secondary-light pull-up" style="background-image: url(../images/svg-icon/color-svg/st-3.svg); background-position: right bottom; background-repeat: no-repeat;">
+						<div class="box-body">	
+							<div class="flex-grow-1">	
+
+								<h4 class="mt-25 mb-5" id="others_amount">Networking</h4>
+								<p class="text-fade mb-0 fs-12">15 Прочие начисления</p>
+							</div>	
+						</div>					
+					</div>
+				</div>
+				<div class="col-xl-3 col-md-6 col-12">
+					<div class="box bg-secondary-light pull-up" style="background-image: url(../images/svg-icon/color-svg/st-4.svg); background-position: right bottom; background-repeat: no-repeat;">
+						<div class="box-body">	
+							<div class="flex-grow-1">	
+
+								<h4 class="mt-25 mb-5" id="services_amount">Network Security</h4>
+								<p class="text-fade mb-0 fs-12">Стоимость дополнительных услуг</p>
+							</div>	
+						</div>					
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xl-4 col-12">
+					<div class="box">
+						<div class="box-body">
+							<p class="text-fade">Общая стоимость товаров и возвратов в заданный период</p>
+							<h3 class="mt-0 mb-20" id="accruals_for_sale">19 <small class="text-success"><i class="fa fa-arrow-up ms-15 me-5"></i> 2 New</small></h3>
+							<div id="charts_widget_2_chart"></div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xl-5 col-12">
+					<div class="box">
+						<div class="box-body">
+							<p class="text-fade">Сумма комиссии, которая была удержана при продаже товара и возвращена при его возврате</p>
+							<h3 class="mt-0 mb-20"  id="sale_commission">21 h 30 min <small class="text-danger"><i class="fa fa-arrow-down ms-25 me-5"></i> 15%</small></h3>
+							<div id="charts_widget_1_chart"></div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</section>
+
+    </div>
+
+	{% endblock %}
+
+
+	{% block js %} 
+
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js' %}"></script>
+    <script src="{% static 'js/pages/data-table.js' %}"></script>
+
+
+	<script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.date.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
+
+    <script src="{% static 'assets/vendor_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+    <script src="{% static 'js/pages/ecommerce_details.js' %}"></script>
+    <script src="{% static 'js/pages/advanced-form-element.js' %}"></script>
+
+    <script>
+
+$('#date_start').change( function (){
+    if($('#date_end').val()){
+        if($('#date_start').val()){
+            GetAll()
+        }
+    }
+});
+
+$('#date_end').change( function (){
+    if($('#date_end').val()){
+        if($('#date_start').val()){
+            GetAll()
+        }
+    }
+});
+
+$(document).ready(function() {
+    var now = new Date();
+    now.setDate(now.getDate() + 1)
+
+var day = ("0" + now.getDate()).slice(-2);
+var month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+
+$('#date_end').val(today);
+$('#date_end_otrg').val(today);
+
+var ok = new Date();
+ok.setDate(ok.getDate() -7);
+
+var day = ("0" + (ok.getDate())).slice(-2);
+var month = ("0" + (ok.getMonth() + 1)).slice(-2);
+
+var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+
+$('#date_start').val(today);
+$('#date_start_otrg').val(today);
+
+
+
+
+GetAll()
+
+});
+
+
+function GetAll() {
+    var url ="{% url 'api_mp_finance_get' %}";
+    var date_start = $('#date_start').val()
+    var date_end = $('#date_end').val()
+    $.ajax({
+		  type: "GET",
+		  url: url,
+		  data: {
+            'start': date_start,
+            'end': date_end
+		  },
+		  dataType: 'json',
+		  success: function (data) {
+			  if (data.status == 200) {
+                $('#accruals_for_sale').html(data.total_am.result.accruals_for_sale);
+                $('#sale_commission').html(data.total_am.result.sale_commission);
+                $('#compensation_amount').html(data.total_am.result.compensation_amount);
+                $('#money_transfer').html(data.total_am.result.money_transfer);
+                $('#services_amount').html(data.total_am.result.services_amount);
+                $('#others_amount').html(data.total_am.result.others_amount);
+
+			  }
+			  else if (data.status == 300) {
+
+			  }
+			  else if (data.status == 400) {
+
+			  }
+			  else if (data.status == 403){
+
+			  }
+		  }
+		  
+		});
+}
+
+    </script>
+    
+    {% endblock %}

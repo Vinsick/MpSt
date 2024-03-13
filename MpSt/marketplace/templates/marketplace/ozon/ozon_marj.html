@@ -1,0 +1,256 @@
+{% extends 'marketplace/main_mp.html' %}
+
+
+{% load static %}
+
+{% block css %}
+
+<style>
+
+
+</style>
+
+{% endblock %}
+
+{% block tiitle %}StulerCRM - Ozon Список Транзакций{% endblock %}
+
+    {% block content %}
+
+	<div class="content-wrapper">
+		<div class="container-full">
+		  <!-- Main content -->
+		  <section class="content">
+			  <div class="row">
+				<div class="col-xl-2 col-lg-4 col-12" style="height: auto; max-height: 750px; overflow: auto;">
+					
+
+					<div class="box">
+						<div class="box-header">
+							<h4 class="box-title">Множественные Дни</h4>
+						</div>
+						<div class="box-body mailbox-nav" id="mn_box_body_loader">
+							<div class="d-flex align-items-center">
+								<strong>Генерация файла</strong>
+								<div class="spinner-border ms-auto" role="status" aria-hidden="true"></div>
+							  </div>
+						  </div>
+						<div class="box-body mailbox-nav" id="mn_box_body">
+
+
+
+								<div class="form-group">
+									<label class="form-label">Магазин</label>
+									<select name="client_id" class="form-select" id="client_id">
+										{% for os in ozon_shops %}
+										<option value="{{ os.client_id }}">{{ os.name }}</option>
+										{% endfor %}
+									</select>
+								</div>
+					
+								<div class="form-group">
+									<label class="form-label">Способ доставки</label>
+									<select name="sp_dost" class="form-select" id="sp_dost">
+										<option value="all">Все</option>
+										<option value="FBO">FBO</option>
+										<option value="FBS">FBS</option>
+										<option value="rFBS">rFBS</option>
+									</select>
+								</div>
+					
+								<div class="form-group date-group">
+									<div class="form-group">
+										<label class="form-label">Начало</label>
+										<input class="form-control" type="date" id="report_date_1" value="" name="report_date_1" required>
+									</div>
+					
+									<div class="form-group">
+										<label class="form-label">Конец</label>
+										<input class="form-control" type="date" id="another_date" value="" name="another_date" required>
+									</div>
+								</div>
+					
+								<div class="form-group">
+									<label class="form-label">Логистика Чебоксары</label>
+									<input class="form-control" type="number" id="log_cheb" value="{{ log_cheb }}" required name="log_cheb">
+								</div>
+					
+								<div class="col-12">
+									<button type="submit" id="otch_but" class="col-12 btn btn-primary">Сгенерировать отчёт</button>
+								</div>
+
+						</div>
+					</div>
+
+
+
+
+				  </div>
+
+				  <!-- /.col -->
+
+				
+				</div>
+		  </section>
+		  <!-- /.content -->
+		</div>
+	</div>
+
+	{% endblock %}
+
+
+	{% block js %} 
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js' %}"></script>
+    <script src="{% static 'js/pages/data-table.js' %}"></script>
+
+
+	<script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.date.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
+
+    <script src="{% static 'assets/vendor_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+
+    <script src="{% static 'js/pages/advanced-form-element.js' %}"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+
+
+
+	<script>
+		$(document).ready(function() {
+			$('#productsTable').DataTable();
+			$('#mn_box_body_loader').hide();
+// Функция для преобразования строки в ArrayBuffer
+function s2ab(s) {
+    var buf = new ArrayBuffer(s.length);
+    var view = new Uint8Array(buf);
+    for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+    return buf;
+}
+
+$('#otch_but').on('click', function() {
+    var url = "{% url 'generate_csv_marj_ozon' %}";
+    var client_id = $('#client_id').val();
+    var report_date = $('#report_date_1').val();
+    var another_date = $('#another_date').val();
+    var log_cheb = $('#log_cheb').val();
+    var sp_dost = $('#sp_dost').val();
+    $('#mn_box_body_loader').show();
+    $('#mn_box_body').hide();  
+
+    $.ajax({
+        url: url,
+        type: 'GET',
+        data: {
+            client_id: client_id,
+            report_date: report_date,
+            another_date: another_date,
+            log_cheb: log_cheb,
+            sp_dost: sp_dost,
+        },
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('Accept-Charset', '');
+        },
+        success: function(response) {
+            // Создаем ссылку на файл CSV
+            var csvBlob = new Blob([response], { type: 'text/csv;charset=utf-8;' });
+            var csvLink = document.createElement('a');
+            csvLink.href = window.URL.createObjectURL(csvBlob);
+            csvLink.download = 'marja_ozon.csv';
+
+            // Конвертируем CSV в XLS
+            Papa.parse(response, {
+                complete: function(results) {
+                    var data = results.data;
+                    var ws = XLSX.utils.json_to_sheet(data);
+                    var wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, ws, "Sheet1"); // Исправленное использование wb
+                    var wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+
+                    // Создаем ссылку на файл XLSX
+                    var xlsxBlob = new Blob([s2ab(wbout)], {type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+                    var xlsxLink = document.createElement('a');
+                    xlsxLink.href = (window.webkitURL || window.URL).createObjectURL(xlsxBlob);
+                    xlsxLink.download = 'marja_ozon.xlsx';
+
+                    // Инициируем клик по ссылке для автоматического скачивания XLS
+                    xlsxLink.click(); // Исправленное использование xlsxLink
+
+                    $('#mn_box_body_loader').hide();
+                    $('#mn_box_body').show();  
+                }
+            });
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            // Обработка ошибки
+            console.log(textStatus, errorThrown);
+            $('#mn_box_body_loader').hide();
+            $('#mn_box_body').show();  
+        }
+    });
+});
+
+
+
+		var table = $('#delivery_table').DataTable({
+  		dom: 'Blfrtip',
+    	buttons: [ 'csv', 'excel', 'pdf', 'print' ],
+        searching: true, // Разрешить поиск
+        "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Russian.json"
+        },
+
+        order: [[1, 'desc']]
+  
+});
+
+} );
+
+
+var table = $('#FBO_table').DataTable({
+		dom: 'Blfrtip',
+		buttons: [ 'excel', 'pdf', 'print' ],
+        searching: true, // Разрешить поиск
+        "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Russian.json"
+        },
+
+        order: [[1, 'desc']]
+
+});
+
+
+var table = $('#FBS_table').DataTable({
+  dom: 'Blfrtip',
+    buttons: [ 'csv', 'excel', 'pdf', 'print' ],
+        searching: true, // Разрешить поиск
+        "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Russian.json"
+        },
+
+        order: [[1, 'desc']]
+  
+});
+
+
+var table = $('#rFBS_table').DataTable({
+  dom: 'Blfrtip',
+    buttons: [ 'csv', 'excel', 'pdf', 'print' ],
+        searching: true, // Разрешить поиск
+        "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Russian.json"
+        },
+
+        order: [[1, 'desc']]
+  
+});
+	   </script>
+
+	{% endblock %}

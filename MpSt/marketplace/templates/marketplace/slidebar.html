@@ -1,0 +1,243 @@
+{% load has_group %}
+<aside class="main-sidebar">
+    <!-- sidebar-->
+    <section class="sidebar position-relative">	
+	  	<div class="multinav">
+		  <div class="multinav-scroll" style="height: 100%;">	
+			  <!-- sidebar menu-->
+			  <ul class="sidebar-menu" data-widget="tree">
+				{% if request.user|has_group:"Manager" or "Administrator" %} 
+
+				  {% else %}
+				  {% endif %}
+				  {% if request.user|has_group:"Svarka" or "Administrator" %}
+
+				  {% else %}
+				  {% endif %}
+
+
+
+				  {% if request.user|has_group:"МаркетПлейсы" or request.user|has_group:"Администрация" or request.user|has_group:"1С" or request.user|has_group:"Управленец" or request.user|has_group:"Сопровождение" %}
+				  <li class="header">МаркетПлейсы</li>
+				  <li class="treeview">
+					<a href="#">
+					<i span class="ti-dashboard"><span class="path3"></span><span class="path3"></span></i>
+					  <span>МаркетПлейсы</span>
+					  <span class="pull-right-container">
+						<i class="fa fa-angle-right pull-right"></i>
+					  </span>
+					</a>
+					<ul class="treeview-menu">
+
+						{% if request.user|has_group:"МаркетПлейсы" or request.user|has_group:"Администрация" %}
+						<li><a href="{% url 'main_mp' %}"><i class="ti-info"><span class="path1"></span><span class="path1"></span></i>Главная</a></li>
+						
+							{% else %}
+							{% endif %}
+  
+
+
+
+
+							<li class="treeview">
+							  <a href="#">
+							  <i span class="ti-dropbox-alt"><span class="path3"></span><span class="path3"></span></i>
+								<span>Упаковка</span>
+								<span class="pull-right-container">
+								  <i class="fa fa-angle-right pull-right"></i>
+								</span>
+							  </a>
+							  <ul class="treeview-menu">
+
+								{% if request.user|has_group:"МаркетПлейсы" or request.user|has_group:"Администрация" or request.user|has_group:"1С" or request.user|has_group:"Управленец" or request.user|has_group:"Сопровождение" %}
+								<li><a href="{% url 'upakovka_spispki_index_html' %}"><i class="ti-menu-alt"><span class="path1"></span><span class="path1"></span></i>Списки</a></li>
+								{% else %}
+								{% endif %}
+
+
+								<li><a href="{% url 'orders_for_up_html' %}"><i class=" ti-direction-alt"><span class="path1"></span><span class="path1"></span></i>Заказы</a></li>
+
+
+					</ul>
+				</li>
+
+
+
+					  
+
+
+
+
+
+					</ul>
+				</li>
+
+					  {% else %}
+					  {% endif %}
+
+
+
+
+				  {% if request.user|has_group:"МаркетПлейсы" or request.user|has_group:"Администрация" or request.user|has_group:"1С" or request.user|has_group:"Сопровождение" %}
+				  <li class="header">Ozon</li>
+				  <li class="treeview">
+					<a href="#">
+						<img src="https://www.ozon.ru/public/favicon.ico" alt="Ozon Logo">
+					  <span>Ozon</span>
+					  <span class="pull-right-container">
+						<i class="fa fa-angle-right pull-right"></i>
+					  </span>
+					</a>
+					<ul class="treeview-menu">
+						{% if request.user|has_group:"МаркетПлейсы" or request.user|has_group:"Администрация" or request.user|has_group:"Сопровождение" %}
+					  <li><a href="{% url 'ozon_orders' %}"><i class="ti-shopping-cart-full"><span class="path1"></span><span class="path1"></span></i>Заказы</a></li>
+					  <li><a href="{% url 'ozon_spisok' %}"><i class="ti-printer"><span class="path1"></span><span class="path1"></span></i>Печать</a></li>
+					  <li><a href="{% url 'ozon_marj' %}"><i class="ti-money"><span class="path1"></span><span class="path1"></span></i>Маржинальность</a></li>
+
+
+
+					  
+					  <li><a href="{% url 'ozon_orders_app' 0 %}"><i class="ti-shopping-cart-full"><span class="path1"></span><span class="path1"></span></i>Заказы</a></li>
+					  <li><a href="{% url 'ozon_reports_app' %}"><i class="ti-clipboard"><span class="path1"></span><span class="path1"></span></i>Отчёты</a></li>
+					  <li><a href="{% url 'ozon_products_app' 0 %}"><i class="ti-bag"><span class="path1"></span><span class="path1"></span></i>Товары</a></li>
+					  <li><a href="{% url 'ozon_warehouse_app' 0 %}"><i class="ti-package"><span class="path1"></span><span class="path1"></span></i>Склад</a></li>
+					  <li><a href="{% url 'ozon_settings_app' %}"><i class="ti-settings"><span class="path1"></span><span class="path1"></span></i>Настройки</a></li>
+					  
+					  
+				  		{% else %}
+					  	{% endif %}
+
+
+					{% if request.user|has_group:"МаркетПлейсы" or request.user|has_group:"Администрация" or request.user|has_group:"1С" or request.user|has_group:"Сопровождение" %}
+					  <li><a href="{% url 'ozon_otgruzka' %}"><i class="ti-truck"><span class="path1"></span><span class="path1"></span></i>Отгрузка</a></li>
+					  {% else %}
+					  {% endif %}
+					</ul>
+				  </li>
+
+				  <li class="header">Ya.Market</li>
+				  <li class="treeview">
+					<a href="#">
+						<img src="https://sun7-22.userapi.com/impg/mCHOUy4tm3GnSOQGt2Uw29LVdx9wAVYNFY-Gog/jExzWMsnoQc.jpg?size=800x800&quality=95&sign=ce4b35db780c06f718d8446eb39ba374&type=album" alt="Yandex Logo">
+					  <span>Яндекс.Маркет</span>
+					  <span class="pull-right-container">
+						<i class="fa fa-angle-right pull-right"></i>
+					  </span>
+					</a>
+					<ul class="treeview-menu">
+						{% if request.user|has_group:"МаркетПлейсы" or request.user|has_group:"Администрация" or request.user|has_group:"Сопровождение" %}
+					  <li><a href="{% url 'yandex_orders' %}"><i class="ti-shopping-cart-full"><span class="path4"></span><span class="path4"></span></i>Заказы</a></li>
+					  {% else %}
+					  {% endif %}
+					  {% if request.user|has_group:"МаркетПлейсы" or request.user|has_group:"Администрация" or request.user|has_group:"1С" or request.user|has_group:"Сопровождение" %}
+					  <li><a href="{% url 'yandex_otgruzka' %}"><i class="ti-truck	"><span class="path1"></span><span class="path1"></span></i>Отгрузка</a></li>
+					  {% else %}
+					  {% endif %}
+					</ul>
+				  </li>
+
+
+				  <li class="header">СберМегаМаркет</li>
+				  <li class="treeview">
+					<a href="#">
+						<img src="https://extra-cdn.sbermegamarket.ru/static/dist/images/logo-mega-desktop.1d57cb.svg" alt="Ozon Logo">
+					  <span>СберМегаМаркет</span>
+					  <span class="pull-right-container">
+						<i class="fa fa-angle-right pull-right"></i>
+					  </span>
+					</a>
+					<ul class="treeview-menu">
+						{% if request.user|has_group:"МаркетПлейсы" or request.user|has_group:"Администрация" or request.user|has_group:"Сопровождение" %}
+					  <li><a href="{% url 'smm_index' %}"><i class="ti-shopping-cart-full"><span class="path5"></span><span class="path5"></span></i>Заказы</a></li>
+					  {% else %}
+					  {% endif %}
+					  {% if request.user|has_group:"МаркетПлейсы" or request.user|has_group:"Администрация" or request.user|has_group:"1С" or request.user|has_group:"Сопровождение" %}
+					  <li><a href="{% url 'sbermegamarket_otgruzka' %}"><i class="ti-truck"><span class="path1"></span><span class="path1"></span></i>Отгрузка</a></li>
+					  {% else %}
+					  {% endif %}
+					</ul>
+				  </li>
+
+				  <li class="header">WildBerries</li>
+				  <li class="treeview">
+					<a href="#">
+						<img src="https://www.wildberries.ru/favicon.ico" alt="Ozon Logo">
+					  <span>WildBerries</span>
+					  <span class="pull-right-container">
+						<i class="fa fa-angle-right pull-right"></i>
+					  </span>
+					</a>
+					<ul class="treeview-menu">
+						<li><a href="{% url 'wildberries_incomes' %}"><i class="ti-layout"><span class="path1"></span><span class="path1"></span></i>Поставки</a></li>
+						<li><a href="#"><i class=" ti-layout-accordion-list"><span class="path1"></span><span class="path1"></span></i>Товары</a></li>
+						<li><a href="#"><i class="ti-shopping-cart"><span class="path1"></span><span class="path1"></span></i>Заказы</a></li>
+						<li><a href="#"><i class="ti-shopping-cart-full"><span class="path1"></span><span class="path1"></span></i>Продажи</a></li>
+						<li><a href="{% url 'wildberries_settings' %}"><i class=" ti-settings"><span class="path1"></span><span class="path1"></span></i>Настройки</a></li>
+					</ul>
+				  </li>
+
+				  {% else %}
+				  {% endif %}
+
+				  {% if request.user|has_group:"МаркетПлейсы" or request.user|has_group:"Администрация" or request.user|has_group:"Сопровождение" %}
+				  <li class="header">Настройка Приложения</li>
+				  <li class="treeview">
+					<a href="#">
+					  <i span class=" ti-bag"><span class="path2"></span><span class="path2"></span></i>
+					  <span>Товары</span>
+					  <span class="pull-right-container">
+						<i class="fa fa-angle-right pull-right"></i>
+					  </span>
+					</a>
+					<ul class="treeview-menu">
+					  <li><a href="{% url 'ozon_products' 17 %}"><i class="icon-Commit"><span class="path2"></span><span class="path2"></span></i>Артиклы</a></li>
+					</ul>
+				  </li>
+
+
+
+				  {% else %}
+				  {% endif %}
+
+
+				  {% if request.user|has_group:"Upakovka" or "Administrator" %} 
+
+					{% else %}
+					
+
+				  <li class="treeview">
+					<a href="#">
+					  <i span="" class="ti-angle-double-right"><span class="path1"></span><span class="path2"></span></i>
+					  <span>Вы не состоите ни</span>
+					</a>
+				  </li>
+				  <li class="treeview">
+					<a href="#">
+					  <i span="" class="ti-angle-double-right"><span class="path1"></span><span class="path2"></span></i>
+					  <span>в одной из групп,</span>
+					</a>
+				  </li>
+				  <li class="treeview">
+					<a href="#">
+					  <i span="" class="ti-angle-double-right"><span class="path1"></span><span class="path2"></span></i>
+					  <span>обратитесь к</span>
+					</a>
+				  </li>
+				  <li class="treeview">
+					<a href="#">
+					  <i span="" class="ti-angle-double-right"><span class="path1"></span><span class="path2"></span></i>
+					  <span>вашему руководителю</span>
+					</a>
+				  </li>
+				  {% endif %}
+			</ul>
+		  </div>
+		</div>
+        <div class="sidebar-footer">
+            <a href="{% url 'main' %}" class="link" data-toggle="tooltip" title="" data-original-title="Settings"><span class="ti-arrow-circle-left"></span></a>
+            <a href="{% url 'main_mp' %}" class="link" data-toggle="tooltip" title="" data-original-title="Главная"></span><i class=" ti-home"></i></a>
+            <a href="{% url 'ozon_products' 17 %}" class="link" data-toggle="tooltip" title="" data-original-title="Logout"><span class=" ti-bag"></span></a>
+        </div>
+    </section>
+  </aside>
+  <div class="control-sidebar-bg"></div>

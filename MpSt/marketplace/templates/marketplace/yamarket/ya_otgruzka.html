@@ -1,0 +1,297 @@
+{% extends 'marketplace/main_mp.html' %}
+
+
+{% load static %}
+
+{% block tiitle %}StulerCRM - Yandex Список Отправлений{% endblock %}
+
+{% block css %}
+<style>
+	.content-wrapper {
+	  background-color: #fc0; /* Фиолетовый цвет */
+	}
+	</style>
+{% endblock %}
+
+    {% block content %}
+
+	<div class="content-wrapper">
+		<div class="container-full">
+		  <!-- Main content -->
+		  <section class="content">
+			  <div class="row">
+
+				<div class="col-12">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-header">
+									<div class="d-flex justify-content-start">
+										<img src="https://sun7-22.userapi.com/impg/mCHOUy4tm3GnSOQGt2Uw29LVdx9wAVYNFY-Gog/jExzWMsnoQc.jpg?size=800x800&quality=95&sign=ce4b35db780c06f718d8446eb39ba374&type=album" style="width: 50px; height: 50px; margin-right: 10px;" class="img-fluid" alt="Ozon Image">
+										<h4 class="card-title" id="ren">Grid cards</h4>
+									</div>
+									
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+				  <div class="col-xl-2 col-lg-4 col-12">
+					<div class="box">
+					  <div class="box-header with-border">
+						<h4 class="box-title">Фильтры</h4>
+						<ul class="box-controls pull-right">
+						  <li><a class="box-btn-slide" href="#"></a></li>	
+						</ul>
+					  </div>
+
+					  <div class="box-body mailbox-nav">
+						<ul class="nav nav-pills flex-column">
+
+
+                            <div class="form-group">
+                                <label class="form-label">Магазин</label>
+                                <select id="client_id" class="form-select">
+									<option value="all">Все</option>
+									{% for os in shops %}
+									<option value="{{ os.id }}">{{ os.name }}</option>
+									{% endfor %}
+                                </select>
+                              </div>
+							
+
+								  <h4 class="box-title mb-5">Дата отгрузки:</h4>
+								  <p class="subtitle mb-20"></p>
+								  <div class="clearfix">
+									<div class="form-group">
+		 
+									  
+									  <div class="row">
+										<div class="col-6"><input class="form-control" type="date" value="" id="date_start"></div>
+										<div class="col-6"><input class="form-control" type="date" value="" id="date_end"></div>
+									  </div>
+									</div>
+								  </div>
+
+
+						</ul>
+					  </div>
+
+				  </div>
+				</div>
+
+
+
+				  <div class="col-xl-10 col-lg-8 col-12">
+
+					<div class="row">
+						<div class="col-xl-4 col-12">
+							<div class="box box-body">
+							  <h6>
+								<span class="text-uppercase">Сумма оплаченная покупателями</span>
+							  </h6>
+							  <br>
+							  <p id="total_sum" class="fs-26"></p>
+			
+							  <div class="progress progress-xxs mt-0 mb-10">
+								<div class="progress-bar bg-danger" role="progressbar" style="width: 35%; height: 4px;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+							  </div>
+							</div>
+						</div>
+						<!-- /.col -->
+			
+						<div class="col-xl-4 col-12">
+							<div class="box box-body">
+							  <h6>
+								<span class="text-uppercase">Общее количество отправленных товаров</span>
+							  </h6>
+							  <br>
+							  <p id="total_quantity" class="fs-26"></p>
+			
+							  <div class="progress progress-xxs mt-0 mb-10">
+								<div class="progress-bar bg-purple" role="progressbar" style="width: 55%; height: 4px;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+							  </div>
+							</div>
+						</div>
+					  </div>
+
+					<div class="col-12">
+
+								<div class="box">
+
+								<div class="box-body">
+								<div class="table-responsive">
+									<table id="table" class="table table-responsive table-bordered">
+										<thead>
+											<tr>
+												<th>sku</th>
+												<th>Количество отправленных</th>
+												<th>Сума отправленных</th>
+											</tr>
+										</thead>
+										<tbody>
+
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+
+
+						</div>
+					</div>
+
+				</div>
+
+		  </section>
+		  <!-- /.content -->
+		</div>
+	</div>
+
+	{% endblock %}
+
+
+	{% block js %} 
+    
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js' %}"></script>
+    <script src="{% static 'js/pages/data-table.js' %}"></script>
+
+
+	<script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.date.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
+
+    <script src="{% static 'assets/vendor_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+
+    <script src="{% static 'js/pages/advanced-form-element.js' %}"></script>
+	<script>
+
+
+
+		$(document).ready(function() {
+			
+
+
+			var now = new Date();
+    var day = ("0" + now.getDate()).slice(-2);
+    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+    var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+
+    $('#date_end').val(today);
+  
+    var ok = new Date();
+    ok.setDate(ok.getDate() -14);
+
+    day = ("0" + (ok.getDate())).slice(-2);
+    month = ("0" + (ok.getMonth() + 1)).slice(-2);
+
+    today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+
+    $('#date_start').val(today);
+
+	var table = $('#table').DataTable({
+
+
+		dom: 'Blfrtip',
+    buttons: [ 'excel', 'pdf', 'print' ],
+        searching: true, // Разрешить поиск
+        "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Russian.json"
+        },  
+
+	});
+
+	function showLoading() {
+	$("#ren").html('Загрузка<br>Загрузка'); 
+	$("#total_sum").html('Загрузка'); 
+	$("#total_quantity").html('Загрузка'); 
+}
+
+function get_orders() {
+	showLoading();
+
+table.row().clear().draw();
+
+var url ="{% url 'api_yandex_get_otgruzka' %}";
+
+
+$.ajax({
+type: "GET",
+url: url,
+data: {
+	'date_start':$('#date_start').val(),
+	'date_end':$('#date_end').val(),
+	'sp_dot': $('#client_id').val(),
+},
+dataType: 'json',
+success: function (data) {
+	for (i=0; i<data.ozon_orders.length; i++){
+		table.row.add([data.ozon_orders[i]['offer_id'], data.ozon_orders[i]['total_count'], data.ozon_orders[i]['total_price']]).draw()
+	}
+	table.order([1, 'desc']).draw(); 
+	var date = $('#date_start').val();
+	var date1 = $('#date_end').val();
+	if (date > date1) {
+    var temp = date;
+    date = date1;
+    date1 = temp;
+	}
+	var parts = date.split('-');
+	var newDate = parts[2] + '.' + parts[1] + '.' + parts[0];
+	var parts1 = date1.split('-');
+	var newDate1 = parts1[2] + '.' + parts1[1] + '.' + parts1[0];
+	$("#ren").html("<strong>Магазин: </strong>"+$('#client_id').val()+"<br><strong>Даты:</strong> с "+newDate+" по " +newDate1+" "); 
+	$("#total_sum").html(data.result_total.total_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " &#8381;"); 
+	$("#total_quantity").html(data.result_total.total_count); 
+},
+error: function (xhr, status, error) {
+	console.error('Ошибка:', error);
+}
+});
+}
+
+$('#client_id').change( function (){
+
+get_orders()
+
+});
+
+$('#date_start').change( function (){
+if($('#date_end').val()){
+if($('#date_start').val()){
+	get_orders()
+}
+}
+});
+
+$('#date_end').change( function (){
+if($('#date_end').val()){
+if($('#date_start').val()){
+	get_orders()
+}
+}
+});
+
+
+
+
+
+get_orders()
+} );
+
+
+
+
+	   </script>
+
+	{% endblock %}

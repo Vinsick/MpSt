@@ -1,0 +1,303 @@
+{% extends 'main/base.html' %}
+
+{% load ozon_warehouse_status_translate %}
+
+{% load static %}
+
+{% block css %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+<style>
+thead tr {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+
+</style>
+{% endblock %}
+
+{% block tiitle %}Отчёты Ozon - StulerCRM{% endblock %}
+
+    {% block content %}
+
+    <div class="content-wrapper">
+
+
+      <div class="content-header">
+        <div class="d-flex align-items-center">
+          <div class="me-auto">
+            <h3 class="page-title"> <i class="ti-clipboard"><span class="path1"></span><span class="path1"></span></i> Отчёты Ozon</h3>
+            <div class="d-inline-block align-items-center">
+              <nav>
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                  <li class="breadcrumb-item" aria-current="page"><img style="width: auto; max-width: 15px; height: auto; max-height: 15px;" src="https://www.ozon.ru/public/favicon.ico" alt="Ozon Logo"> Ozon</li>
+                  <li class="breadcrumb-item active" aria-current="page"><i class="ti-clipboard"><span class="path1"></span><span class="path1"></span></i> Отчёты</li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+          <section class="content">
+
+<div class="row">
+  <div class="col-xl-4 col-12">
+    <div class="box" id="box_GetOrdersUpakovkaPDF">
+      <div class="box-header with-border">
+      <h4 class="box-title"><i class="fa  fa-print"></i> <strong> Список отгрузки</strong></h4>
+      </div>
+      <div class="box-body">
+        <div class="row">
+          <div class="col-6">
+            <h5 class="box-title mb-5"><i class="fa  fa-truck"></i> Способ доставки:</h5>
+            <select class="form-control select2" id="dostavka_multy_selected_GetOrdersUpakovkaPDF" multiple="multiple" data-placeholder="Способ доставки">
+            
+              {% for tpl_provider in tpl_providers %}
+              <option value="{{ tpl_provider }}">{{ tpl_provider }}</option>
+              {% endfor %}
+            
+            </select>
+          </div>
+      
+          <div class="col-6">
+            <h5 class="box-title mb-5"><i class="fa  fa-genderless"></i> Статус:</h5>
+            <select class="form-control select2" id="status_multy_selected_GetOrdersUpakovkaPDF" multiple="multiple" data-placeholder="Статус">
+            </select>
+          </div>
+        </div>
+      
+        <div class="row justify-content-center">
+          <div class="form-group col-md-5">
+            <label class="col-form-label"><i class="fa fa-calendar"></i> Дата отгрузки</label>
+            <div class="">
+              <input class="form-control" type="date" id="date_GetOrdersUpakovkaPDF">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="box-footer text-end">
+      <a id="button_GetOrdersUpakovkaPDF" class="btn btn-primary btn-sm">Сформировать</a>
+      </div>
+    </div>
+    </div>
+
+
+
+    <div class="col-xl-4 col-12">
+      <div class="box">
+        <div class="box-header with-border">
+        <h4 class="box-title"><i class="fa fa-money"></i> <strong> Маржинальность</strong></h4>
+        </div>
+        <div class="box-body">
+        <p><code>div.box-footer</code></p>
+        <p>Similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</p>
+        </div>
+        <div class="box-footer text-end">
+        <button class="btn btn-primary btn-sm">Сформировать</button>
+        </div>
+      </div>
+      </div>
+
+</div>
+
+          </section>
+
+    </div>
+
+	{% endblock %}
+
+
+	{% block js %} 
+
+	<script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+
+  <!-- Подключение moment.js -->
+  <script src="https://cdn.jsdelivr.net/momentjs/2.14.1/moment.min.js"></script>
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <script src="{% static 'js/pages/advanced-form-element.js' %}"></script>
+  
+	<script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+
+
+    <script>
+
+function toggleLoadingSpinnerInBoxFooter(boxId) {
+  var boxFooter = $('#' + boxId + ' .box-footer');
+  var loadingSpinner = boxFooter.find('.spinner-border');
+
+  // Проверяем, существует ли уже спиннер
+  if (loadingSpinner.length > 0) {
+    // Если спиннер существует, удаляем его
+    loadingSpinner.remove();
+  } else {
+    // Если спиннера нет, добавляем его
+    var newLoadingSpinner = '<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div></div>';
+    boxFooter.append(newLoadingSpinner);
+  }
+}
+
+var statuses = [
+ 'awaiting_packaging',
+ 'awaiting_deliver',
+]
+
+function translateStatus(status) {
+  let translatedStatus;
+  let className;
+
+  switch (status) {
+    case 'acceptance_in_progress':
+      translatedStatus = 'Идёт приёмка';
+      className = 'badge-primary';
+      break;
+    case 'arbitration':
+      translatedStatus = 'Арбитраж';
+      className = 'badge-danger';
+      break;
+    case 'awaiting_approve':
+      translatedStatus = 'Ожидает подтверждения';
+      className = 'badge-warning';
+      break;
+    case 'awaiting_deliver':
+      translatedStatus = 'Ожидает отгрузки';
+      className = 'badge-info';
+      break;
+    case 'awaiting_packaging':
+      translatedStatus = 'Ожидает упаковки';
+      className = 'badge-light';
+      break;
+    case 'awaiting_registration':
+      translatedStatus = 'Ожидает регистрации';
+      className = 'badge-secondary';
+      break;
+    case 'awaiting_verification':
+      translatedStatus = 'Создано';
+      className = 'badge-success';
+      break;
+    case 'cancelled':
+      translatedStatus = 'Отменено';
+      className = 'badge-danger';
+      break;
+    case 'cancelled_from_split_pending':
+      translatedStatus = 'Отменено Сплит';
+      className = 'badge-danger';
+      break;
+    case 'client_arbitration':
+      translatedStatus = 'Клиентский арбитраж доставки';
+      className = 'badge-danger';
+      break;
+    case 'delivering':
+      translatedStatus = 'Доставляется';
+      className = 'badge-dark';
+      break;
+    case 'driver_pickup':
+      translatedStatus = 'У водителя';
+      className = 'badge-info';
+      break;
+    case 'not_accepted':
+      translatedStatus = 'Не принят на сортировочном центре';
+      className = 'badge-warning';
+      break;
+    case 'sent_by_seller':
+      translatedStatus = 'Отправлено продавцом';
+      className = 'badge-success';
+      break;
+    case 'delivered':
+      translatedStatus = 'Доставлено';
+      className = 'badge-success';
+      break;
+    default:
+      translatedStatus = status;
+      className = 'badge-secondary';
+  }
+
+  return {
+    translatedStatus: translatedStatus,
+    className: className
+  };
+}
+
+function getSerializedJSON(elementId) {
+    var selectedValues = jQuery(elementId).val();
+    if (selectedValues) {
+        var dataObject = { selectedValues };
+        return JSON.stringify(dataObject);
+    }
+    return null;
+}
+
+function GetOrdersUpakovkaPDF() {
+  var url = "{% url 'api_orders_upakovka_pdf_print' %}";
+
+  var jsonString_dostavka = getSerializedJSON('#dostavka_multy_selected_GetOrdersUpakovkaPDF');
+  var jsonString_status = getSerializedJSON('#status_multy_selected_GetOrdersUpakovkaPDF');
+  var date =  $('#date_GetOrdersUpakovkaPDF').val();
+
+  var filename = date + '_Список Отгрузки.pdf';
+  toggleLoadingSpinnerInBoxFooter('box_GetOrdersUpakovkaPDF');
+  $.ajax({
+    url: url,
+    type: 'GET',
+    data: {
+      dostavka: jsonString_dostavka,
+      status: jsonString_status,
+      date: date
+    },
+    success: function(response) {
+      // Assuming response.html contains the HTML string
+      var htmlString = response.html;
+
+      // Create a new jsPDF instance
+      var doc = new jsPDF();
+
+      // Convert the HTML string to a PDF
+      doc.html(htmlString, {
+        callback: function(doc) {
+          // Save the PDF
+          doc.save(filename);
+          toggleLoadingSpinnerInBoxFooter('box_GetOrdersUpakovkaPDF');
+        },
+        x: 10,
+        y: 10
+      });
+    },
+    error: function(xhr, status, error) {
+        console.error(error);
+        toggleLoadingSpinnerInBoxFooter('box_GetOrdersUpakovkaPDF');
+    }
+  });
+}
+
+
+$(document).ready(function() {
+
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+    today = yyyy + '-' + mm + '-' + dd;
+    $('#date_GetOrdersUpakovkaPDF').val(today);
+
+
+  $('#button_GetOrdersUpakovkaPDF').on('click', function() {
+    GetOrdersUpakovkaPDF()
+    });
+
+
+$.each(statuses, function(index, status) {
+  var translatedStatus = translateStatus(status);
+  $('#status_multy_selected_GetOrdersUpakovkaPDF').append($('<option>', {
+    value: status,
+    text: translatedStatus.translatedStatus
+  }));
+});
+})
+    </script>
+    
+    {% endblock %}

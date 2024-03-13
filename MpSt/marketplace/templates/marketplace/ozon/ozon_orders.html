@@ -1,0 +1,532 @@
+{% extends 'marketplace/main_mp.html' %}
+
+
+{% load static %}
+
+
+{% block css %}
+
+<style>
+
+.dataTables_scrollHead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: #fff;
+}
+.pull-right {
+  float: right;
+}
+
+#order_table2 {
+    width: 100%;
+    margin: 20px 0;
+  }
+
+  #order_table2 th,
+  #order_table2 td {
+    text-align: center;
+  }
+
+  #order_table2 th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+
+  #order_table2 tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  #order_table2 tr:hover {
+    background-color: #e9e9e9;
+  }
+
+</style>
+
+{% endblock %}
+
+{% block tiitle %}StulerCRM - OZON Заказы{% endblock %}
+
+    {% block content %}
+
+    <div class="content-wrapper">
+        <div class="container-full">
+          <!-- Content Header (Page header) -->	  
+          <div class="content-header">
+              <div class="d-flex align-items-center">
+                  <div class="mr-auto">
+                      <h3 class="page-title">Страница Заказов</h3>
+                      <div class="d-inline-block align-items-center">
+                          <nav>
+                              <ol class="breadcrumb">
+                                  <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
+                                  <li class="breadcrumb-item" aria-current="page">Ozon</li>
+                                  <li class="breadcrumb-item active" aria-current="page">Страница Заказов</li>
+                              </ol>
+                          </nav>
+                      </div>
+                  </div>
+                  
+              </div>
+          </div>
+  
+  
+
+
+
+
+
+          <section class="content">
+            <div class="row">
+              <div class="col-xl-2 col-lg-5 col-12">
+              
+                <div class="row">
+
+
+  
+        </div>
+              <!-- /.modal -->
+      
+              <!-- /. box -->
+              <div class="box">
+                <div class="box-header with-border">
+                <h4 class="box-title">Фильтры</h4>
+                <ul class="box-controls pull-right">
+                  <li><a class="box-btn-slide" href="#"></a></li>	
+                </ul>
+                </div>
+    
+                <div class="box-body mailbox-nav">
+                <ul class="nav nav-pills flex-column">
+
+                  <div class="form-group">
+                    <label>Склад</label>
+                    <select class="form-select" id="sp_dost">
+                    </select>
+                  </div>
+    
+                  <div class="form-group">
+                    <label>Статус заказа</label>
+                    <select class="form-select" id="status">
+                    </select>
+                  </div>
+    
+    
+                  <div class="col-12">
+                    <label class="box-title mb-5">Дата оформления</label>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="form-group">
+                          <label>Начальная дата:</label>
+                          <input class="form-control" type="date" value="" id="date_start">
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-group">
+                          <label>Конечная дата:</label>
+                          <input class="form-control" type="date" value="" id="date_end">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+
+                  <div class="col-12">
+                    <label class="box-title mb-5">Дата отгрузки Ozon</label>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="form-group">
+                          <label>Начальная дата:</label>
+                          <input class="form-control" type="date" value="" id="date_start_otrg">
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-group">
+                          <label>Конечная дата:</label>
+                          <input class="form-control" type="date" value="" id="date_end_otrg">
+                        </div>
+                      </div>
+              </div>
+            </div>
+
+
+                  
+                </ul>
+                </div>
+    
+                <!-- /.box-body -->
+              </div>
+
+              </div>
+              <!-- /.col -->
+              <div class="col-xl-10 col-lg-7 col-12" >
+                <div class="box" id="order_box">
+                  <div class="box-header with-border">
+                    <h4 class="box-title">Список Заказов</h4>
+                    <a id="load_orders_butt" class="btn btn-xs btn-warning pull-right">Обновить</a>
+                  </div>
+                  <div class="box-body order_box_body">
+                    <div class="table-responsive">
+                      <table id="order_table2" class="table table-sm table-hover">
+                        <thead class="thead-light">
+                          <tr>
+                            <th class="text-center" scope="col">#</th>
+                            <th class="text-center" scope="col">Ф.И.О.</th>
+                            <th class="text-center" scope="col">Создан</th>
+                            <th class="text-center" scope="col">Отгрузка</th>
+                            <th class="text-center" scope="col">Артикул</th>
+                            <th class="text-center" scope="col">Статус</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <!-- Здесь будут добавлены строки таблицы -->
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              <!-- /. box -->
+              </div>
+              <!-- /.col -->
+    
+              <!-- /.col -->
+            </div>
+          </section>
+
+
+
+          <!-- /.content -->
+        </div>
+    </div>
+
+
+
+
+    
+
+
+	{% endblock %}
+
+
+	{% block js %} 
+    
+    
+    <script src="{% static 'assets/vendor_components/datatable/datatables.min.js' %}"></script>
+    <script src="{% static 'js/pages/data-table.js' %}"></script>
+
+
+	<script src="{% static 'assets/vendor_components/select2/dist/js/select2.full.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.date.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/input-mask/jquery.inputmask.extensions.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/moment/min/moment.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js' %}"></script>
+	<script src="{% static 'assets/vendor_plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
+
+    <script src="{% static 'assets/vendor_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+
+    <script src="{% static 'js/pages/advanced-form-element.js' %}"></script>
+
+    <script>
+
+      
+
+
+var table = $('#order_table2').DataTable({
+        searching: true, // Разрешить поиск
+        scrollY: '450px', // Включить прокрутку по вертикали
+  fixedHeader: true, // Фиксированный заголовок
+        "scrollCollapse": true,
+        "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Russian.json"
+        },
+
+        order: [[1, 'desc']],
+        columnDefs: [{
+          targets: '_all',
+          className: 'nowrap'
+        }],
+        paging: false // Отключить пагинацию
+        
+});
+
+$.fn.dataTable.moment = function ( format, locale ) {
+    var types = $.fn.dataTable.ext.type;
+
+    types.detect.unshift( function ( d ) {
+        return moment( d, format, locale, true ).isValid() ?
+            'moment-'+format :
+            null;
+    } );
+
+    types.order[ 'moment-'+format+'-pre' ] = function ( d ) {
+        return moment( d, format, locale, true ).unix();
+    };
+};
+
+function get_orders() {
+table.row().clear().draw();
+
+var statusMapping = {
+    'acceptance_in_progress': '<span class="badge badge-warning">Идёт приёмка</span>',
+    'arbitration': '<span class="badge badge-danger">Арбитраж</span>',
+    'awaiting_approve': '<span class="badge badge-info">Ожидает подтверждения</span>',
+    'awaiting_deliver': '<span class="badge badge-primary">Ожидает отгрузки</span>',
+    'awaiting_packaging': '<span class="badge badge-info">Ожидает упаковки</span>',
+    'awaiting_registration': '<span class="badge badge-info">Ожидает регистрации</span>',
+    'awaiting_verification': '<span class="badge badge-primary">Создано</span>',
+    'cancelled': '<span class="badge badge-danger">Отменено</span>',
+    'cancelled_from_split_pending': '<span class="badge badge-danger">Отменено</span>',
+    'client_arbitration': '<span class="badge badge-danger">Клиентский арбитраж доставки</span>',
+    'delivered': '<span class="badge badge-success">Доставлено</span>',
+    'delivering': '<span class="badge badge-dark">Доставляется</span>',
+    'driver_pickup': '<span class="badge badge-primary">У водителя</span>',
+    'not_accepted': '<span class="badge badge-danger">Не принят на сортировочном центре</span>',
+    'sent_by_seller': '<span class="badge badge-info">Отправлено продавцом</span>'
+};
+
+var url ="{% url 'ozon_gets_orders_table' %}";
+
+$.ajax({
+  type: "GET",
+  url: url,
+  data: {
+    'date_start': $('#date_start').val(),
+    'date_end': $('#date_end').val(),
+    'date_start_otrg': $('#date_start_otrg').val(),
+    'date_end_otrg': $('#date_end_otrg').val(),
+    'sp_dot': $('#sp_dost').val(),
+    'status': $('#status').val()
+  },
+  dataType: 'json',
+  success: function (data) {
+    let tableData = [];
+    for (let i = 0; i < data.Orders.length; i++) {
+      let postingNumber = data.Orders[i][0];
+      let cell = `<a href="order_info/${postingNumber}/" target="_blank">${postingNumber}</a>`;
+      let status = data.Orders[i][3];
+      let russianStatus = statusMapping[status];
+      tableData.push([cell, data.Orders[i][11], data.Orders[i][7], data.Orders[i][8], data.Orders[i][27], russianStatus]);
+    }
+    table.rows.add(tableData).draw();
+    table.order([2, 'desc']).draw();
+  },
+  error: function (jqXHR, textStatus, errorThrown) {
+    console.error('Ошибка AJAX запроса:', textStatus, errorThrown);
+  }
+});
+   
+}
+
+
+
+$('#sp_dost').change( function (){
+
+            get_orders()
+
+});
+
+$('#status').change( function (){
+
+            get_orders()
+
+});
+
+$('#date_start').change( function (){
+    if($('#date_end').val()){
+        if($('#date_start').val()){
+            get_orders()
+        }
+    }
+});
+
+$('#date_end').change( function (){
+    if($('#date_end').val()){
+        if($('#date_start').val()){
+            get_orders()
+        }
+    }
+});
+
+$('#date_start_otrg').change( function (){
+    if($('#date_end_otrg').val()){
+        if($('#date_start_otrg').val()){
+            get_orders()
+        }
+    }
+});
+
+$('#date_end_otrg').change( function (){
+    if($('#date_end_otrg').val()){
+        if($('#date_start_otrg').val()){
+            get_orders()
+        }
+    }
+});
+
+$(document).ready(function() {
+  var now = new Date();
+now.setDate(now.getDate() + 14)
+
+var day = ("0" + now.getDate()).slice(-2);
+var month = ("0" + (now.getMonth() + 1)).slice(-2);
+var year = now.getFullYear();
+
+var today = year + "-" + month + "-" + day;
+
+$('#date_end').val(today);
+$('#date_end_otrg').val(today);
+
+var ok = new Date();
+ok.setDate(ok.getDate() - 7);
+
+var day_ok = ("0" + ok.getDate()).slice(-2);
+var month_ok = ("0" + (ok.getMonth() + 1)).slice(-2);
+var year_ok = ok.getFullYear();
+
+var lastWeekDate = year_ok + "-" + month_ok + "-" + day_ok;
+
+$('#date_start').val(lastWeekDate);
+$('#date_start_otrg').val(lastWeekDate);
+
+
+
+
+
+
+
+    var url ="{% url 'ozon_get_dost' %}";
+    $.ajax({
+		  type: "GET",
+		  url: url,
+		  data: {
+		  },
+		  dataType: 'json',
+		  success: function (data) {
+			  if (data.status == 200) {
+                $('#sp_dost').append($('<option>', {
+                            value: "all",
+                            text: "Все"
+                        }));
+
+                for (i=0; i<data.Istochniki.length; i++){
+                      $('#sp_dost').append($('<option>', {
+                            value: data.Istochniki[i][0],
+                            text: data.Istochniki[i][3] +" - "+ data.Istochniki[i][2]
+                        }));
+
+                      };
+			  }
+			  else if (data.status == 300) {
+
+			  }
+			  else if (data.status == 400) {
+
+			  }
+			  else if (data.status == 403){
+
+			  }
+		  }
+		  
+		});
+
+
+        var url ="{% url 'ozon_get_status' %}";
+        $.ajax({
+		  type: "GET",
+		  url: url,
+		  data: {
+		  },
+		  dataType: 'json',
+		  success: function (data) {
+			  if (data.status == 200) {
+                $('#status').append($('<option>', {
+                    value: "all",
+                            text: "Все"
+                        }));
+                for (i=0; i<data.Istochniki.length; i++){
+                      $('#status').append($('<option>', {
+                            value: data.Istochniki[i][1],
+                            text: data.Istochniki[i][2]
+                        }));
+
+                      };
+			  }
+			  else if (data.status == 300) {
+
+			  }
+			  else if (data.status == 400) {
+
+			  }
+			  else if (data.status == 403){
+
+			  }
+		  }
+		  
+		});
+    get_orders()
+});
+
+
+
+
+$("#load_orders_butt").click(function (e) {
+    e.preventDefault();
+
+    var url ="{% url 'ozon_get_orders' %}";
+
+    swal({   
+        title: "ВНИМАНИЕ",   
+        text: "Обновление списков может происходить до 10 минут!!  Не закрывайте плашку",   
+        type: "warning",   
+        showCancelButton: true,   
+        confirmButtonColor: "#DD6B55",   
+        confirmButtonText: "Да, обновить!",   
+        cancelButtonText: "Нет, стоп!",   
+        closeOnConfirm: false,  
+        closeOnCancel: false 
+    }, function(isConfirm) {
+        if (isConfirm) { 
+            swal({
+                title: 'Три... Два... Один...!',
+                text: 'Заказы начали обновляться, окно автоматически закроется после обновления заказов',
+                type: 'success',
+                showConfirmButton: false,
+                onOpen: function() {
+                    swal.showLoading();
+                }
+            });  
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                data: {},
+                dataType: 'json',
+                success: function (data) {
+                    swal.close(); // Закрываем лоадер
+                    swal({
+                        title: "Все заказы успешно обновлены.",
+                        type: "success",
+                        timer: 30000,
+                        showConfirmButton: true
+                    });
+                },
+                error: function () {
+                    swal.close(); // Закрываем лоадер в случае ошибки
+                    swal("Ошибка", "Произошла ошибка при обновлении.", "error");
+                }
+            });
+        } else {
+            swal("Отмена", "Вы отказались обновлять список", "error");
+        } 
+    });
+});
+
+
+
+    </script>
+    
+    {% endblock %}
